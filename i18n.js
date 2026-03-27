@@ -185,7 +185,22 @@ window.I18N_CONTENT.locales.en.staticContent.push(
   { selector: '#cierre .cierre-thesis:nth-child(2) p', type: 'text', value: 'Every index and every measurement presupposes a theoretical framework. That framework is a choice, not a neutral fact.' },
   { selector: '#cierre .cierre-thesis:nth-child(3) p', type: 'text', value: 'Pluralism is not relativism. You can recognize incompatible values without concluding that all of them are worth the same.' },
   { selector: '#cierre .cierre-thesis:nth-child(4) p', type: 'text', value: 'Epistemic humility is not political paralysis. It is the condition for avoiding irreversible mistakes.' },
-  { selector: '#cierre .cierre-coda', type: 'html', value: 'This tension is not resolved.<br/><strong>It is inhabited.</strong>' }
+  { selector: '#cierre .cierre-coda', type: 'html', value: 'This tension is not resolved.<br/><strong>It is inhabited.</strong>' },
+  { selector: '#footerEyebrow', type: 'text', value: 'Credits and continuity' },
+  { selector: '#footerSummary', type: 'text', value: 'This editorial artifact aims to return complexity to the concept of liberty and offer a navigable tool for discussing it beyond political slogans.' },
+  { selector: '#footerWorkLabel', type: 'text', value: 'Public scholarship' },
+  { selector: '#footerWorkTitle', type: 'text', value: 'More work on Isaiah Berlin from a Colombian perspective' },
+  { selector: '#footerWorkCopy', type: 'text', value: 'Continue the exploration in my Spotify podcast, where these ideas are grounded in Colombian debates, vocabulary, and conflicts.' },
+  { selector: '#footerSpotifyLink', type: 'text', value: 'Listen on Spotify' },
+  { selector: '#footerSourcesLabel', type: 'text', value: 'Sources and context' },
+  { selector: '#footerSourcesTitle', type: 'text', value: 'Read more and explore the source notebooks' },
+  { selector: '#footerSourcesCopy', type: 'text', value: 'The README explains the infographic\'s motivation, visual architecture, and central questions. The source notebooks open a deeper path into the research material.' },
+  { selector: '#footerReadmeLink', type: 'text', value: 'Read README' },
+  { selector: '#footerNotebookLink', type: 'text', value: 'Open source notebooks' },
+  { selector: '#footerRightsLabel', type: 'text', value: 'Use and license' },
+  { selector: '#footerRightsTitle', type: 'text', value: 'Creative Commons for educational circulation' },
+  { selector: '#footerRightsCopy', type: 'text', value: 'Content prepared in March 2026. A Creative Commons BY-NC-SA 4.0 license is proposed so the material can be shared, cited, and adapted with attribution, without commercial use, and under the same license.' },
+  { selector: '#footerMetaDate', type: 'text', value: 'Prepared: March 2026' }
 );
 
 window.I18N_CONTENT.locales.en.canvasValues.push(
