@@ -225,6 +225,21 @@ body {
   border-color: var(--clr-accent-mid);
 }
 
+.hero-language-switch {
+  display: inline-flex;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0;
+  padding: 0.5rem 0.65rem;
+  border-bottom: none;
+  border: 1px solid var(--clr-border);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.03);
+}
+
+.hero-language-switch .language-switch__label {
+  color: var(--clr-text-dim);
+}
+
 .lens-panel__hint {
   font-size: 0.7rem;
   color: var(--clr-text-dim);
@@ -1531,7 +1546,7 @@ body {
 }
 
 @media (max-width: 500px) {
-  body { padding-bottom: 12rem; }
+  body { padding-bottom: 5.5rem; }
 
   .lens-panel {
     top: auto;
@@ -1540,17 +1555,72 @@ body {
     bottom: 1rem;
     width: auto;
     max-width: none;
+    max-height: min(31svh, 270px);
+    display: flex;
+    flex-direction: column;
     transform: none;
     border-radius: var(--radius-lg);
     border-right: 1px solid var(--clr-border);
   }
-  .lens-panel__toggle { display: none; }
-  .lens-panel.collapsed { width: var(--lens-panel-width); }
-  .lens-panel.collapsed .lens-panel__body { display: block; }
+  .lens-panel__header {
+    padding: 0.65rem 0.8rem;
+  }
+  .lens-panel__label {
+    font-size: 0.62rem;
+  }
+  .lens-panel__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lens-panel__body {
+    padding: 0.65rem 0.75rem 0.8rem;
+    overflow-y: auto;
+  }
+  .lens-panel__hint {
+    display: none;
+  }
+  .lens-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+  .lens-btn {
+    min-height: 54px;
+    justify-content: center;
+    padding: 0.55rem 0.6rem;
+  }
+  .lens-btn__name {
+    font-size: 0.69rem;
+    line-height: 1.2;
+  }
+  .lens-btn__author {
+    display: none;
+  }
+  .lens-panel.collapsed {
+    width: auto;
+    max-height: 52px;
+  }
+  .lens-panel.collapsed .lens-panel__label {
+    display: block;
+  }
+  .lens-panel.collapsed .lens-panel__header {
+    justify-content: space-between;
+    border-bottom: none;
+    padding-inline: 0.8rem;
+  }
+  .lens-panel.collapsed .lens-panel__body {
+    display: none;
+  }
   .lens-panel__coach {
     left: 0;
     right: 0;
     width: auto;
+  }
+  .hero-language-switch {
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 1rem;
   }
 }
 

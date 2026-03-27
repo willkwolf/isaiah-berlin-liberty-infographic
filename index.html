@@ -19,13 +19,6 @@
       <button class="lens-panel__toggle" id="lensToggleBtn" aria-label="Colapsar selector" aria-expanded="true" aria-controls="lensPanelBody">◂</button>
     </div>
     <div class="lens-panel__body" id="lensPanelBody">
-      <div class="language-switch" role="group" aria-label="Idioma del sitio">
-        <span class="language-switch__label" id="languageSwitchLabel">Idioma</span>
-        <div class="language-switch__controls">
-          <button class="language-btn active" data-lang="es" aria-pressed="true">ES</button>
-          <button class="language-btn" data-lang="en" aria-pressed="false">EN</button>
-        </div>
-      </div>
       <p class="lens-panel__hint">Los datos no cambian.<br/>Cambia la interpretación.</p>
       <div class="lens-options" role="radiogroup" aria-label="Seleccionar marco teórico">
         <button class="lens-btn active" data-lens="negativa" role="radio" aria-checked="true">
@@ -78,6 +71,13 @@
         <div class="section__num" aria-hidden="true">I</div>
         <div class="hero-content">
           <p class="hero-content__pre">Punto de partida</p>
+          <div class="language-switch hero-language-switch" role="group" aria-label="Idioma del sitio">
+            <span class="language-switch__label" id="languageSwitchLabel">Idioma</span>
+            <div class="language-switch__controls">
+              <button class="language-btn active" data-lang="es" aria-pressed="true">ES</button>
+              <button class="language-btn" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+          </div>
           <h1 id="problema-title" class="hero-content__title">Anatomía<br/><em>de la libertad</em></h1>
           <p class="hero-content__thesis">
             La política no es la gestión de consensos. Es la administración del <strong>desacuerdo irreducible</strong>.
