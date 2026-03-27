@@ -6,6 +6,8 @@
 
 'use strict';
 
+const I18N = window.I18N_CONTENT || { defaultLanguage: 'es', supportedLanguages: ['es'], locales: {} };
+
 // ═══════════════════════════════════════════════
 // DATA — Mock estructurado (no necesita API)
 // ═══════════════════════════════════════════════
@@ -204,12 +206,16 @@ const SYSTEM_NARRATIVES = {
 
 const state = {
   currentLens: 'negativa',
+  currentLanguage: I18N.defaultLanguage || 'es',
   berlinSide: 'negativa',
   marketMode: 'ideal',
   systemMode: 'closed',
   activePowerNode: null,
   senActiveCaps: new Set(),
   conflictValue: 50,
+  lensGuideSeen: new Set(),
+  activeLensGuide: null,
+  lensGuideTimer: null,
 };
 
 // ═══════════════════════════════════════════════
@@ -222,6 +228,230 @@ function qsa(sel, ctx = document) { return [...ctx.querySelectorAll(sel)]; }
 function lerp(a, b, t) { return a + (b - a) * t; }
 
 function clamp(val, min, max) { return Math.min(Math.max(val, min), max); }
+
+const originalStaticContent = new Map();
+
+function getEnglishLocale() {
+  return I18N?.locales?.en || null;
+}
+
+function isEnglish() {
+  return state.currentLanguage === 'en' && Boolean(getEnglishLocale());
+}
+
+function getSupportedLanguage(lang) {
+  if (!lang) return I18N.defaultLanguage || 'es';
+  const normalized = String(lang).toLowerCase();
+  const short = normalized.slice(0, 2);
+  return (I18N.supportedLanguages || ['es']).includes(short) ? short : (I18N.defaultLanguage || 'es');
+}
+
+function getPreferredLanguage() {
+  try {
+    const saved = localStorage.getItem('site-language');
+    if (saved) return getSupportedLanguage(saved);
+  } catch {}
+  return getSupportedLanguage(navigator.language);
+}
+
+function persistLanguage(lang) {
+  try {
+    localStorage.setItem('site-language', lang);
+  } catch {}
+}
+
+function getLensDefinition(lens) {
+  if (isEnglish()) return getEnglishLocale().lenses[lens] || LENS_DATA[lens];
+  return LENS_DATA[lens];
+}
+
+function getCanvasValues() {
+  return isEnglish() ? getEnglishLocale().canvasValues : [
+    { label: 'Libertad', angle: -60, color: '#4a9eff' },
+    { label: 'Igualdad', angle: 60, color: '#3dbe8a' },
+    { label: 'Seguridad', angle: 180, color: '#ff7a35' },
+    { label: 'Eficiencia', angle: 0, color: '#b0b0aa' },
+    { label: 'Solidaridad', angle: 120, color: '#ff7a35' },
+    { label: 'Autonomía', angle: -120, color: '#4a9eff' },
+  ];
+}
+
+function getConflictNotes() {
+  return isEnglish() ? getEnglishLocale().conflictNotes : CONFLICT_NOTES;
+}
+
+function getPowerNode(nodeId) {
+  if (isEnglish()) return getEnglishLocale().powerNodes[nodeId] || POWER_NODE_DATA[nodeId];
+  return POWER_NODE_DATA[nodeId];
+}
+
+function getMarketLocale() {
+  return isEnglish()
+    ? getEnglishLocale().market
+    : {
+        axis: { price: 'P', quantity: 'Q' },
+        ideal: {
+          caption: 'Modelo ideal: curvas simétricas, un único equilibrio eficiente, información perfecta, cero externalidades. Este es el modelo del manual — no el mundo real.',
+          demand: 'Demanda',
+          supply: 'Oferta',
+          equilibrium: 'Equilibrio'
+        },
+        real: {
+          caption: 'Evidencia empírica: mercados reales presentan poder oligopólico, externalidades no internalizadas, información asimétrica y barreras de entrada. El modelo ideal es útil como referencia, no como descripción.',
+          demand: 'Demanda',
+          supplyReal: 'Oferta real',
+          supplyIdeal: 'Oferta ideal',
+          oligopoly: 'Costo oligopolio',
+          note: 'Externalidades, poder de mercado, información asimétrica, bienes públicos — no aparecen en el modelo ideal.'
+        }
+      };
+}
+
+function getSenCapabilities() {
+  return isEnglish() ? getEnglishLocale().sen.capabilities : SEN_CAPACIDADES;
+}
+
+function getSenLocale() {
+  return isEnglish()
+    ? getEnglishLocale().sen
+    : {
+        meterLabel: 'Libertad efectiva estimada',
+        caveat: 'Nota: estos porcentajes son pedagógicos. Sen rechaza agregar capacidades en un solo índice — la composición importa tanto como el total.',
+        messages: {
+          zero: 'Sin capacidades básicas activas: libertad formal puede existir, pero la libertad real es nula.',
+          low: 'Privación severa de capacidades. En términos de Sen, esta persona no es libre en ningún sentido sustantivo.',
+          mid: 'Capacidades parciales. La libertad efectiva existe pero está gravemente limitada.',
+          high: 'Capacidades sustanciales. La persona puede funcionar, pero aún hay déficits importantes.',
+          full: 'Capacidades plenas. Este es el ideal normativo de Sen — pocas personas en el mundo lo alcanzan.'
+        }
+      };
+}
+
+function getColombiaContent() {
+  return isEnglish()
+    ? getEnglishLocale().colombia
+    : {
+        indicators: COLOMBIA_DATA.indicators,
+        readings: COLOMBIA_DATA.readings
+      };
+}
+
+function getSystemNarratives() {
+  return isEnglish() ? getEnglishLocale().systemNarratives : SYSTEM_NARRATIVES;
+}
+
+function getCoachCopy(sectionId) {
+  if (isEnglish()) return getEnglishLocale().ui.coach[sectionId] || getEnglishLocale().ui.coach.default;
+  const copy = {
+    berlin: 'Prueba otro lente aquí para comparar los dos conceptos de Berlin sin salir de la sección.',
+    conflicto: 'Este trade-off cambia de sentido según el marco. Toca aquí para releer la pérdida.',
+    poder: 'El poder se ve distinto desde cada marco. Toca el lente para reinterpretar este mapa.',
+    limites: 'Esta distinción se vuelve más nítida o más borrosa según el lente. Puedes probarlo aquí.',
+    economia: 'Cambia el lente aquí para ver cómo la misma escena económica sostiene conclusiones políticas distintas.',
+    sen: 'Esta sección se enriquece mucho cuando comparas Berlin, Sen y la lectura libertaria lado a lado.',
+    colombia: 'Este tablero está hecho para releerse con el lente. Toca aquí para cambiar el diagnóstico.',
+    default: 'Puedes usar el lente aquí para reinterpretar esta sección.'
+  };
+  return copy[sectionId] || copy.default;
+}
+
+function captureStaticContent() {
+  const entries = getEnglishLocale()?.staticContent || [];
+  entries.forEach(entry => {
+    qsa(entry.selector).forEach((node, index) => {
+      const key = `${entry.type}:${entry.selector}:${entry.attr || ''}:${index}`;
+      if (originalStaticContent.has(key)) return;
+      if (entry.type === 'html') originalStaticContent.set(key, node.innerHTML);
+      else if (entry.type === 'attr') originalStaticContent.set(key, node.getAttribute(entry.attr) || '');
+      else originalStaticContent.set(key, node.textContent || '');
+    });
+  });
+}
+
+function applyStaticTranslations(lang) {
+  const english = getEnglishLocale();
+  const entries = english?.staticContent || [];
+  captureStaticContent();
+
+  entries.forEach(entry => {
+    qsa(entry.selector).forEach((node, index) => {
+      const key = `${entry.type}:${entry.selector}:${entry.attr || ''}:${index}`;
+      if (lang === 'en') {
+        if (entry.type === 'html') node.innerHTML = entry.value;
+        else if (entry.type === 'attr') node.setAttribute(entry.attr, entry.value);
+        else node.textContent = entry.value;
+      } else {
+        const original = originalStaticContent.get(key);
+        if (original == null) return;
+        if (entry.type === 'html') node.innerHTML = original;
+        else if (entry.type === 'attr') node.setAttribute(entry.attr, original);
+        else node.textContent = original;
+      }
+    });
+  });
+}
+
+function updateLanguageButtons() {
+  qsa('.language-btn').forEach(btn => {
+    const active = btn.dataset.lang === state.currentLanguage;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
+  });
+}
+
+function syncLensPanelToggle() {
+  const panel = qs('#lensPanel');
+  const btn = qs('#lensToggleBtn');
+  if (!panel || !btn) return;
+  const collapsed = panel.classList.contains('collapsed');
+  const english = getEnglishLocale();
+  const collapseLabel = isEnglish() ? english.ui.collapseLabel : 'Colapsar selector de lente';
+  const expandLabel = isEnglish() ? english.ui.expandLabel : 'Expandir selector de lente';
+  btn.setAttribute('aria-expanded', String(!collapsed));
+  btn.setAttribute('aria-label', collapsed ? expandLabel : collapseLabel);
+}
+
+function setLensPanelCollapsed(collapsed) {
+  const panel = qs('#lensPanel');
+  if (!panel) return;
+  panel.classList.toggle('collapsed', collapsed);
+  syncLensPanelToggle();
+}
+
+function hideLensCoach(markSeen = true) {
+  const coach = qs('#lensCoach');
+  const panel = qs('#lensPanel');
+  if (state.lensGuideTimer) {
+    clearTimeout(state.lensGuideTimer);
+    state.lensGuideTimer = null;
+  }
+  if (markSeen && state.activeLensGuide) state.lensGuideSeen.add(state.activeLensGuide);
+  panel?.classList.remove('is-guided');
+  if (!coach) {
+    state.activeLensGuide = null;
+    return;
+  }
+  coach.classList.remove('is-visible');
+  setTimeout(() => {
+    if (!coach.classList.contains('is-visible')) coach.hidden = true;
+  }, 180);
+  state.activeLensGuide = null;
+}
+
+function showLensCoach(sectionId) {
+  const coach = qs('#lensCoach');
+  const text = qs('#lensCoachText');
+  const panel = qs('#lensPanel');
+  if (!coach || !text || !panel) return;
+  if (state.lensGuideSeen.has(sectionId)) return;
+  hideLensCoach(false);
+  state.activeLensGuide = sectionId;
+  text.textContent = getCoachCopy(sectionId);
+  coach.hidden = false;
+  panel.classList.add('is-guided');
+  requestAnimationFrame(() => coach.classList.add('is-visible'));
+  state.lensGuideTimer = setTimeout(() => hideLensCoach(true), 4200);
+}
 
 // ═══════════════════════════════════════════════
 // LENS SYSTEM
@@ -244,7 +474,7 @@ function setLens(lens) {
   });
 
   // Update all interpretation texts
-  const interp = LENS_DATA[lens].interpretations;
+  const interp = getLensDefinition(lens).interpretations;
   const map = {
     berlinLensText:    'berlin',
     conflictLensText:  'conflicto',
@@ -263,7 +493,18 @@ function setLens(lens) {
 
   // Announce
   const announce = qs('#lensAnnounce');
-  if (announce) announce.textContent = `Marco activo: ${LENS_DATA[lens].name} (${LENS_DATA[lens].author})`;
+  if (announce) {
+    if (isEnglish()) {
+      const def = getLensDefinition(lens);
+      announce.textContent = getEnglishLocale().ui.lensActiveAnnouncement
+        .replace('{name}', def.name)
+        .replace('{author}', def.author);
+    } else {
+      announce.textContent = `Marco activo: ${LENS_DATA[lens].name} (${LENS_DATA[lens].author})`;
+    }
+  }
+
+  hideLensCoach();
 }
 
 // ═══════════════════════════════════════════════
@@ -273,11 +514,19 @@ function setLens(lens) {
 function initLensPanel() {
   const panel = qs('#lensPanel');
   const btn = qs('#lensToggleBtn');
+  const header = qs('.lens-panel__header');
 
   btn?.addEventListener('click', () => {
-    const collapsed = panel.classList.toggle('collapsed');
-    btn.setAttribute('aria-expanded', String(!collapsed));
-    btn.setAttribute('aria-label', collapsed ? 'Expandir selector de lente' : 'Colapsar selector de lente');
+    setLensPanelCollapsed(!panel.classList.contains('collapsed'));
+    hideLensCoach();
+  });
+
+  header?.addEventListener('click', e => {
+    if (e.target === btn) return;
+    if (panel?.classList.contains('collapsed')) {
+      setLensPanelCollapsed(false);
+      hideLensCoach();
+    }
   });
 
   qsa('.lens-btn').forEach(btn => {
@@ -286,6 +535,63 @@ function initLensPanel() {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setLens(btn.dataset.lens); }
     });
   });
+
+  syncLensPanelToggle();
+}
+
+function initLanguageControls() {
+  qsa('.language-btn').forEach(btn => {
+    btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+  });
+  updateLanguageButtons();
+}
+
+function setLanguage(lang, { persist = true } = {}) {
+  const nextLang = getSupportedLanguage(lang);
+  state.currentLanguage = nextLang;
+  if (persist) persistLanguage(nextLang);
+
+  document.documentElement.lang = nextLang;
+  const description = qs('meta[name="description"]');
+  const english = getEnglishLocale();
+  if (nextLang === 'en' && english) {
+    document.title = english.meta.title;
+    description?.setAttribute('content', english.meta.description);
+  } else {
+    document.title = 'Anatomía de la Libertad';
+    description?.setAttribute('content', 'Una exploración interactiva de los marcos teóricos de la libertad política: Berlin, Sen, Hayek.');
+  }
+
+  applyStaticTranslations(nextLang);
+  updateLanguageButtons();
+  syncLensPanelToggle();
+  drawMarketSvg(state.marketMode);
+  renderPowerInfo();
+  renderSenCapabilities();
+  updateColombiaDashboard();
+  renderSystemNarrative();
+  updateConflictSlider(state.conflictValue);
+  setLens(state.currentLens);
+
+  if (state.activeLensGuide) showLensCoach(state.activeLensGuide);
+}
+
+function initLensGuidance() {
+  const sections = qsa('[data-lens-context]');
+  if (!sections.length || !('IntersectionObserver' in window)) return;
+
+  const observer = new IntersectionObserver(entries => {
+    const visible = entries
+      .filter(entry => entry.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+    if (!visible) return;
+    const context = visible.target.dataset.lensContext;
+    if (!context || state.lensGuideSeen.has(context)) return;
+    showLensCoach(context);
+  }, { threshold: [0.4, 0.7] });
+
+  sections.forEach(section => observer.observe(section));
 }
 
 // ═══════════════════════════════════════════════
@@ -318,21 +624,12 @@ function initDivergenceCanvas() {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  // Values that diverge from a center point
-  const values = [
-    { label: 'Libertad', angle: -60, color: '#4a9eff' },
-    { label: 'Igualdad', angle: 60, color: '#3dbe8a' },
-    { label: 'Seguridad', angle: 180, color: '#ff7a35' },
-    { label: 'Eficiencia', angle: 0, color: '#b0b0aa' },
-    { label: 'Solidaridad', angle: 120, color: '#ff7a35' },
-    { label: 'Autonomía', angle: -120, color: '#4a9eff' },
-  ];
-
   let t = 0;
 
   function draw() {
     const w = canvas.width, h = canvas.height;
     ctx.clearRect(0, 0, w, h);
+    const values = getCanvasValues();
 
     const cx = w / 2, cy = h / 2;
     const baseR = 28;
@@ -424,39 +721,38 @@ const CONFLICT_NOTES = [
 ];
 
 function getConflictNote(val) {
-  return CONFLICT_NOTES.find(n => val >= n.range[0] && val <= n.range[1])?.text || '';
+  return getConflictNotes().find(n => val >= n.range[0] && val <= n.range[1])?.text || '';
+}
+
+function updateConflictSlider(val) {
+  const slider = qs('#conflictSlider');
+  if (!slider) return;
+
+  state.conflictValue = val;
+  const negLoss = 100 - val;
+  const eqLoss = val;
+
+  const barNeg = qs('#lossBarNeg');
+  const barEq  = qs('#lossBarEq');
+  const valNeg = qs('#lossValNeg');
+  const valEq  = qs('#lossValEq');
+  const note   = qs('#conflictNote');
+
+  if (barNeg) barNeg.style.width = negLoss + '%';
+  if (barEq)  barEq.style.width = eqLoss + '%';
+  if (valNeg) valNeg.textContent = negLoss + '%';
+  if (valEq)  valEq.textContent = eqLoss + '%';
+  if (note)   note.textContent = getConflictNote(val);
+
+  slider.setAttribute('aria-valuenow', val);
 }
 
 function initConflictSlider() {
   const slider = qs('#conflictSlider');
   if (!slider) return;
 
-  function update(val) {
-    state.conflictValue = val;
-    const negRestriction = val; // más libertad → más restricción a igualdad, menos a negativa
-    const eqSacrificed = 100 - val;
-
-    // lossBarNeg: cuánta libertad negativa se sacrifica (inverted: slider izquierda = max igualdad = max restricción lib neg)
-    const negLoss = 100 - val;
-    const eqLoss = val;
-
-    const barNeg = qs('#lossBarNeg');
-    const barEq  = qs('#lossBarEq');
-    const valNeg = qs('#lossValNeg');
-    const valEq  = qs('#lossValEq');
-    const note   = qs('#conflictNote');
-
-    if (barNeg) barNeg.style.width = negLoss + '%';
-    if (barEq)  barEq.style.width = eqLoss + '%';
-    if (valNeg) valNeg.textContent = negLoss + '%';
-    if (valEq)  valEq.textContent = eqLoss + '%';
-    if (note)   note.textContent = getConflictNote(val);
-
-    slider.setAttribute('aria-valuenow', val);
-  }
-
-  slider.addEventListener('input', () => update(+slider.value));
-  update(50);
+  slider.addEventListener('input', () => updateConflictSlider(+slider.value));
+  updateConflictSlider(50);
 }
 
 // ═══════════════════════════════════════════════
@@ -465,38 +761,49 @@ function initConflictSlider() {
 
 function initPowerDiagram() {
   const nodes = qsa('.power-node');
-  const infoPanel = qs('#powerInfo');
-  if (!infoPanel) return;
-
-  function activateNode(nodeId) {
-    if (state.activePowerNode === nodeId) {
-      // deselect
-      state.activePowerNode = null;
-      nodes.forEach(n => n.classList.remove('active'));
-      infoPanel.innerHTML = '<p class="power-info__hint">Haz clic en un nodo para ver el tipo de restricción que ejerce sobre el individuo.</p>';
-      return;
-    }
-
-    state.activePowerNode = nodeId;
-    nodes.forEach(n => n.classList.toggle('active', n.dataset.node === nodeId));
-
-    const data = POWER_NODE_DATA[nodeId];
-    if (data) {
-      infoPanel.innerHTML = `
-        <div class="power-info__node-name">${data.name}</div>
-        <div class="power-info__type">${data.type}</div>
-        <p class="power-info__desc">${data.desc}</p>
-        <p class="power-info__mechanism">${data.mechanism}</p>
-      `;
-    }
-  }
+  if (!nodes.length) return;
 
   nodes.forEach(node => {
-    node.addEventListener('click', () => activateNode(node.dataset.node));
+    node.addEventListener('click', () => {
+      if (state.activePowerNode === node.dataset.node) state.activePowerNode = null;
+      else state.activePowerNode = node.dataset.node;
+      renderPowerInfo();
+    });
     node.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activateNode(node.dataset.node); }
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (state.activePowerNode === node.dataset.node) state.activePowerNode = null;
+        else state.activePowerNode = node.dataset.node;
+        renderPowerInfo();
+      }
     });
   });
+
+  renderPowerInfo();
+}
+
+function renderPowerInfo() {
+  const infoPanel = qs('#powerInfo');
+  const nodes = qsa('.power-node');
+  if (!infoPanel) return;
+
+  if (!state.activePowerNode) {
+    nodes.forEach(n => n.classList.remove('active'));
+    infoPanel.innerHTML = isEnglish()
+      ? '<p class="power-info__hint">Tap a node to see the kind of restriction it exerts on the individual.</p>'
+      : '<p class="power-info__hint">Haz clic en un nodo para ver el tipo de restricción que ejerce sobre el individuo.</p>';
+    return;
+  }
+
+  nodes.forEach(n => n.classList.toggle('active', n.dataset.node === state.activePowerNode));
+  const data = getPowerNode(state.activePowerNode);
+  if (!data) return;
+  infoPanel.innerHTML = `
+    <div class="power-info__node-name">${data.name}</div>
+    <div class="power-info__type">${data.type}</div>
+    <p class="power-info__desc">${data.desc}</p>
+    <p class="power-info__mechanism">${data.mechanism}</p>
+  `;
 }
 
 // ═══════════════════════════════════════════════
@@ -507,6 +814,7 @@ function drawMarketSvg(mode) {
   const svg = qs('#marketSvg');
   const caption = qs('#marketCaption');
   if (!svg) return;
+  const locale = getMarketLocale();
 
   const W = 520, H = 240;
   const pad = { l: 50, r: 20, t: 30, b: 40 };
@@ -523,8 +831,8 @@ function drawMarketSvg(mode) {
     <!-- Axes -->
     <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t + ph}" stroke="#2a2a35" stroke-width="1.5"/>
     <line x1="${pad.l}" y1="${pad.t + ph}" x2="${pad.l + pw}" y2="${pad.t + ph}" stroke="#2a2a35" stroke-width="1.5"/>
-    <text x="${pad.l - 8}" y="${pad.t}" fill="#8a8878" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">P</text>
-    <text x="${pad.l + pw}" y="${pad.t + ph + 15}" fill="#8a8878" font-size="10" font-family="IBM Plex Mono">Q</text>
+    <text x="${pad.l - 8}" y="${pad.t}" fill="#8a8878" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">${locale.axis.price}</text>
+    <text x="${pad.l + pw}" y="${pad.t + ph + 15}" fill="#8a8878" font-size="10" font-family="IBM Plex Mono">${locale.axis.quantity}</text>
   `;
 
   if (mode === 'ideal') {
@@ -553,12 +861,12 @@ function drawMarketSvg(mode) {
       <line x1="${px(eq_q)}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${py(0)}" stroke="#f0ece0" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
       <line x1="${pad.l}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${py(eq_p)}" stroke="#f0ece0" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
       <!-- Labels -->
-      <text x="${px(10) + 6}" y="${py(90 - 70)}" fill="#4a9eff" font-size="11" font-family="IBM Plex Mono">Demanda</text>
-      <text x="${px(8)}" y="${py(10 + 56)}" fill="#3dbe8a" font-size="11" font-family="IBM Plex Mono">Oferta</text>
-      <text x="${px(eq_q) + 8}" y="${py(eq_p) - 6}" fill="#f0ece0" font-size="10" font-family="IBM Plex Mono">Equilibrio</text>
+      <text x="${px(10) + 6}" y="${py(90 - 70)}" fill="#4a9eff" font-size="11" font-family="IBM Plex Mono">${locale.ideal.demand}</text>
+      <text x="${px(8)}" y="${py(10 + 56)}" fill="#3dbe8a" font-size="11" font-family="IBM Plex Mono">${locale.ideal.supply}</text>
+      <text x="${px(eq_q) + 8}" y="${py(eq_p) - 6}" fill="#f0ece0" font-size="10" font-family="IBM Plex Mono">${locale.ideal.equilibrium}</text>
     `;
 
-    if (caption) caption.textContent = 'Modelo ideal: curvas simétricas, un único equilibrio eficiente, información perfecta, cero externalidades. Este es el modelo del manual — no el mundo real.';
+    if (caption) caption.textContent = locale.ideal.caption;
 
   } else {
     // Real market: multiple equilibria, monopoly power, externalities
@@ -590,15 +898,15 @@ function drawMarketSvg(mode) {
       <polyline points="${demandPath.join(' ')}" fill="none" stroke="#4a9eff" stroke-width="2"/>
       <polyline points="${supplyPath.join(' ')}" fill="none" stroke="#ff7a35" stroke-width="2"/>
       <!-- Welfare loss area hint -->
-      <text x="${pad.l + 8}" y="${pad.t + 16}" fill="#ff7a35" font-size="10" font-family="IBM Plex Mono">Costo oligopolio</text>
-      <text x="${px(7.5)}" y="${py(82)}" fill="#4a9eff" font-size="11" font-family="IBM Plex Mono">Demanda</text>
-      <text x="${px(6)}" y="${py(58)}" fill="#ff7a35" font-size="11" font-family="IBM Plex Mono">Oferta real</text>
-      <text x="${px(7.5)}" y="${py(55)}" fill="#3dbe8a" font-size="10" font-family="IBM Plex Mono" opacity="0.5">Oferta ideal</text>
+      <text x="${pad.l + 8}" y="${pad.t + 16}" fill="#ff7a35" font-size="10" font-family="IBM Plex Mono">${locale.real.oligopoly}</text>
+      <text x="${px(7.5)}" y="${py(82)}" fill="#4a9eff" font-size="11" font-family="IBM Plex Mono">${locale.real.demand}</text>
+      <text x="${px(6)}" y="${py(58)}" fill="#ff7a35" font-size="11" font-family="IBM Plex Mono">${locale.real.supplyReal}</text>
+      <text x="${px(7.5)}" y="${py(55)}" fill="#3dbe8a" font-size="10" font-family="IBM Plex Mono" opacity="0.5">${locale.real.supplyIdeal}</text>
       <!-- Annotations -->
-      <text x="${pad.l + 5}" y="${H - 8}" fill="#8a8878" font-size="9" font-family="IBM Plex Mono">Externalidades, poder de mercado, información asimétrica, bienes públicos — no aparecen en el modelo ideal.</text>
+      <text x="${pad.l + 5}" y="${H - 8}" fill="#8a8878" font-size="9" font-family="IBM Plex Mono">${locale.real.note}</text>
     `;
 
-    if (caption) caption.textContent = 'Evidencia empírica: mercados reales presentan poder oligopólico, externalidades no internalizadas, información asimétrica y barreras de entrada. El modelo ideal es útil como referencia, no como descripción.';
+    if (caption) caption.textContent = locale.real.caption;
   }
 
   svg.innerHTML = svgContent;
@@ -623,66 +931,73 @@ function initMarketToggle() {
 // SECTION VII — SEN CAPACIDADES
 // ═══════════════════════════════════════════════
 
-function initSenCapacidades() {
+function toggleCapability(id) {
+  if (state.senActiveCaps.has(id)) state.senActiveCaps.delete(id);
+  else state.senActiveCaps.add(id);
+  updateSenMeter();
+}
+
+function renderSenCapabilities() {
   const grid = qs('#senCapsGrid');
   if (!grid) return;
+  const capabilities = getSenCapabilities();
 
-  // Build buttons
-  SEN_CAPACIDADES.forEach(cap => {
+  grid.innerHTML = '';
+  capabilities.forEach(cap => {
     const btn = document.createElement('button');
     btn.className = 'sen-cap-btn';
     btn.dataset.id = cap.id;
     btn.title = cap.desc;
-    btn.setAttribute('aria-pressed', 'false');
+    btn.setAttribute('aria-pressed', String(state.senActiveCaps.has(cap.id)));
     btn.innerHTML = `
       <span class="sen-cap-btn__icon">${cap.icon}</span>
       <span class="sen-cap-btn__name">${cap.name}</span>
-      <span class="sen-cap-btn__weight">Peso: ${cap.weight}%</span>
+      <span class="sen-cap-btn__weight">${isEnglish() ? 'Weight' : 'Peso'}: ${cap.weight}%</span>
     `;
-    btn.addEventListener('click', () => toggleCap(cap.id));
-    btn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCap(cap.id); }});
+    btn.addEventListener('click', () => toggleCapability(cap.id));
+    btn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCapability(cap.id); }});
     grid.appendChild(btn);
   });
 
-  function toggleCap(id) {
-    if (state.senActiveCaps.has(id)) {
-      state.senActiveCaps.delete(id);
-    } else {
-      state.senActiveCaps.add(id);
-    }
-    updateSenMeter();
-  }
-
-  function updateSenMeter() {
-    let total = 0;
-    SEN_CAPACIDADES.forEach(cap => {
-      const btn = qs(`.sen-cap-btn[data-id="${cap.id}"]`);
-      const active = state.senActiveCaps.has(cap.id);
-      if (btn) {
-        btn.classList.toggle('active', active);
-        btn.setAttribute('aria-pressed', String(active));
-      }
-      if (active) total += cap.weight;
-    });
-
-    const bar = qs('#senFreedomBar');
-    const val = qs('#senFreedomVal');
-    const caveat = qs('#senFreedomCaveat');
-
-    if (bar) bar.style.width = total + '%';
-    if (val) val.textContent = total + '%';
-
-    let msg = '';
-    if (total === 0) msg = 'Sin capacidades básicas activas: libertad formal puede existir, pero la libertad real es nula.';
-    else if (total < 30) msg = 'Privación severa de capacidades. En términos de Sen, esta persona no es libre en ningún sentido sustantivo.';
-    else if (total < 60) msg = 'Capacidades parciales. La libertad efectiva existe pero está gravemente limitada.';
-    else if (total < 85) msg = 'Capacidades sustanciales. La persona puede funcionar, pero aún hay déficits importantes.';
-    else msg = 'Capacidades plenas. Este es el ideal normativo de Sen — pocas personas en el mundo lo alcanzan.';
-
-    if (caveat) caveat.textContent = `⚠ Nota: estos porcentajes son pedagógicos. Sen rechaza agregar capacidades en un solo índice — la composición importa tanto como el total.`;
-  }
-
   updateSenMeter();
+}
+
+function updateSenMeter() {
+  const capabilities = getSenCapabilities();
+  const locale = getSenLocale();
+  let total = 0;
+
+  capabilities.forEach(cap => {
+    const btn = qs(`.sen-cap-btn[data-id="${cap.id}"]`);
+    const active = state.senActiveCaps.has(cap.id);
+    if (btn) {
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', String(active));
+    }
+    if (active) total += cap.weight;
+  });
+
+  const bar = qs('#senFreedomBar');
+  const val = qs('#senFreedomVal');
+  const caveat = qs('#senFreedomCaveat');
+  const label = qs('#sen .sen-meter__label');
+
+  if (bar) bar.style.width = total + '%';
+  if (val) val.textContent = total + '%';
+  if (label) label.textContent = locale.meterLabel;
+
+  let msg = locale.messages.zero;
+  if (total === 0) msg = locale.messages.zero;
+  else if (total < 30) msg = locale.messages.low;
+  else if (total < 60) msg = locale.messages.mid;
+  else if (total < 85) msg = locale.messages.high;
+  else msg = locale.messages.full;
+
+  if (caveat) caveat.textContent = msg ? `${msg} ${locale.caveat}` : locale.caveat;
+}
+
+function initSenCapacidades() {
+  renderSenCapabilities();
 }
 
 // ═══════════════════════════════════════════════
@@ -696,26 +1011,28 @@ function updateColombiaDashboard() {
 
   const lens = state.currentLens;
   const lensColor = LENS_DATA[lens].color;
+  const locale = getColombiaContent();
 
   dash.innerHTML = COLOMBIA_DATA.indicators.map(ind => {
+    const localeIndicator = locale.indicators.find(item => item.id === ind.id) || ind;
     const pct = (ind.value / ind.max) * 100;
     const barColor = ind.color_by_lens[lens] || lensColor;
     return `
       <div class="colombia-indicator">
-        <div class="colombia-indicator__source">${ind.source}</div>
-        <div class="colombia-indicator__name">${ind.name}</div>
+        <div class="colombia-indicator__source">${localeIndicator.source || ind.source}</div>
+        <div class="colombia-indicator__name">${localeIndicator.name || ind.name}</div>
         <div class="colombia-indicator__value" style="color:${barColor}">${ind.value}</div>
-        <div class="colombia-indicator__rank">${ind.rank}</div>
+        <div class="colombia-indicator__rank">${localeIndicator.rank || ind.rank}</div>
         <div class="colombia-indicator__bar-track">
           <div class="colombia-indicator__bar" style="width:${pct}%;background:${barColor}"></div>
         </div>
-        <div class="colombia-indicator__scale">Escala: ${ind.unit}</div>
+        <div class="colombia-indicator__scale">${isEnglish() ? 'Scale' : 'Escala'}: ${localeIndicator.unit || ind.unit}</div>
       </div>
     `;
   }).join('');
 
   if (reading) {
-    reading.textContent = COLOMBIA_DATA.readings[lens] || '';
+    reading.textContent = locale.readings[lens] || COLOMBIA_DATA.readings[lens] || '';
   }
 }
 
@@ -726,28 +1043,38 @@ function updateColombiaDashboard() {
 function initSystemToggle() {
   const closedBtn = qs('#systemClosedBtn');
   const pluralBtn = qs('#systemPluralBtn');
+  if (!closedBtn || !pluralBtn) return;
+
+  closedBtn.addEventListener('click', () => {
+    state.systemMode = 'closed';
+    renderSystemNarrative();
+  });
+  pluralBtn.addEventListener('click', () => {
+    state.systemMode = 'plural';
+    renderSystemNarrative();
+  });
+  renderSystemNarrative();
+}
+
+function renderSystemNarrative() {
   const narrative = qs('#systemNarrative');
+  const closedBtn = qs('#systemClosedBtn');
+  const pluralBtn = qs('#systemPluralBtn');
   if (!narrative) return;
 
-  function setSystem(mode) {
-    state.systemMode = mode;
-    closedBtn?.classList.toggle('active', mode === 'closed');
-    pluralBtn?.classList.toggle('active', mode === 'plural');
-    closedBtn?.setAttribute('aria-pressed', String(mode === 'closed'));
-    pluralBtn?.setAttribute('aria-pressed', String(mode === 'plural'));
+  closedBtn?.classList.toggle('active', state.systemMode === 'closed');
+  pluralBtn?.classList.toggle('active', state.systemMode === 'plural');
+  closedBtn?.setAttribute('aria-pressed', String(state.systemMode === 'closed'));
+  pluralBtn?.setAttribute('aria-pressed', String(state.systemMode === 'plural'));
 
-    const data = SYSTEM_NARRATIVES[mode];
-    narrative.innerHTML = `
-      <h4>${data.title}</h4>
-      <p>${data.content}</p>
-      <ul>${data.implications.map(i => `<li>${i}</li>`).join('')}</ul>
-      <p style="margin-top:1rem;font-size:0.82rem;color:var(--clr-text-dim);border-top:1px solid var(--clr-border);padding-top:0.75rem;font-style:italic">${data.warning}</p>
-    `;
-  }
-
-  closedBtn?.addEventListener('click', () => setSystem('closed'));
-  pluralBtn?.addEventListener('click', () => setSystem('plural'));
-  setSystem('closed');
+  const data = getSystemNarratives()[state.systemMode];
+  if (!data) return;
+  narrative.innerHTML = `
+    <h4>${data.title}</h4>
+    <p>${data.content}</p>
+    <ul>${data.implications.map(i => `<li>${i}</li>`).join('')}</ul>
+    <p style="margin-top:1rem;font-size:0.82rem;color:var(--clr-text-dim);border-top:1px solid var(--clr-border);padding-top:0.75rem;font-style:italic">${data.warning}</p>
+  `;
 }
 
 // ═══════════════════════════════════════════════
@@ -787,11 +1114,14 @@ function initFadeIn() {
 // ═══════════════════════════════════════════════
 
 document.addEventListener('DOMContentLoaded', () => {
+  state.currentLanguage = getPreferredLanguage();
+
   // Set initial lens
   document.body.classList.add('lens-negativa');
 
   // Initialize all components
   initLensPanel();
+  initLanguageControls();
   initScrollSpy();
   initDivergenceCanvas();
   initBerlinToggle();
@@ -801,10 +1131,12 @@ document.addEventListener('DOMContentLoaded', () => {
   initSenCapacidades();
   updateColombiaDashboard();
   initSystemToggle();
+  initLensGuidance();
   initFadeIn();
 
   // Set initial interpretations
   setLens('negativa');
+  setLanguage(state.currentLanguage, { persist: false });
 
   console.log('Anatomía de la Libertad — iniciada.');
   console.log('Marco actual:', state.currentLens);

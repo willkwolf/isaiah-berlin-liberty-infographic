@@ -16,9 +16,16 @@
   <aside class="lens-panel" id="lensPanel" role="navigation" aria-label="Selector de lente teórica">
     <div class="lens-panel__header">
       <span class="lens-panel__label">Marco teórico</span>
-      <button class="lens-panel__toggle" id="lensToggleBtn" aria-label="Colapsar selector" aria-expanded="true">◂</button>
+      <button class="lens-panel__toggle" id="lensToggleBtn" aria-label="Colapsar selector" aria-expanded="true" aria-controls="lensPanelBody">◂</button>
     </div>
     <div class="lens-panel__body" id="lensPanelBody">
+      <div class="language-switch" role="group" aria-label="Idioma del sitio">
+        <span class="language-switch__label" id="languageSwitchLabel">Idioma</span>
+        <div class="language-switch__controls">
+          <button class="language-btn active" data-lang="es" aria-pressed="true">ES</button>
+          <button class="language-btn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
       <p class="lens-panel__hint">Los datos no cambian.<br/>Cambia la interpretación.</p>
       <div class="lens-options" role="radiogroup" aria-label="Seleccionar marco teórico">
         <button class="lens-btn active" data-lens="negativa" role="radio" aria-checked="true">
@@ -42,6 +49,10 @@
           <span class="lens-btn__author">Hayek / Friedman</span>
         </button>
       </div>
+    </div>
+    <div class="lens-panel__coach" id="lensCoach" aria-live="polite" hidden>
+      <span class="lens-panel__coach-pulse" aria-hidden="true"></span>
+      <p class="lens-panel__coach-text" id="lensCoachText"></p>
     </div>
   </aside>
 
@@ -86,7 +97,7 @@
     </section>
 
     <!-- II — BERLIN -->
-    <section id="berlin" class="section" aria-labelledby="berlin-title">
+    <section id="berlin" class="section" data-lens-context="berlin" aria-labelledby="berlin-title">
       <div class="section__inner">
         <div class="section__num" aria-hidden="true">II</div>
         <h2 id="berlin-title" class="section__title">Isaiah Berlin<br/><em>y los dos conceptos</em></h2>
@@ -162,7 +173,7 @@
     </section>
 
     <!-- III — CONFLICTO -->
-    <section id="conflicto" class="section section--dark" aria-labelledby="conflicto-title">
+    <section id="conflicto" class="section section--dark" data-lens-context="conflicto" aria-labelledby="conflicto-title">
       <div class="section__inner">
         <div class="section__num" aria-hidden="true">III</div>
         <h2 id="conflicto-title" class="section__title">El conflicto<br/><em>no resuelto</em></h2>
@@ -216,7 +227,7 @@
     </section>
 
     <!-- IV — PODER -->
-    <section id="poder" class="section" aria-labelledby="poder-title">
+    <section id="poder" class="section" data-lens-context="poder" aria-labelledby="poder-title">
       <div class="section__inner">
         <div class="section__num" aria-hidden="true">IV</div>
         <h2 id="poder-title" class="section__title">Poder<br/><em>y obediencia</em></h2>
@@ -272,7 +283,7 @@
     </section>
 
     <!-- V — LÍMITES -->
-    <section id="limites" class="section section--dark" aria-labelledby="limites-title">
+    <section id="limites" class="section section--dark" data-lens-context="limites" aria-labelledby="limites-title">
       <div class="section__inner">
         <div class="section__num" aria-hidden="true">V</div>
         <h2 id="limites-title" class="section__title">Incapacidad<br/><em>versus coerción</em></h2>
@@ -333,7 +344,7 @@
     </section>
 
     <!-- VI — ECONOMÍA -->
-    <section id="economia" class="section" aria-labelledby="economia-title">
+    <section id="economia" class="section" data-lens-context="economia" aria-labelledby="economia-title">
       <div class="section__inner">
         <div class="section__num" aria-hidden="true">VI</div>
         <h2 id="economia-title" class="section__title">Hayek &amp; Friedman<br/><em>libertad como no-interferencia</em></h2>
@@ -387,7 +398,7 @@
     </section>
 
     <!-- VII — SEN -->
-    <section id="sen" class="section section--dark" aria-labelledby="sen-title">
+    <section id="sen" class="section section--dark" data-lens-context="sen" aria-labelledby="sen-title">
       <div class="section__inner">
         <div class="section__num" aria-hidden="true">VII</div>
         <h2 id="sen-title" class="section__title">Amartya Sen<br/><em>libertad como capacidad real</em></h2>
@@ -438,7 +449,7 @@
     </section>
 
     <!-- VIII — COLOMBIA -->
-    <section id="colombia" class="section" aria-labelledby="colombia-title">
+    <section id="colombia" class="section" data-lens-context="colombia" aria-labelledby="colombia-title">
       <div class="section__inner">
         <div class="section__num" aria-hidden="true">VIII</div>
         <h2 id="colombia-title" class="section__title">Colombia<br/><em>bajo tres índices</em></h2>
@@ -516,6 +527,7 @@
   </main>
 
   <div class="sr-only" id="lensAnnounce" aria-live="assertive" aria-atomic="true"></div>
+  <script src="i18n.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
