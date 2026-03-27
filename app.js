@@ -216,6 +216,7 @@ const state = {
   lensGuideSeen: new Set(),
   activeLensGuide: null,
   lensGuideTimer: null,
+  onboardingVisible: false,
 };
 
 // ═══════════════════════════════════════════════
@@ -257,6 +258,20 @@ function getPreferredLanguage() {
 function persistLanguage(lang) {
   try {
     localStorage.setItem('site-language', lang);
+  } catch {}
+}
+
+function hasSeenOnboarding() {
+  try {
+    return localStorage.getItem('site-onboarding-seen') === 'true';
+  } catch {
+    return false;
+  }
+}
+
+function persistOnboardingSeen() {
+  try {
+    localStorage.setItem('site-onboarding-seen', 'true');
   } catch {}
 }
 
@@ -443,6 +458,7 @@ function showLensCoach(sectionId) {
   const text = qs('#lensCoachText');
   const panel = qs('#lensPanel');
   if (!coach || !text || !panel) return;
+  if (state.onboardingVisible) return;
   if (state.lensGuideSeen.has(sectionId)) return;
   hideLensCoach(false);
   state.activeLensGuide = sectionId;
@@ -453,12 +469,73 @@ function showLensCoach(sectionId) {
   state.lensGuideTimer = setTimeout(() => hideLensCoach(true), 4200);
 }
 
+function getOnboardingCopy() {
+  const isMobile = window.matchMedia('(max-width: 500px)').matches;
+  if (isEnglish()) {
+    return {
+      eyebrow: 'First visit',
+      title: isMobile ? 'Use the language switch above and the lens chips below.' : 'Use the language switch above and the lens panel on the right.',
+      body: isMobile
+        ? 'On mobile, the bottom chips let you reinterpret each section quickly without leaving the reading flow.'
+        : 'On desktop, the right-side lens lets you reread each section from Berlin, Sen, or a libertarian frame in one tap.',
+      button: 'Got it'
+    };
+  }
+
+  return {
+    eyebrow: 'Primer vistazo',
+    title: isMobile
+      ? 'Usa el selector de idioma arriba y los chips del lente abajo.'
+      : 'Usa el selector de idioma arriba y el panel de lentes a la derecha.',
+    body: isMobile
+      ? 'En móvil, los chips inferiores te dejan reinterpretar cada sección rápido sin romper el flujo de lectura.'
+      : 'En escritorio, el panel lateral te permite releer cada sección desde Berlin, Sen o una lectura libertaria con un solo toque.',
+    button: 'Entendido'
+  };
+}
+
+function renderOnboarding() {
+  const eyebrow = qs('#heroOnboardingEyebrow');
+  const title = qs('#heroOnboardingTitle');
+  const body = qs('#heroOnboardingBody');
+  const button = qs('#heroOnboardingDismiss');
+  const copy = getOnboardingCopy();
+  if (eyebrow) eyebrow.textContent = copy.eyebrow;
+  if (title) title.textContent = copy.title;
+  if (body) body.textContent = copy.body;
+  if (button) button.textContent = copy.button;
+}
+
+function showOnboarding() {
+  const card = qs('#heroOnboarding');
+  const panel = qs('#lensPanel');
+  const languageSwitch = qs('.hero-language-switch');
+  if (!card || hasSeenOnboarding()) return;
+  state.onboardingVisible = true;
+  renderOnboarding();
+  card.hidden = false;
+  panel?.classList.add('is-guided');
+  languageSwitch?.classList.add('is-guided');
+}
+
+function hideOnboarding({ persist = true } = {}) {
+  const card = qs('#heroOnboarding');
+  const panel = qs('#lensPanel');
+  const languageSwitch = qs('.hero-language-switch');
+  if (persist) persistOnboardingSeen();
+  state.onboardingVisible = false;
+  card?.setAttribute('hidden', '');
+  panel?.classList.remove('is-guided');
+  languageSwitch?.classList.remove('is-guided');
+}
+
 // ═══════════════════════════════════════════════
 // LENS SYSTEM
 // ═══════════════════════════════════════════════
 
 function setLens(lens) {
   if (!LENS_DATA[lens]) return;
+  if (state.onboardingVisible) hideOnboarding();
   state.currentLens = lens;
 
   // Update body class
@@ -517,6 +594,7 @@ function initLensPanel() {
   const header = qs('.lens-panel__header');
 
   btn?.addEventListener('click', () => {
+    if (state.onboardingVisible) hideOnboarding();
     setLensPanelCollapsed(!panel.classList.contains('collapsed'));
     hideLensCoach();
   });
@@ -524,6 +602,7 @@ function initLensPanel() {
   header?.addEventListener('click', e => {
     if (e.target === btn) return;
     if (panel?.classList.contains('collapsed')) {
+      if (state.onboardingVisible) hideOnboarding();
       setLensPanelCollapsed(false);
       hideLensCoach();
     }
@@ -541,7 +620,10 @@ function initLensPanel() {
 
 function initLanguageControls() {
   qsa('.language-btn').forEach(btn => {
-    btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+    btn.addEventListener('click', () => {
+      if (state.onboardingVisible) hideOnboarding();
+      setLanguage(btn.dataset.lang);
+    });
   });
   updateLanguageButtons();
 }
@@ -572,8 +654,7 @@ function setLanguage(lang, { persist = true } = {}) {
   renderSystemNarrative();
   updateConflictSlider(state.conflictValue);
   setLens(state.currentLens);
-
-  if (state.activeLensGuide) showLensCoach(state.activeLensGuide);
+  if (state.onboardingVisible) renderOnboarding();
 }
 
 function initLensGuidance() {
@@ -592,6 +673,16 @@ function initLensGuidance() {
   }, { threshold: [0.4, 0.7] });
 
   sections.forEach(section => observer.observe(section));
+}
+
+function initOnboarding() {
+  const dismissBtn = qs('#heroOnboardingDismiss');
+  dismissBtn?.addEventListener('click', () => hideOnboarding());
+  if (!hasSeenOnboarding()) {
+    window.setTimeout(() => {
+      if (!hasSeenOnboarding()) showOnboarding();
+    }, 300);
+  }
 }
 
 // ═══════════════════════════════════════════════
@@ -1132,6 +1223,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateColombiaDashboard();
   initSystemToggle();
   initLensGuidance();
+  initOnboarding();
   initFadeIn();
 
   // Set initial interpretations
