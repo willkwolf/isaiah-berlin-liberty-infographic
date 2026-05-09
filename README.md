@@ -2,6 +2,8 @@
 
 Una infografía interactiva sobre los marcos teóricos de la libertad política: Berlin, Sen, Hayek/Friedman. Diseñada como artefacto editorial navegable, no como resumen estático.
 
+Link: https://willkwolf.github.io/isaiah-berlin-liberty-infographic/
+
 ---
 
 ## Motivación
