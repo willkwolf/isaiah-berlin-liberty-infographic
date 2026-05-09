@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <a href="#main" class="skip-link">Saltar al contenido principal</a>
 
   <!-- LENS SELECTOR — Fixed UI Component -->
   <aside class="lens-panel" id="lensPanel" role="navigation" aria-label="Selector de lente teórica">
@@ -78,6 +79,7 @@
               <button class="language-btn" data-lang="en" aria-pressed="false">EN</button>
             </div>
           </div>
+          <button class="color-mode-btn" id="colorModeBtn" aria-label="Activar modo claro" aria-pressed="false">☀</button>
           <div class="hero-onboarding" id="heroOnboarding" aria-live="polite" hidden>
             <span class="hero-onboarding__eyebrow" id="heroOnboardingEyebrow">Primer vistazo</span>
             <p class="hero-onboarding__title" id="heroOnboardingTitle"></p>
@@ -240,23 +242,23 @@
         <p class="section__subtitle">Berlin distingue: la coacción implica agente humano intencional. <em>«¿Por qué debo obedecer?»</em> es la pregunta política fundamental.</p>
 
         <div class="power-wrap">
-          <svg id="powerDiagram" viewBox="0 0 500 360" class="power-svg" role="group" aria-label="Diagrama de relaciones de poder">
+          <svg id="powerDiagram" viewBox="0 0 500 380" class="power-svg" role="group" aria-label="Diagrama de relaciones de poder">
             <defs>
               <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
                 <polygon points="0 0, 10 3.5, 0 7" class="arrow-marker"/>
               </marker>
             </defs>
-            <line class="power-edge" x1="250" y1="165" x2="250" y2="90"/>
-            <line class="power-edge" x1="250" y1="165" x2="145" y2="275"/>
-            <line class="power-edge" x1="250" y1="165" x2="355" y2="275"/>
-            <line class="power-edge" x1="250" y1="90" x2="145" y2="275"/>
-            <line class="power-edge" x1="250" y1="90" x2="355" y2="275"/>
-            <line class="power-edge" x1="145" y1="275" x2="355" y2="275"/>
+            <line class="power-edge" x1="250" y1="210" x2="250" y2="116"/>
+            <line class="power-edge" x1="250" y1="210" x2="176" y2="295"/>
+            <line class="power-edge" x1="250" y1="210" x2="324" y2="295"/>
+            <line class="power-edge" x1="250" y1="116" x2="176" y2="295"/>
+            <line class="power-edge" x1="250" y1="116" x2="324" y2="295"/>
+            <line class="power-edge" x1="176" y1="295" x2="324" y2="295"/>
 
             <g class="power-node" data-node="individuo" tabindex="0" role="button" aria-label="Individuo: sujeto político">
-              <circle cx="250" cy="165" r="42"/>
-              <text class="power-node__text" x="250" y="161">Individuo</text>
-              <text class="power-node__sub" x="250" y="177">sujeto político</text>
+              <circle cx="250" cy="210" r="44"/>
+              <text class="power-node__text" x="250" y="206">Individuo</text>
+              <text class="power-node__sub" x="250" y="223">sujeto político</text>
             </g>
             <g class="power-node" data-node="estado" tabindex="0" role="button" aria-label="Estado: monopolio de la fuerza">
               <circle cx="250" cy="80" r="36"/>
@@ -264,14 +266,14 @@
               <text class="power-node__sub" x="250" y="92">monopolio fuerza</text>
             </g>
             <g class="power-node" data-node="mercado" tabindex="0" role="button" aria-label="Mercado: coordinación por precio">
-              <circle cx="140" cy="280" r="36"/>
-              <text class="power-node__text" x="140" y="276">Mercado</text>
-              <text class="power-node__sub" x="140" y="292">precio / contrato</text>
+              <circle cx="140" cy="320" r="36"/>
+              <text class="power-node__text" x="140" y="316">Mercado</text>
+              <text class="power-node__sub" x="140" y="332">precio / contrato</text>
             </g>
             <g class="power-node" data-node="sociedad" tabindex="0" role="button" aria-label="Sociedad: norma y cultura">
-              <circle cx="360" cy="280" r="36"/>
-              <text class="power-node__text" x="360" y="276">Sociedad</text>
-              <text class="power-node__sub" x="360" y="292">norma / cultura</text>
+              <circle cx="360" cy="320" r="36"/>
+              <text class="power-node__text" x="360" y="316">Sociedad</text>
+              <text class="power-node__sub" x="360" y="332">norma / cultura</text>
             </g>
           </svg>
 

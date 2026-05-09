@@ -1879,3 +1879,187 @@ body {
   }
   html { scroll-behavior: auto; }
 }
+
+/* ─── FEATURE 1: SCROLL-AWARE LENS PANEL (MOBILE) ─── */
+@media (max-width: 500px) {
+  .lens-panel {
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .lens-panel--visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .lens-panel--always-visible {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lens-panel {
+      transition: opacity 0.3s ease;
+    }
+  }
+}
+
+/* ─── FEATURE 2: DRUM SELECTOR (MOBILE) ─── */
+.drum-selector {
+  display: none;
+}
+
+@media (max-width: 500px) {
+  .drum-selector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 44px;
+    min-width: 44px;
+    overflow: hidden;
+    position: relative;
+    cursor: grab;
+    user-select: none;
+  }
+
+  .lens-options {
+    display: none;
+  }
+}
+
+.drum-selector__window {
+  height: 44px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.drum-selector__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  height: 44px;
+  transition: transform 200ms ease;
+}
+
+.drum-selector__item--active {
+  /* Estado visible del ítem activo */
+}
+
+.drum-selector__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.drum-selector__name {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--clr-text-bright);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drum-selector__item {
+    transition: none;
+  }
+}
+
+/* ─── FEATURE 3: ACCESSIBILITY IMPROVEMENTS ─── */
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.6rem 1rem;
+  background: var(--clr-bg);
+  color: var(--clr-accent);
+  border: 2px solid var(--clr-accent);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: top 0.1s;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Light mode variables */
+body.light-mode {
+  --clr-bg:          #f5f4f0;
+  --clr-bg-2:        #eeede8;
+  --clr-bg-3:        #e8e7e2;
+  --clr-surface:     #e2e1dc;
+  --clr-border:      #c8c7c0;
+  --clr-text:        #1a1a20;
+  --clr-text-dim:    #5a5a60;
+  --clr-text-bright: #0e0e10;
+}
+
+/* Focus indicators — high-contrast fixed colors */
+:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+  border-radius: var(--radius);
+}
+body.light-mode :focus-visible {
+  outline: 3px solid #0e0e10;
+}
+
+/* Color mode button */
+.color-mode-btn {
+  border: 1px solid var(--clr-border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--clr-text-dim);
+  border-radius: 999px;
+  padding: 0.3rem 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.color-mode-btn:hover {
+  color: var(--clr-text-bright);
+  border-color: var(--clr-text-dim);
+}
+
+/* Touch targets & slider thumb (mobile) */
+@media (max-width: 500px) {
+  .top-nav__link {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .language-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  #lensToggleBtn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .color-mode-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  #conflictSlider::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  #conflictSlider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+  }
+}

@@ -217,6 +217,7 @@ const state = {
   activeLensGuide: null,
   lensGuideTimer: null,
   onboardingVisible: false,
+  colorMode: 'dark',
 };
 
 // ═══════════════════════════════════════════════
@@ -582,6 +583,9 @@ function setLens(lens) {
   }
 
   hideLensCoach();
+
+  // Update drum selector (Feature 2)
+  updateDrumSelector(lens);
 }
 
 // ═══════════════════════════════════════════════
@@ -1168,6 +1172,296 @@ function renderSystemNarrative() {
   `;
 }
 
+// ═══ FEATURE 1: SCROLL-AWARE LENS PANEL ═══
+
+function showLensPanel() {
+  const panel = qs('#lensPanel');
+  if (panel) panel.classList.add('lens-panel--visible');
+}
+
+function hideLensPanel() {
+  const panel = qs('#lensPanel');
+  if (panel) panel.classList.remove('lens-panel--visible');
+}
+
+function initScrollAwareLensPanel() {
+  const panel = qs('#lensPanel');
+  if (!panel) return;
+
+  // Only active on mobile (≤500px)
+  const mq = window.matchMedia('(max-width: 500px)');
+
+  // Fallback: no IntersectionObserver support
+  if (!('IntersectionObserver' in window)) {
+    panel.classList.add('lens-panel--always-visible');
+    return;
+  }
+
+  let observer = null;
+
+  function createObserver() {
+    if (observer) observer.disconnect();
+
+    if (!mq.matches) {
+      // Desktop: remove mobile visibility classes, let CSS handle it
+      panel.classList.remove('lens-panel--visible');
+      return;
+    }
+
+    observer = new IntersectionObserver(entries => {
+      const anyIntersecting = entries.some(entry => entry.isIntersecting);
+      if (anyIntersecting) {
+        showLensPanel();
+      } else {
+        hideLensPanel();
+      }
+    }, { threshold: 0.2 });
+
+    qsa('.lens-interpretation').forEach(el => observer.observe(el));
+  }
+
+  // Initial setup
+  createObserver();
+
+  // Re-evaluate on resize with 100ms debounce
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      createObserver();
+    }, 100);
+  });
+}
+
+// ═══ FEATURE 2: DRUM SELECTOR ═══
+
+const DRUM_ORDER = ['negativa', 'positiva', 'capacidades', 'libertario'];
+
+/**
+ * Pure helper — returns the next drum index given a start index and swipe direction.
+ * Exposed as a named function so property tests can import it directly.
+ * @param {number} startIndex - current index in DRUM_ORDER (0–3)
+ * @param {'up'|'down'} direction - swipe direction
+ * @returns {number} next index (0–3)
+ */
+function getDrumNextIndex(startIndex, direction) {
+  if (direction === 'up') return (startIndex + 3) % 4;
+  return (startIndex + 1) % 4;
+}
+
+/**
+ * Pure helper — returns the next drum index given a start index and keyboard key.
+ * Exposed as a named function so property tests can import it directly.
+ * @param {number} startIndex - current index in DRUM_ORDER (0–3)
+ * @param {'ArrowDown'|'ArrowUp'} key - keyboard key
+ * @returns {number} next index (0–3)
+ */
+function getDrumKeyboardNextIndex(startIndex, key) {
+  if (key === 'ArrowUp') return (startIndex + 3) % 4;
+  return (startIndex + 1) % 4;
+}
+
+/**
+ * Synchronise the drum selector UI with the active lens.
+ * Called from setLens() and at the end of initDrumSelector().
+ * @param {string} lens - active lens key
+ */
+function updateDrumSelector(lens) {
+  const idx = DRUM_ORDER.indexOf(lens);
+  if (idx === -1) return;
+
+  const lensData = LENS_DATA[lens];
+  if (!lensData) return;
+
+  // Update visible item (name + dot color)
+  const dot = qs('.drum-selector__dot');
+  const name = qs('.drum-selector__name');
+  const item = qs('.drum-selector__item');
+
+  if (dot) dot.style.backgroundColor = lensData.color;
+  if (name) name.textContent = lensData.name;
+  if (item) item.dataset.lens = lens;
+
+  // Update aria-selected on all [role="option"]
+  qsa('[role="option"]', qs('.drum-selector') || document).forEach(opt => {
+    const selected = opt.dataset.lens === lens;
+    opt.setAttribute('aria-selected', String(selected));
+  });
+}
+
+/**
+ * Build and insert the drum selector DOM, register touch and keyboard events.
+ * Called once from DOMContentLoaded.
+ */
+function initDrumSelector() {
+  const body = qs('.lens-panel__body');
+  if (!body) return;
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── Build DOM ──────────────────────────────────────────────────────────────
+
+  const drum = document.createElement('div');
+  drum.className = 'drum-selector';
+  drum.setAttribute('role', 'listbox');
+  drum.setAttribute('aria-label', 'Marco teórico activo');
+  drum.setAttribute('tabindex', '0');
+
+  // Visible window (aria-hidden — screen readers use the sr-only options below)
+  const window_ = document.createElement('div');
+  window_.className = 'drum-selector__window';
+  window_.setAttribute('aria-hidden', 'true');
+
+  const item = document.createElement('div');
+  item.className = 'drum-selector__item drum-selector__item--active';
+
+  const dot = document.createElement('span');
+  dot.className = 'drum-selector__dot';
+
+  const nameSpan = document.createElement('span');
+  nameSpan.className = 'drum-selector__name';
+
+  item.appendChild(dot);
+  item.appendChild(nameSpan);
+  window_.appendChild(item);
+  drum.appendChild(window_);
+
+  // Screen-reader options (visually hidden)
+  DRUM_ORDER.forEach(lensKey => {
+    const opt = document.createElement('div');
+    opt.setAttribute('role', 'option');
+    opt.setAttribute('aria-selected', 'false');
+    opt.dataset.lens = lensKey;
+    opt.className = 'sr-only';
+    opt.textContent = LENS_DATA[lensKey].name;
+    drum.appendChild(opt);
+  });
+
+  // Insert after .lens-options
+  const lensOptions = qs('.lens-options', body);
+  if (lensOptions && lensOptions.nextSibling) {
+    body.insertBefore(drum, lensOptions.nextSibling);
+  } else {
+    body.appendChild(drum);
+  }
+
+  // ── Touch state ────────────────────────────────────────────────────────────
+
+  let touchStartY = 0;
+  let deltaY = 0;
+  let isDragging = false;
+
+  drum.addEventListener('touchstart', e => {
+    touchStartY = e.touches[0].clientY;
+    deltaY = 0;
+    isDragging = true;
+  }, { passive: true });
+
+  drum.addEventListener('touchmove', e => {
+    if (!isDragging) return;
+    deltaY = e.touches[0].clientY - touchStartY;
+
+    if (Math.abs(deltaY) > 5) {
+      e.preventDefault();
+    }
+
+    // Update visual position of the drum item
+    if (!prefersReducedMotion) {
+      item.style.transform = `translateY(${deltaY}px)`;
+    }
+  }, { passive: false });
+
+  drum.addEventListener('touchend', () => {
+    if (!isDragging) return;
+    isDragging = false;
+
+    if (Math.abs(deltaY) > 30) {
+      const currentIndex = DRUM_ORDER.indexOf(state.currentLens);
+      const direction = deltaY < 0 ? 'up' : 'down';
+      const nextIndex = getDrumNextIndex(currentIndex, direction);
+      setLens(DRUM_ORDER[nextIndex]);
+    }
+
+    // Animate return to position 0
+    if (!prefersReducedMotion) {
+      item.style.transition = 'transform 200ms ease';
+      item.style.transform = 'translateY(0)';
+      setTimeout(() => { item.style.transition = ''; }, 200);
+    } else {
+      item.style.transform = '';
+    }
+
+    deltaY = 0;
+  });
+
+  // ── Keyboard ───────────────────────────────────────────────────────────────
+
+  drum.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      const currentIndex = DRUM_ORDER.indexOf(state.currentLens);
+      setLens(DRUM_ORDER[getDrumKeyboardNextIndex(currentIndex, 'ArrowDown')]);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const currentIndex = DRUM_ORDER.indexOf(state.currentLens);
+      setLens(DRUM_ORDER[getDrumKeyboardNextIndex(currentIndex, 'ArrowUp')]);
+    }
+    // Enter / Space → no-op (lens already active)
+  });
+
+  // ── Initial sync ───────────────────────────────────────────────────────────
+
+  updateDrumSelector(state.currentLens);
+}
+
+// ═══ FEATURE 3: COLOR MODE TOGGLE ═══
+
+/**
+ * Read the user's preferred color mode from localStorage or system preference.
+ * @returns {'light'|'dark'}
+ */
+function getInitialColorMode() {
+  try {
+    const saved = localStorage.getItem('site-color-scheme');
+    if (saved) return saved;
+  } catch {}
+  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+}
+
+/**
+ * Apply a color mode to the document and persist the preference.
+ * @param {'light'|'dark'} mode
+ */
+function setColorMode(mode) {
+  document.body.classList.toggle('light-mode', mode === 'light');
+
+  const btn = qs('#colorModeBtn');
+  if (btn) {
+    btn.setAttribute('aria-pressed', mode === 'light' ? 'true' : 'false');
+    btn.setAttribute('aria-label', mode === 'light' ? 'Activar modo oscuro' : 'Activar modo claro');
+    btn.textContent = mode === 'light' ? '🌙' : '☀';
+  }
+
+  try {
+    localStorage.setItem('site-color-scheme', mode);
+  } catch {}
+
+  state.colorMode = mode;
+}
+
+/**
+ * Initialise the color mode toggle button.
+ * Reads the initial preference and wires up the click handler.
+ */
+function initColorModeToggle() {
+  setColorMode(getInitialColorMode());
+
+  const btn = qs('#colorModeBtn');
+  btn?.addEventListener('click', () => {
+    setColorMode(state.colorMode === 'light' ? 'dark' : 'light');
+  });
+}
+
 // ═══════════════════════════════════════════════
 // INTERSECTION OBSERVER — fade-in sections
 // ═══════════════════════════════════════════════
@@ -1212,6 +1506,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize all components
   initLensPanel();
+  initScrollAwareLensPanel();
+  initDrumSelector();
+  initColorModeToggle();
   initLanguageControls();
   initScrollSpy();
   initDivergenceCanvas();
