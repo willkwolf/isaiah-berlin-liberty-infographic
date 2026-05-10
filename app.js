@@ -1233,16 +1233,13 @@ function initScrollAwareLensPanel() {
   });
 }
 
-// ═══ FEATURE 2: DRUM SELECTOR ═══
+// ═══ FEATURE 2: LENS PICKER ═══
 
 const DRUM_ORDER = ['negativa', 'positiva', 'capacidades', 'libertario'];
 
 /**
  * Pure helper — returns the next drum index given a start index and swipe direction.
- * Exposed as a named function so property tests can import it directly.
- * @param {number} startIndex - current index in DRUM_ORDER (0–3)
- * @param {'up'|'down'} direction - swipe direction
- * @returns {number} next index (0–3)
+ * Kept for property-test compatibility.
  */
 function getDrumNextIndex(startIndex, direction) {
   if (direction === 'up') return (startIndex + 3) % 4;
@@ -1251,10 +1248,7 @@ function getDrumNextIndex(startIndex, direction) {
 
 /**
  * Pure helper — returns the next drum index given a start index and keyboard key.
- * Exposed as a named function so property tests can import it directly.
- * @param {number} startIndex - current index in DRUM_ORDER (0–3)
- * @param {'ArrowDown'|'ArrowUp'} key - keyboard key
- * @returns {number} next index (0–3)
+ * Kept for property-test compatibility.
  */
 function getDrumKeyboardNextIndex(startIndex, key) {
   if (key === 'ArrowUp') return (startIndex + 3) % 4;
@@ -1262,151 +1256,221 @@ function getDrumKeyboardNextIndex(startIndex, key) {
 }
 
 /**
- * Synchronise the drum selector UI with the active lens.
+ * Synchronise the picker UI with the active lens.
  * Called from setLens() and at the end of initDrumSelector().
- * @param {string} lens - active lens key
  */
 function updateDrumSelector(lens) {
-  const idx = DRUM_ORDER.indexOf(lens);
-  if (idx === -1) return;
+  const picker = qs('.lens-picker');
+  if (!picker) return;
 
   const lensData = LENS_DATA[lens];
   if (!lensData) return;
 
-  // Update visible item (name + dot color)
-  const dot = qs('.drum-selector__dot');
-  const name = qs('.drum-selector__name');
-  const item = qs('.drum-selector__item');
-
+  // Update trigger
+  const dot = qs('.lens-picker__dot', picker);
+  const label = qs('.lens-picker__label', picker);
   if (dot) dot.style.backgroundColor = lensData.color;
-  if (name) name.textContent = lensData.name;
-  if (item) item.dataset.lens = lens;
+  if (label) label.textContent = lensData.name;
 
-  // Update aria-selected on all [role="option"]
-  qsa('[role="option"]', qs('.drum-selector') || document).forEach(opt => {
+  // Update options
+  qsa('.lens-picker__option', picker).forEach(opt => {
     const selected = opt.dataset.lens === lens;
+    opt.classList.toggle('is-selected', selected);
     opt.setAttribute('aria-selected', String(selected));
   });
+
+  // Update ARIA on the listbox
+  const list = qs('.lens-picker__list', picker);
+  if (list) list.setAttribute('aria-activedescendant', `lens-picker-opt-${lens}`);
 }
 
 /**
- * Build and insert the drum selector DOM, register touch and keyboard events.
+ * Build and insert the Apple-style inline picker, replacing the drum selector.
  * Called once from DOMContentLoaded.
  */
 function initDrumSelector() {
   const body = qs('.lens-panel__body');
   if (!body) return;
 
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   // ── Build DOM ──────────────────────────────────────────────────────────────
 
-  const drum = document.createElement('div');
-  drum.className = 'drum-selector';
-  drum.setAttribute('role', 'listbox');
-  drum.setAttribute('aria-label', 'Marco teórico activo');
-  drum.setAttribute('tabindex', '0');
+  const picker = document.createElement('div');
+  picker.className = 'lens-picker';
+  picker.setAttribute('role', 'combobox');
+  picker.setAttribute('aria-haspopup', 'listbox');
+  picker.setAttribute('aria-expanded', 'false');
+  picker.setAttribute('aria-label', 'Marco teórico activo');
 
-  // Visible window (aria-hidden — screen readers use the sr-only options below)
-  const window_ = document.createElement('div');
-  window_.className = 'drum-selector__window';
-  window_.setAttribute('aria-hidden', 'true');
+  // Trigger row
+  const trigger = document.createElement('button');
+  trigger.className = 'lens-picker__trigger';
+  trigger.setAttribute('type', 'button');
+  trigger.setAttribute('aria-label', 'Seleccionar marco teórico');
 
-  const item = document.createElement('div');
-  item.className = 'drum-selector__item drum-selector__item--active';
+  const triggerDot = document.createElement('span');
+  triggerDot.className = 'lens-picker__dot';
+  triggerDot.setAttribute('aria-hidden', 'true');
 
-  const dot = document.createElement('span');
-  dot.className = 'drum-selector__dot';
+  const triggerLabel = document.createElement('span');
+  triggerLabel.className = 'lens-picker__label';
 
-  const nameSpan = document.createElement('span');
-  nameSpan.className = 'drum-selector__name';
+  // Chevron SVG
+  const chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  chevron.setAttribute('class', 'lens-picker__chevron');
+  chevron.setAttribute('viewBox', '0 0 16 16');
+  chevron.setAttribute('fill', 'none');
+  chevron.setAttribute('aria-hidden', 'true');
+  const chevronPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  chevronPath.setAttribute('d', 'M3 5.5L8 10.5L13 5.5');
+  chevronPath.setAttribute('stroke', 'currentColor');
+  chevronPath.setAttribute('stroke-width', '1.8');
+  chevronPath.setAttribute('stroke-linecap', 'round');
+  chevronPath.setAttribute('stroke-linejoin', 'round');
+  chevron.appendChild(chevronPath);
 
-  item.appendChild(dot);
-  item.appendChild(nameSpan);
-  window_.appendChild(item);
-  drum.appendChild(window_);
+  trigger.appendChild(triggerDot);
+  trigger.appendChild(triggerLabel);
+  trigger.appendChild(chevron);
+  picker.appendChild(trigger);
 
-  // Screen-reader options (visually hidden)
+  // Dropdown list
+  const list = document.createElement('div');
+  list.className = 'lens-picker__list';
+  list.setAttribute('role', 'listbox');
+  list.setAttribute('aria-label', 'Marcos teóricos disponibles');
+  list.id = 'lens-picker-list';
+
   DRUM_ORDER.forEach(lensKey => {
-    const opt = document.createElement('div');
+    const lensData = LENS_DATA[lensKey];
+    const opt = document.createElement('button');
+    opt.className = 'lens-picker__option';
+    opt.setAttribute('type', 'button');
     opt.setAttribute('role', 'option');
     opt.setAttribute('aria-selected', 'false');
     opt.dataset.lens = lensKey;
-    opt.className = 'sr-only';
-    opt.textContent = LENS_DATA[lensKey].name;
-    drum.appendChild(opt);
+    opt.id = `lens-picker-opt-${lensKey}`;
+
+    const optDot = document.createElement('span');
+    optDot.className = 'lens-picker__option-dot';
+    optDot.style.backgroundColor = lensData.color;
+    optDot.setAttribute('aria-hidden', 'true');
+
+    const optName = document.createElement('span');
+    optName.className = 'lens-picker__option-name';
+    optName.textContent = lensData.name;
+
+    const optAuthor = document.createElement('span');
+    optAuthor.className = 'lens-picker__option-author';
+    optAuthor.textContent = lensData.author;
+
+    // Checkmark SVG
+    const check = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    check.setAttribute('class', 'lens-picker__option-check');
+    check.setAttribute('viewBox', '0 0 16 16');
+    check.setAttribute('fill', 'none');
+    check.setAttribute('aria-hidden', 'true');
+    const checkPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    checkPath.setAttribute('d', 'M3 8L6.5 11.5L13 4.5');
+    checkPath.setAttribute('stroke', 'currentColor');
+    checkPath.setAttribute('stroke-width', '1.8');
+    checkPath.setAttribute('stroke-linecap', 'round');
+    checkPath.setAttribute('stroke-linejoin', 'round');
+    check.appendChild(checkPath);
+
+    opt.appendChild(optDot);
+    opt.appendChild(optName);
+    opt.appendChild(optAuthor);
+    opt.appendChild(check);
+    list.appendChild(opt);
   });
+
+  picker.appendChild(list);
 
   // Insert after .lens-options
   const lensOptions = qs('.lens-options', body);
   if (lensOptions && lensOptions.nextSibling) {
-    body.insertBefore(drum, lensOptions.nextSibling);
+    body.insertBefore(picker, lensOptions.nextSibling);
   } else {
-    body.appendChild(drum);
+    body.appendChild(picker);
   }
 
-  // ── Touch state ────────────────────────────────────────────────────────────
+  // ── Open / close ───────────────────────────────────────────────────────────
 
-  let touchStartY = 0;
-  let deltaY = 0;
-  let isDragging = false;
+  let isOpen = false;
 
-  drum.addEventListener('touchstart', e => {
-    touchStartY = e.touches[0].clientY;
-    deltaY = 0;
-    isDragging = true;
-  }, { passive: true });
+  function openPicker() {
+    isOpen = true;
+    picker.classList.add('is-open');
+    picker.setAttribute('aria-expanded', 'true');
+    // Scroll selected option into view
+    const selected = qs('.lens-picker__option.is-selected', list);
+    if (selected) selected.scrollIntoView({ block: 'nearest' });
+  }
 
-  drum.addEventListener('touchmove', e => {
-    if (!isDragging) return;
-    deltaY = e.touches[0].clientY - touchStartY;
+  function closePicker() {
+    isOpen = false;
+    picker.classList.remove('is-open');
+    picker.setAttribute('aria-expanded', 'false');
+  }
 
-    if (Math.abs(deltaY) > 5) {
-      e.preventDefault();
-    }
+  function togglePicker() {
+    if (isOpen) closePicker();
+    else openPicker();
+  }
 
-    // Update visual position of the drum item
-    if (!prefersReducedMotion) {
-      item.style.transform = `translateY(${deltaY}px)`;
-    }
-  }, { passive: false });
-
-  drum.addEventListener('touchend', () => {
-    if (!isDragging) return;
-    isDragging = false;
-
-    if (Math.abs(deltaY) > 30) {
-      const currentIndex = DRUM_ORDER.indexOf(state.currentLens);
-      const direction = deltaY < 0 ? 'up' : 'down';
-      const nextIndex = getDrumNextIndex(currentIndex, direction);
-      setLens(DRUM_ORDER[nextIndex]);
-    }
-
-    // Animate return to position 0
-    if (!prefersReducedMotion) {
-      item.style.transition = 'transform 200ms ease';
-      item.style.transform = 'translateY(0)';
-      setTimeout(() => { item.style.transition = ''; }, 200);
-    } else {
-      item.style.transform = '';
-    }
-
-    deltaY = 0;
+  trigger.addEventListener('click', e => {
+    e.stopPropagation();
+    togglePicker();
   });
 
-  // ── Keyboard ───────────────────────────────────────────────────────────────
+  // Close when clicking outside
+  document.addEventListener('click', e => {
+    if (isOpen && !picker.contains(e.target)) closePicker();
+  });
 
-  drum.addEventListener('keydown', e => {
-    if (e.key === 'ArrowDown') {
+  // ── Option selection ───────────────────────────────────────────────────────
+
+  qsa('.lens-picker__option', list).forEach(opt => {
+    opt.addEventListener('click', e => {
+      e.stopPropagation();
+      setLens(opt.dataset.lens);
+      closePicker();
+      trigger.focus();
+    });
+  });
+
+  // ── Keyboard navigation ────────────────────────────────────────────────────
+
+  trigger.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
+      if (!isOpen) {
+        openPicker();
+        return;
+      }
       const currentIndex = DRUM_ORDER.indexOf(state.currentLens);
-      setLens(DRUM_ORDER[getDrumKeyboardNextIndex(currentIndex, 'ArrowDown')]);
-    } else if (e.key === 'ArrowUp') {
+      const nextIndex = getDrumKeyboardNextIndex(currentIndex, e.key);
+      setLens(DRUM_ORDER[nextIndex]);
+    } else if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      const currentIndex = DRUM_ORDER.indexOf(state.currentLens);
-      setLens(DRUM_ORDER[getDrumKeyboardNextIndex(currentIndex, 'ArrowUp')]);
+      togglePicker();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      closePicker();
     }
-    // Enter / Space → no-op (lens already active)
+  });
+
+  list.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closePicker();
+      trigger.focus();
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const currentIndex = DRUM_ORDER.indexOf(state.currentLens);
+      const nextIndex = getDrumKeyboardNextIndex(currentIndex, e.key);
+      setLens(DRUM_ORDER[nextIndex]);
+    }
   });
 
   // ── Initial sync ───────────────────────────────────────────────────────────
