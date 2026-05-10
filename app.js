@@ -1233,7 +1233,7 @@ function initScrollAwareLensPanel() {
   });
 }
 
-// ═══ FEATURE 2: LENS PICKER ═══
+// ═══ FEATURE 2: WHEEL PICKER ═══
 
 const DRUM_ORDER = ['negativa', 'positiva', 'capacidades', 'libertario'];
 
@@ -1256,226 +1256,169 @@ function getDrumKeyboardNextIndex(startIndex, key) {
 }
 
 /**
- * Synchronise the picker UI with the active lens.
+ * Synchronise the wheel picker UI with the active lens.
  * Called from setLens() and at the end of initDrumSelector().
  */
 function updateDrumSelector(lens) {
-  const picker = qs('.lens-picker');
-  if (!picker) return;
+  const wheel = qs('.lens-wheel');
+  if (!wheel) return;
 
   const lensData = LENS_DATA[lens];
   if (!lensData) return;
 
-  // Update trigger
-  const dot = qs('.lens-picker__dot', picker);
-  const label = qs('.lens-picker__label', picker);
-  if (dot) dot.style.backgroundColor = lensData.color;
-  if (label) label.textContent = lensData.name;
+  const idx = DRUM_ORDER.indexOf(lens);
+  if (idx === -1) return;
 
-  // Update options
-  qsa('.lens-picker__option', picker).forEach(opt => {
-    const selected = opt.dataset.lens === lens;
-    opt.classList.toggle('is-selected', selected);
-    opt.setAttribute('aria-selected', String(selected));
+  // Mark center item
+  qsa('.lens-wheel__item', wheel).forEach((item, i) => {
+    item.classList.toggle('is-center', i === idx);
   });
 
-  // Update ARIA on the listbox
-  const list = qs('.lens-picker__list', picker);
-  if (list) list.setAttribute('aria-activedescendant', `lens-picker-opt-${lens}`);
+  // Scroll the track so the active item is centered — without animation
+  // when called programmatically (e.g. from setLens)
+  const track = qs('.lens-wheel__track', wheel);
+  if (track) {
+    const ITEM_H = 44;
+    // Each item is at offset: idx * ITEM_H (track has padding-top: 44px)
+    // To center item idx, scrollTop = idx * ITEM_H
+    track.scrollTo({ top: idx * ITEM_H, behavior: 'smooth' });
+  }
 }
 
 /**
- * Build and insert the Apple-style inline picker, replacing the drum selector.
+ * Build and insert the iOS-style wheel picker.
  * Called once from DOMContentLoaded.
  */
 function initDrumSelector() {
   const body = qs('.lens-panel__body');
   if (!body) return;
 
+  const ITEM_H = 44;
+
   // ── Build DOM ──────────────────────────────────────────────────────────────
 
-  const picker = document.createElement('div');
-  picker.className = 'lens-picker';
-  picker.setAttribute('role', 'combobox');
-  picker.setAttribute('aria-haspopup', 'listbox');
-  picker.setAttribute('aria-expanded', 'false');
-  picker.setAttribute('aria-label', 'Marco teórico activo');
+  const wheel = document.createElement('div');
+  wheel.className = 'lens-wheel';
+  wheel.setAttribute('role', 'listbox');
+  wheel.setAttribute('aria-label', 'Marco teórico activo');
 
-  // Trigger row
-  const trigger = document.createElement('button');
-  trigger.className = 'lens-picker__trigger';
-  trigger.setAttribute('type', 'button');
-  trigger.setAttribute('aria-label', 'Seleccionar marco teórico');
+  // Selection highlight band (purely decorative)
+  const highlight = document.createElement('div');
+  highlight.className = 'lens-wheel__highlight';
+  highlight.setAttribute('aria-hidden', 'true');
+  wheel.appendChild(highlight);
 
-  const triggerDot = document.createElement('span');
-  triggerDot.className = 'lens-picker__dot';
-  triggerDot.setAttribute('aria-hidden', 'true');
+  // Scrollable track
+  const track = document.createElement('div');
+  track.className = 'lens-wheel__track';
+  track.setAttribute('aria-hidden', 'true'); // screen readers use the listbox role on wheel
 
-  const triggerLabel = document.createElement('span');
-  triggerLabel.className = 'lens-picker__label';
-
-  // Chevron SVG
-  const chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  chevron.setAttribute('class', 'lens-picker__chevron');
-  chevron.setAttribute('viewBox', '0 0 16 16');
-  chevron.setAttribute('fill', 'none');
-  chevron.setAttribute('aria-hidden', 'true');
-  const chevronPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  chevronPath.setAttribute('d', 'M3 5.5L8 10.5L13 5.5');
-  chevronPath.setAttribute('stroke', 'currentColor');
-  chevronPath.setAttribute('stroke-width', '1.8');
-  chevronPath.setAttribute('stroke-linecap', 'round');
-  chevronPath.setAttribute('stroke-linejoin', 'round');
-  chevron.appendChild(chevronPath);
-
-  trigger.appendChild(triggerDot);
-  trigger.appendChild(triggerLabel);
-  trigger.appendChild(chevron);
-  picker.appendChild(trigger);
-
-  // Dropdown list
-  const list = document.createElement('div');
-  list.className = 'lens-picker__list';
-  list.setAttribute('role', 'listbox');
-  list.setAttribute('aria-label', 'Marcos teóricos disponibles');
-  list.id = 'lens-picker-list';
-
-  DRUM_ORDER.forEach(lensKey => {
+  DRUM_ORDER.forEach((lensKey, i) => {
     const lensData = LENS_DATA[lensKey];
-    const opt = document.createElement('button');
-    opt.className = 'lens-picker__option';
-    opt.setAttribute('type', 'button');
-    opt.setAttribute('role', 'option');
-    opt.setAttribute('aria-selected', 'false');
-    opt.dataset.lens = lensKey;
-    opt.id = `lens-picker-opt-${lensKey}`;
 
-    const optDot = document.createElement('span');
-    optDot.className = 'lens-picker__option-dot';
-    optDot.style.backgroundColor = lensData.color;
-    optDot.setAttribute('aria-hidden', 'true');
+    const item = document.createElement('div');
+    item.className = 'lens-wheel__item';
+    item.dataset.lens = lensKey;
+    item.dataset.index = String(i);
+    item.setAttribute('role', 'option');
+    item.setAttribute('aria-selected', 'false');
+    item.id = `lens-wheel-opt-${lensKey}`;
 
-    const optName = document.createElement('span');
-    optName.className = 'lens-picker__option-name';
-    optName.textContent = lensData.name;
+    const dot = document.createElement('span');
+    dot.className = 'lens-wheel__dot';
+    dot.style.backgroundColor = lensData.color;
+    dot.setAttribute('aria-hidden', 'true');
 
-    const optAuthor = document.createElement('span');
-    optAuthor.className = 'lens-picker__option-author';
-    optAuthor.textContent = lensData.author;
+    const name = document.createElement('span');
+    name.className = 'lens-wheel__name';
+    name.textContent = lensData.name;
 
-    // Checkmark SVG
-    const check = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    check.setAttribute('class', 'lens-picker__option-check');
-    check.setAttribute('viewBox', '0 0 16 16');
-    check.setAttribute('fill', 'none');
-    check.setAttribute('aria-hidden', 'true');
-    const checkPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    checkPath.setAttribute('d', 'M3 8L6.5 11.5L13 4.5');
-    checkPath.setAttribute('stroke', 'currentColor');
-    checkPath.setAttribute('stroke-width', '1.8');
-    checkPath.setAttribute('stroke-linecap', 'round');
-    checkPath.setAttribute('stroke-linejoin', 'round');
-    check.appendChild(checkPath);
+    const author = document.createElement('span');
+    author.className = 'lens-wheel__author';
+    author.textContent = lensData.author;
 
-    opt.appendChild(optDot);
-    opt.appendChild(optName);
-    opt.appendChild(optAuthor);
-    opt.appendChild(check);
-    list.appendChild(opt);
+    item.appendChild(dot);
+    item.appendChild(name);
+    item.appendChild(author);
+    track.appendChild(item);
   });
 
-  picker.appendChild(list);
+  wheel.appendChild(track);
 
   // Insert after .lens-options
   const lensOptions = qs('.lens-options', body);
   if (lensOptions && lensOptions.nextSibling) {
-    body.insertBefore(picker, lensOptions.nextSibling);
+    body.insertBefore(wheel, lensOptions.nextSibling);
   } else {
-    body.appendChild(picker);
+    body.appendChild(wheel);
   }
 
-  // ── Open / close ───────────────────────────────────────────────────────────
+  // ── Scroll → selection sync ────────────────────────────────────────────────
+  // We use scroll-snap + a scroll-end listener to detect which item is centered.
 
-  let isOpen = false;
+  let scrollTimer = null;
 
-  function openPicker() {
-    isOpen = true;
-    picker.classList.add('is-open');
-    picker.setAttribute('aria-expanded', 'true');
-    // Scroll selected option into view
-    const selected = qs('.lens-picker__option.is-selected', list);
-    if (selected) selected.scrollIntoView({ block: 'nearest' });
+  function onScrollEnd() {
+    // Determine which item is closest to center
+    const scrollTop = track.scrollTop;
+    const centeredIdx = Math.round(scrollTop / ITEM_H);
+    const clampedIdx = Math.max(0, Math.min(DRUM_ORDER.length - 1, centeredIdx));
+
+    // Update visual center class
+    qsa('.lens-wheel__item', track).forEach((item, i) => {
+      item.classList.toggle('is-center', i === clampedIdx);
+      item.setAttribute('aria-selected', String(i === clampedIdx));
+    });
+
+    // Fire setLens only if it actually changed
+    if (DRUM_ORDER[clampedIdx] !== state.currentLens) {
+      setLens(DRUM_ORDER[clampedIdx]);
+    }
   }
 
-  function closePicker() {
-    isOpen = false;
-    picker.classList.remove('is-open');
-    picker.setAttribute('aria-expanded', 'false');
-  }
+  track.addEventListener('scroll', () => {
+    // Debounce: fire after scroll settles (scroll-snap will snap it)
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(onScrollEnd, 80);
+  }, { passive: true });
 
-  function togglePicker() {
-    if (isOpen) closePicker();
-    else openPicker();
-  }
+  // ── Tap on item → scroll to it ─────────────────────────────────────────────
 
-  trigger.addEventListener('click', e => {
-    e.stopPropagation();
-    togglePicker();
-  });
-
-  // Close when clicking outside
-  document.addEventListener('click', e => {
-    if (isOpen && !picker.contains(e.target)) closePicker();
-  });
-
-  // ── Option selection ───────────────────────────────────────────────────────
-
-  qsa('.lens-picker__option', list).forEach(opt => {
-    opt.addEventListener('click', e => {
-      e.stopPropagation();
-      setLens(opt.dataset.lens);
-      closePicker();
-      trigger.focus();
+  qsa('.lens-wheel__item', track).forEach((item, i) => {
+    item.addEventListener('click', () => {
+      track.scrollTo({ top: i * ITEM_H, behavior: 'smooth' });
     });
   });
 
   // ── Keyboard navigation ────────────────────────────────────────────────────
 
-  trigger.addEventListener('keydown', e => {
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+  wheel.setAttribute('tabindex', '0');
+
+  wheel.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') {
       e.preventDefault();
-      if (!isOpen) {
-        openPicker();
-        return;
-      }
       const currentIndex = DRUM_ORDER.indexOf(state.currentLens);
-      const nextIndex = getDrumKeyboardNextIndex(currentIndex, e.key);
-      setLens(DRUM_ORDER[nextIndex]);
-    } else if (e.key === 'Enter' || e.key === ' ') {
+      const nextIndex = getDrumKeyboardNextIndex(currentIndex, 'ArrowDown');
+      track.scrollTo({ top: nextIndex * ITEM_H, behavior: 'smooth' });
+    } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      togglePicker();
-    } else if (e.key === 'Escape') {
-      e.preventDefault();
-      closePicker();
+      const currentIndex = DRUM_ORDER.indexOf(state.currentLens);
+      const nextIndex = getDrumKeyboardNextIndex(currentIndex, 'ArrowUp');
+      track.scrollTo({ top: nextIndex * ITEM_H, behavior: 'smooth' });
     }
   });
 
-  list.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      closePicker();
-      trigger.focus();
-    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      const currentIndex = DRUM_ORDER.indexOf(state.currentLens);
-      const nextIndex = getDrumKeyboardNextIndex(currentIndex, e.key);
-      setLens(DRUM_ORDER[nextIndex]);
-    }
+  // ── Initial position ───────────────────────────────────────────────────────
+
+  const initialIdx = DRUM_ORDER.indexOf(state.currentLens);
+  // Use instant scroll on init (no animation)
+  track.scrollTop = Math.max(0, initialIdx) * ITEM_H;
+
+  // Mark initial center item
+  qsa('.lens-wheel__item', track).forEach((item, i) => {
+    item.classList.toggle('is-center', i === Math.max(0, initialIdx));
+    item.setAttribute('aria-selected', String(i === Math.max(0, initialIdx)));
   });
-
-  // ── Initial sync ───────────────────────────────────────────────────────────
-
-  updateDrumSelector(state.currentLens);
 }
 
 // ═══ FEATURE 3: COLOR MODE TOGGLE ═══

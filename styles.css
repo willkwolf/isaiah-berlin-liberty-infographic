@@ -1760,7 +1760,7 @@ body {
     bottom: 1rem;
     width: auto;
     max-width: none;
-    max-height: min(19svh, 150px);
+    max-height: min(26svh, 196px);
     display: flex;
     flex-direction: column;
     transform: none;
@@ -1908,56 +1908,110 @@ body {
   }
 }
 
-/* ─── FEATURE 2: LENS PICKER (MOBILE) ─── */
+/* ─── FEATURE 2: WHEEL PICKER (MOBILE) ─── */
 
-/* Hidden on desktop — shown only on mobile */
-.lens-picker {
+/* Hidden on desktop */
+.lens-wheel {
   display: none;
 }
 
 @media (max-width: 500px) {
-  /* Hide the original horizontal chips on mobile */
+  /* Hide the original horizontal chips */
   .lens-options {
     display: none;
   }
 
-  /* Show the picker */
-  .lens-picker {
+  /* ── Wheel container ── */
+  .lens-wheel {
     display: block;
-    width: 100%;
     position: relative;
-    user-select: none;
+    width: 100%;
+    height: 132px; /* 3 × 44px */
+    overflow: hidden;
   }
 
-  /* ── Trigger row ── */
-  .lens-picker__trigger {
+  /* Fade masks — top and bottom, iOS-style */
+  .lens-wheel::before,
+  .lens-wheel::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 44px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .lens-wheel::before {
+    top: 0;
+    background: linear-gradient(
+      to bottom,
+      var(--clr-bg-2) 0%,
+      transparent 100%
+    );
+  }
+  .lens-wheel::after {
+    bottom: 0;
+    background: linear-gradient(
+      to top,
+      var(--clr-bg-2) 0%,
+      transparent 100%
+    );
+  }
+
+  /* Selection highlight band — sits behind the center item */
+  .lens-wheel__highlight {
+    position: absolute;
+    top: 44px; /* second row = center */
+    left: 0;
+    right: 0;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--clr-border);
+    border-bottom: 1px solid var(--clr-border);
+    border-radius: var(--radius);
+    z-index: 1;
+    pointer-events: none;
+    transition: background 0.2s ease;
+  }
+
+  /* ── Scroll track ── */
+  .lens-wheel__track {
+    position: absolute;
+    inset: 0;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Padding so first and last items can center */
+    padding-top: 44px;
+    padding-bottom: 44px;
+  }
+  .lens-wheel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ── Each item ── */
+  .lens-wheel__item {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
-    width: 100%;
-    min-height: 44px;
-    padding: 0 0.75rem;
-    background: var(--clr-surface);
-    border: 1px solid var(--clr-border);
-    border-radius: var(--radius-lg);
+    gap: 0.6rem;
+    height: 44px;
+    padding: 0 0.85rem;
+    scroll-snap-align: center;
     cursor: pointer;
-    transition: border-color 0.2s ease, background 0.2s ease;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    /* Default: dimmed */
+    opacity: 0.35;
+    transform: scale(0.92);
     -webkit-tap-highlight-color: transparent;
   }
 
-  .lens-picker__trigger:focus-visible {
-    outline: 3px solid #ffffff;
-    outline-offset: 2px;
+  .lens-wheel__item.is-center {
+    opacity: 1;
+    transform: scale(1);
   }
 
-  .lens-picker.is-open .lens-picker__trigger {
-    border-color: var(--clr-accent-mid);
-    background: var(--clr-accent-dim);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
-  .lens-picker__dot {
+  .lens-wheel__dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
@@ -1965,123 +2019,33 @@ body {
     transition: background-color 0.2s ease;
   }
 
-  .lens-picker__label {
+  .lens-wheel__name {
     flex: 1;
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     font-weight: 500;
     color: var(--clr-text-bright);
-    text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .lens-picker__chevron {
-    flex-shrink: 0;
-    width: 16px;
-    height: 16px;
-    color: var(--clr-text-dim);
-    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .lens-picker.is-open .lens-picker__chevron {
-    transform: rotate(180deg);
-  }
-
-  /* ── Dropdown list ── */
-  .lens-picker__list {
-    position: relative;
-    width: 100%;
-    background: var(--clr-surface);
-    border: 1px solid var(--clr-accent-mid);
-    border-top: none;
-    border-bottom-left-radius: var(--radius-lg);
-    border-bottom-right-radius: var(--radius-lg);
-    overflow: hidden;
-    /* Collapsed by default */
-    max-height: 0;
-    opacity: 0;
-    pointer-events: none;
-    transition: max-height 0.26s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.18s ease;
-  }
-
-  .lens-picker.is-open .lens-picker__list {
-    max-height: 220px; /* 4 × 44px + breathing room */
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  /* ── Individual option ── */
-  .lens-picker__option {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-    width: 100%;
-    min-height: 44px;
-    padding: 0 0.75rem;
-    background: none;
-    border: none;
-    border-top: 1px solid var(--clr-border);
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    transition: background 0.15s ease;
-  }
-
-  .lens-picker__option:first-child {
-    border-top: none;
-  }
-
-  .lens-picker__option:active,
-  .lens-picker__option:hover {
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  .lens-picker__option.is-selected {
-    background: var(--clr-accent-dim);
-  }
-
-  .lens-picker__option-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .lens-picker__option-name {
-    flex: 1;
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--clr-text-bright);
-    text-align: left;
-  }
-
-  .lens-picker__option-author {
+  .lens-wheel__author {
     font-family: var(--font-mono);
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     color: var(--clr-text-dim);
-  }
-
-  .lens-picker__option-check {
     flex-shrink: 0;
-    width: 16px;
-    height: 16px;
-    color: var(--clr-accent);
-    opacity: 0;
-    transition: opacity 0.15s ease;
   }
 
-  .lens-picker__option.is-selected .lens-picker__option-check {
-    opacity: 1;
-  }
-
-  /* Reduced motion: no transitions */
+  /* Reduced motion: no scale/opacity transitions */
   @media (prefers-reduced-motion: reduce) {
-    .lens-picker__list {
+    .lens-wheel__item {
       transition: none;
+      opacity: 0.5;
+      transform: none;
     }
-    .lens-picker__chevron {
-      transition: none;
+    .lens-wheel__item.is-center {
+      opacity: 1;
+      transform: none;
     }
   }
 }
