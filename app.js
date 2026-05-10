@@ -262,6 +262,21 @@ function persistLanguage(lang) {
   } catch {}
 }
 
+function persistLens(lens) {
+  try {
+    localStorage.setItem('site-lens', lens);
+  } catch {}
+}
+
+function getPreferredLens() {
+  try {
+    const saved = localStorage.getItem('site-lens');
+    if (saved && LENS_DATA[saved]) return saved;
+  } catch {}
+  // First visit: start at 'positiva' (visual center of the 4-item wheel)
+  return 'positiva';
+}
+
 function hasSeenOnboarding() {
   try {
     return localStorage.getItem('site-onboarding-seen') === 'true';
@@ -538,6 +553,7 @@ function setLens(lens) {
   if (!LENS_DATA[lens]) return;
   if (state.onboardingVisible) hideOnboarding();
   state.currentLens = lens;
+  persistLens(lens);
 
   // Update body class
   const classes = Object.values(LENS_DATA).map(d => d.bodyClass);
@@ -1508,8 +1524,10 @@ function initFadeIn() {
 document.addEventListener('DOMContentLoaded', () => {
   state.currentLanguage = getPreferredLanguage();
 
-  // Set initial lens
-  document.body.classList.add('lens-negativa');
+  // Restore last lens (or 'positiva' on first visit — visual center of the wheel)
+  const initialLens = getPreferredLens();
+  state.currentLens = initialLens;
+  document.body.classList.add(LENS_DATA[initialLens].bodyClass);
 
   // Initialize all components
   initLensPanel();
@@ -1531,7 +1549,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFadeIn();
 
   // Set initial interpretations
-  setLens('negativa');
+  setLens(initialLens);
   setLanguage(state.currentLanguage, { persist: false });
 
   console.log('Anatomía de la Libertad — iniciada.');
