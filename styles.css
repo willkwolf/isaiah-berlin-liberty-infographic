@@ -1528,12 +1528,17 @@ body {
 }
 .cierre-coda strong { color: var(--clr-accent); transition: color var(--transition); }
 
-/* ─── FOOTER ─────────────────────────────── */
+/* ─── FOOTER — always dark, signals end of content ─── */
 .site-footer {
-  border-top: 1px solid var(--clr-border);
-  background:
-    radial-gradient(circle at top left, var(--clr-accent-dim), transparent 28%),
-    linear-gradient(180deg, var(--clr-bg-3), #0a0a0d);
+  border-top: 1px solid #2a2a35;
+  background: linear-gradient(180deg, #111114, #0a0a0d);
+  /* Force dark text colors regardless of body.light-mode */
+  --clr-text:        #d4d0c8;
+  --clr-text-dim:    #8a8878;
+  --clr-text-bright: #f0ece0;
+  --clr-border:      #2a2a35;
+  --clr-surface:     #1e1e26;
+  --clr-bg:          #0e0e10;
 }
 
 .site-footer__inner {
@@ -2091,65 +2096,7 @@ body.light-mode {
   --clr-text-bright: #0e0e10;
 }
 
-/* Light mode — footer overrides */
-html.pre-light .site-footer,
-body.light-mode .site-footer {
-  background: var(--clr-bg-3) !important;
-  border-top-color: var(--clr-border);
-}
-
-html.pre-light .site-footer__title,
-html.pre-light .site-footer__card-title,
-body.light-mode .site-footer__title,
-body.light-mode .site-footer__card-title {
-  color: var(--clr-text-bright);
-}
-
-html.pre-light .site-footer__summary,
-html.pre-light .site-footer__card-copy,
-body.light-mode .site-footer__summary,
-body.light-mode .site-footer__card-copy {
-  color: var(--clr-text);
-}
-
-html.pre-light .site-footer__eyebrow,
-html.pre-light .site-footer__card-label,
-body.light-mode .site-footer__eyebrow,
-body.light-mode .site-footer__card-label {
-  color: var(--clr-accent);
-}
-
-html.pre-light .site-footer__card,
-body.light-mode .site-footer__card {
-  background: rgba(0, 0, 0, 0.04);
-  border-color: var(--clr-border);
-  box-shadow: none;
-}
-
-html.pre-light .site-footer__link,
-body.light-mode .site-footer__link {
-  background: rgba(0, 0, 0, 0.04);
-  border-color: var(--clr-border);
-  color: var(--clr-text);
-}
-
-html.pre-light .site-footer__link:hover,
-body.light-mode .site-footer__link:hover {
-  background: var(--clr-accent-dim);
-  border-color: var(--clr-accent-mid);
-  color: var(--clr-text-bright);
-}
-
-html.pre-light .site-footer__badge,
-body.light-mode .site-footer__badge {
-  color: var(--clr-text-bright);
-}
-
-html.pre-light .site-footer__meta-text,
-body.light-mode .site-footer__meta-text {
-  color: var(--clr-text-dim);
-  border-color: var(--clr-border);
-}
+/* Light mode — footer is always dark, no overrides needed */
 
 /* Focus indicators — high-contrast fixed colors */
 :focus-visible {

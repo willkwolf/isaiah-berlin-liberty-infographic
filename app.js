@@ -927,26 +927,31 @@ function drawMarketSvg(mode) {
   if (!svg) return;
   const locale = getMarketLocale();
 
-  const W = 560, H = 240;
-  const pad = { l: 50, r: 70, t: 30, b: 40 };
+  const W = 560, H = 260;
+  const pad = { l: 60, r: 70, t: 36, b: 50 };
   const pw = W - pad.l - pad.r;
   const ph = H - pad.t - pad.b;
 
-  // Update viewBox to match new width
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-
-  // Quantity axis: 0..10
-  // Price axis: 0..100
 
   function px(q) { return pad.l + (q / 10) * pw; }
   function py(p) { return pad.t + ph - (p / 100) * ph; }
 
+  // Axis label text — full words for clarity
+  const priceLabel  = isEnglish() ? 'Price (P)' : 'Precio (P)';
+  const quantLabel  = isEnglish() ? 'Quantity (Q)' : 'Cantidad (Q)';
+
+  // Use a neutral dark color for axes/labels that works on both themes
+  const axisColor   = '#6b7280';
+  const axisStroke  = '#4b5563';
+
   let svgContent = `
     <!-- Axes -->
-    <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t + ph}" stroke="#2a2a35" stroke-width="1.5"/>
-    <line x1="${pad.l}" y1="${pad.t + ph}" x2="${pad.l + pw}" y2="${pad.t + ph}" stroke="#2a2a35" stroke-width="1.5"/>
-    <text x="${pad.l - 8}" y="${pad.t}" fill="#8a8878" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">${locale.axis.price}</text>
-    <text x="${pad.l + pw}" y="${pad.t + ph + 15}" fill="#8a8878" font-size="10" font-family="IBM Plex Mono">${locale.axis.quantity}</text>
+    <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1.5"/>
+    <line x1="${pad.l}" y1="${pad.t + ph}" x2="${pad.l + pw}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1.5"/>
+    <!-- Axis labels -->
+    <text x="${pad.l - 10}" y="${pad.t - 8}" fill="${axisColor}" font-size="11" font-family="IBM Plex Mono" text-anchor="middle">${priceLabel}</text>
+    <text x="${pad.l + pw + 4}" y="${pad.t + ph + 18}" fill="${axisColor}" font-size="11" font-family="IBM Plex Mono" text-anchor="start">${quantLabel}</text>
   `;
 
   if (mode === 'ideal') {
@@ -962,25 +967,30 @@ function drawMarketSvg(mode) {
     const eq_q = (90 - 10) / 14;
     const eq_p = 10 + 7 * eq_q;
 
-    // Label positions: anchor to end of each curve, inside the plot area
-    const demandLabelX = px(9.2);
-    const demandLabelY = py(90 - 7 * 9.2) - 6;
+    // Labels anchored well inside the plot
+    const demandLabelX = px(8.5);
+    const demandLabelY = py(90 - 7 * 8.5) - 8;
     const supplyLabelX = px(8.5);
-    const supplyLabelY = py(10 + 7 * 8.5) + 14;
-    const eqLabelX = px(eq_q) + 8;
-    const eqLabelY = py(eq_p) - 8;
+    const supplyLabelY = py(10 + 7 * 8.5) + 16;
+    // Equilibrium label: left of the point if near right edge
+    const eqLabelX = px(eq_q) - 8;
+    const eqLabelY = py(eq_p) - 10;
 
     svgContent += `
-      <polyline points="${demandPath.join(' ')}" fill="none" stroke="#4a9eff" stroke-width="2"/>
-      <polyline points="${supplyPath.join(' ')}" fill="none" stroke="#3dbe8a" stroke-width="2"/>
+      <polyline points="${demandPath.join(' ')}" fill="none" stroke="#4a9eff" stroke-width="2.5"/>
+      <polyline points="${supplyPath.join(' ')}" fill="none" stroke="#3dbe8a" stroke-width="2.5"/>
+      <!-- Equilibrium dashed lines -->
+      <line x1="${px(eq_q)}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${py(0)}" stroke="${axisStroke}" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="${pad.l}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${py(eq_p)}" stroke="${axisStroke}" stroke-width="1" stroke-dasharray="4,3"/>
       <!-- Equilibrium point -->
-      <circle cx="${px(eq_q)}" cy="${py(eq_p)}" r="5" fill="#f0ece0"/>
-      <line x1="${px(eq_q)}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${py(0)}" stroke="#f0ece0" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
-      <line x1="${pad.l}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${py(eq_p)}" stroke="#f0ece0" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
-      <!-- Labels — anchored inside plot area -->
-      <text x="${demandLabelX}" y="${demandLabelY}" fill="#4a9eff" font-size="11" font-family="IBM Plex Mono" text-anchor="end">${locale.ideal.demand}</text>
-      <text x="${supplyLabelX}" y="${supplyLabelY}" fill="#3dbe8a" font-size="11" font-family="IBM Plex Mono" text-anchor="start">${locale.ideal.supply}</text>
-      <text x="${eqLabelX}" y="${eqLabelY}" fill="#f0ece0" font-size="10" font-family="IBM Plex Mono" text-anchor="start">${locale.ideal.equilibrium}</text>
+      <circle cx="${px(eq_q)}" cy="${py(eq_p)}" r="6" fill="#f0ece0" stroke="${axisStroke}" stroke-width="1"/>
+      <!-- Curve labels with background for legibility -->
+      <rect x="${demandLabelX - 42}" y="${demandLabelY - 13}" width="44" height="16" rx="3" fill="rgba(74,158,255,0.15)"/>
+      <text x="${demandLabelX}" y="${demandLabelY}" fill="#4a9eff" font-size="12" font-family="IBM Plex Mono" font-weight="500" text-anchor="end">${locale.ideal.demand}</text>
+      <rect x="${supplyLabelX - 2}" y="${supplyLabelY - 13}" width="44" height="16" rx="3" fill="rgba(61,190,138,0.15)"/>
+      <text x="${supplyLabelX}" y="${supplyLabelY}" fill="#3dbe8a" font-size="12" font-family="IBM Plex Mono" font-weight="500" text-anchor="start">${locale.ideal.supply}</text>
+      <rect x="${eqLabelX - 56}" y="${eqLabelY - 13}" width="58" height="16" rx="3" fill="rgba(107,114,128,0.2)"/>
+      <text x="${eqLabelX}" y="${eqLabelY}" fill="${axisColor}" font-size="11" font-family="IBM Plex Mono" text-anchor="end">${locale.ideal.equilibrium}</text>
     `;
 
     if (caption) caption.textContent = locale.ideal.caption;
@@ -1005,17 +1015,19 @@ function drawMarketSvg(mode) {
     }
 
     svgContent += `
-      <!-- Ideal supply faint -->
-      <polyline points="${idealSupplyPath.join(' ')}" fill="none" stroke="#3dbe8a" stroke-width="1" stroke-dasharray="5,4" opacity="0.3"/>
-      <polyline points="${demandPath.join(' ')}" fill="none" stroke="#4a9eff" stroke-width="2"/>
-      <polyline points="${supplyPath.join(' ')}" fill="none" stroke="#ff7a35" stroke-width="2"/>
-      <!-- Labels — anchored inside plot area -->
-      <text x="${pad.l + 8}" y="${pad.t + 16}" fill="#ff7a35" font-size="10" font-family="IBM Plex Mono">${locale.real.oligopoly}</text>
-      <text x="${px(7)}" y="${py(88 - 5 * 7) - 6}" fill="#4a9eff" font-size="11" font-family="IBM Plex Mono" text-anchor="end">${locale.real.demand}</text>
-      <text x="${px(7)}" y="${py(30 + 4 * 7) + 14}" fill="#ff7a35" font-size="11" font-family="IBM Plex Mono" text-anchor="start">${locale.real.supplyReal}</text>
-      <text x="${px(6.5)}" y="${py(10 + 7 * 6.5) - 6}" fill="#3dbe8a" font-size="10" font-family="IBM Plex Mono" text-anchor="start" opacity="0.5">${locale.real.supplyIdeal}</text>
+      <polyline points="${idealSupplyPath.join(' ')}" fill="none" stroke="#3dbe8a" stroke-width="1" stroke-dasharray="5,4" opacity="0.35"/>
+      <polyline points="${demandPath.join(' ')}" fill="none" stroke="#4a9eff" stroke-width="2.5"/>
+      <polyline points="${supplyPath.join(' ')}" fill="none" stroke="#ff7a35" stroke-width="2.5"/>
+      <!-- Labels with background rects -->
+      <rect x="${pad.l + 6}" y="${pad.t + 4}" width="90" height="16" rx="3" fill="rgba(255,122,53,0.15)"/>
+      <text x="${pad.l + 10}" y="${pad.t + 16}" fill="#ff7a35" font-size="11" font-family="IBM Plex Mono">${locale.real.oligopoly}</text>
+      <rect x="${px(6.5) - 46}" y="${py(88 - 5 * 6.5) - 16}" width="48" height="16" rx="3" fill="rgba(74,158,255,0.15)"/>
+      <text x="${px(6.5)}" y="${py(88 - 5 * 6.5) - 4}" fill="#4a9eff" font-size="12" font-family="IBM Plex Mono" font-weight="500" text-anchor="end">${locale.real.demand}</text>
+      <rect x="${px(6.5) + 2}" y="${py(30 + 4 * 6.5) + 2}" width="60" height="16" rx="3" fill="rgba(255,122,53,0.15)"/>
+      <text x="${px(6.5) + 4}" y="${py(30 + 4 * 6.5) + 14}" fill="#ff7a35" font-size="12" font-family="IBM Plex Mono" font-weight="500">${locale.real.supplyReal}</text>
+      <text x="${px(5)}" y="${py(10 + 7 * 5) - 6}" fill="#3dbe8a" font-size="10" font-family="IBM Plex Mono" opacity="0.6" text-anchor="start">${locale.real.supplyIdeal}</text>
       <!-- Bottom note -->
-      <text x="${pad.l + 5}" y="${H - 8}" fill="#8a8878" font-size="9" font-family="IBM Plex Mono">${locale.real.note}</text>
+      <text x="${pad.l + 5}" y="${H - 6}" fill="${axisColor}" font-size="9" font-family="IBM Plex Mono">${locale.real.note}</text>
     `;
 
     if (caption) caption.textContent = locale.real.caption;
@@ -1442,23 +1454,22 @@ function initDrumSelector() {
 
 /**
  * Read the user's preferred color mode.
- * Priority: 1) explicit localStorage preference, 2) time-of-day in local timezone,
- * 3) system prefers-color-scheme.
- * Day = 07:00–20:00 local time → light mode. Night = 20:00–07:00 → dark mode.
- * @returns {'light'|'dark'}
+ * Priority:
+ *   1. Explicit manual toggle by user (site-color-manual = '1' in localStorage)
+ *   2. Local hour: 07:00–20:00 = light, else dark
+ *   3. System prefers-color-scheme fallback
  */
 function getInitialColorMode() {
   try {
-    const saved = localStorage.getItem('site-color-scheme');
-    if (saved) return saved;
+    const isManual = localStorage.getItem('site-color-manual') === '1';
+    if (isManual) {
+      const saved = localStorage.getItem('site-color-scheme');
+      if (saved === 'light' || saved === 'dark') return saved;
+    }
   } catch {}
-
-  // Auto: use local hour to pick day/night
+  // Auto: local hour
   const hour = new Date().getHours();
-  const isDaytime = hour >= 7 && hour < 20;
-  if (isDaytime) return 'light';
-
-  // Fallback to system preference
+  if (hour >= 7 && hour < 20) return 'light';
   return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
 }
 
@@ -1466,7 +1477,7 @@ function getInitialColorMode() {
  * Apply a color mode to the document and persist the preference.
  * @param {'light'|'dark'} mode
  */
-function setColorMode(mode) {
+function setColorMode(mode, { manual = false } = {}) {
   // Remove the pre-light class from <html> — JS now owns the color mode
   document.documentElement.classList.remove('pre-light');
 
@@ -1481,6 +1492,8 @@ function setColorMode(mode) {
 
   try {
     localStorage.setItem('site-color-scheme', mode);
+    // Only mark as manual when the user explicitly clicked the toggle
+    if (manual) localStorage.setItem('site-color-manual', '1');
   } catch {}
 
   state.colorMode = mode;
@@ -1495,7 +1508,7 @@ function initColorModeToggle() {
 
   const btn = qs('#colorModeBtn');
   btn?.addEventListener('click', () => {
-    setColorMode(state.colorMode === 'light' ? 'dark' : 'light');
+    setColorMode(state.colorMode === 'light' ? 'dark' : 'light', { manual: true });
   });
 }
 
