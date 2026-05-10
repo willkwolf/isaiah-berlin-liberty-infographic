@@ -927,10 +927,13 @@ function drawMarketSvg(mode) {
   if (!svg) return;
   const locale = getMarketLocale();
 
-  const W = 520, H = 240;
-  const pad = { l: 50, r: 20, t: 30, b: 40 };
+  const W = 560, H = 240;
+  const pad = { l: 50, r: 70, t: 30, b: 40 };
   const pw = W - pad.l - pad.r;
   const ph = H - pad.t - pad.b;
+
+  // Update viewBox to match new width
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
   // Quantity axis: 0..10
   // Price axis: 0..100
@@ -947,11 +950,6 @@ function drawMarketSvg(mode) {
   `;
 
   if (mode === 'ideal') {
-    // Perfect supply/demand curves crossing at equilibrium
-    // Demand: P = 90 - 7Q
-    // Supply: P = 10 + 7Q
-    // Equilibrium: 90-7Q = 10+7Q → Q=5.71, P=49.97
-
     const demandPath = [];
     const supplyPath = [];
     for (let q = 0; q <= 10; q += 0.5) {
@@ -964,6 +962,14 @@ function drawMarketSvg(mode) {
     const eq_q = (90 - 10) / 14;
     const eq_p = 10 + 7 * eq_q;
 
+    // Label positions: anchor to end of each curve, inside the plot area
+    const demandLabelX = px(9.2);
+    const demandLabelY = py(90 - 7 * 9.2) - 6;
+    const supplyLabelX = px(8.5);
+    const supplyLabelY = py(10 + 7 * 8.5) + 14;
+    const eqLabelX = px(eq_q) + 8;
+    const eqLabelY = py(eq_p) - 8;
+
     svgContent += `
       <polyline points="${demandPath.join(' ')}" fill="none" stroke="#4a9eff" stroke-width="2"/>
       <polyline points="${supplyPath.join(' ')}" fill="none" stroke="#3dbe8a" stroke-width="2"/>
@@ -971,32 +977,27 @@ function drawMarketSvg(mode) {
       <circle cx="${px(eq_q)}" cy="${py(eq_p)}" r="5" fill="#f0ece0"/>
       <line x1="${px(eq_q)}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${py(0)}" stroke="#f0ece0" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
       <line x1="${pad.l}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${py(eq_p)}" stroke="#f0ece0" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
-      <!-- Labels -->
-      <text x="${px(10) + 6}" y="${py(90 - 70)}" fill="#4a9eff" font-size="11" font-family="IBM Plex Mono">${locale.ideal.demand}</text>
-      <text x="${px(8)}" y="${py(10 + 56)}" fill="#3dbe8a" font-size="11" font-family="IBM Plex Mono">${locale.ideal.supply}</text>
-      <text x="${px(eq_q) + 8}" y="${py(eq_p) - 6}" fill="#f0ece0" font-size="10" font-family="IBM Plex Mono">${locale.ideal.equilibrium}</text>
+      <!-- Labels — anchored inside plot area -->
+      <text x="${demandLabelX}" y="${demandLabelY}" fill="#4a9eff" font-size="11" font-family="IBM Plex Mono" text-anchor="end">${locale.ideal.demand}</text>
+      <text x="${supplyLabelX}" y="${supplyLabelY}" fill="#3dbe8a" font-size="11" font-family="IBM Plex Mono" text-anchor="start">${locale.ideal.supply}</text>
+      <text x="${eqLabelX}" y="${eqLabelY}" fill="#f0ece0" font-size="10" font-family="IBM Plex Mono" text-anchor="start">${locale.ideal.equilibrium}</text>
     `;
 
     if (caption) caption.textContent = locale.ideal.caption;
 
   } else {
-    // Real market: multiple equilibria, monopoly power, externalities
-    // Demand still roughly linear but with kink (sticky prices)
     const demandPath = [];
     for (let q = 0; q <= 10; q += 0.5) {
-      // Kinked demand curve
       const pd = q < 4 ? 88 - 5 * q : 70 - 9 * (q - 4);
       if (pd >= 0 && pd <= 100) demandPath.push(`${px(q)},${py(pd)}`);
     }
 
-    // Supply with market power — oligopoly, not perfect competition
     const supplyPath = [];
     for (let q = 0; q <= 10; q += 0.5) {
-      const ps = 30 + 4 * q + (q > 6 ? 8 * (q - 6) : 0); // cost increases sharply after capacity
+      const ps = 30 + 4 * q + (q > 6 ? 8 * (q - 6) : 0);
       if (ps >= 0 && ps <= 100) supplyPath.push(`${px(q)},${py(ps)}`);
     }
 
-    // Shadow "ideal" supply faint
     const idealSupplyPath = [];
     for (let q = 0; q <= 10; q += 0.5) {
       const ps = 10 + 7 * q;
@@ -1008,12 +1009,12 @@ function drawMarketSvg(mode) {
       <polyline points="${idealSupplyPath.join(' ')}" fill="none" stroke="#3dbe8a" stroke-width="1" stroke-dasharray="5,4" opacity="0.3"/>
       <polyline points="${demandPath.join(' ')}" fill="none" stroke="#4a9eff" stroke-width="2"/>
       <polyline points="${supplyPath.join(' ')}" fill="none" stroke="#ff7a35" stroke-width="2"/>
-      <!-- Welfare loss area hint -->
+      <!-- Labels — anchored inside plot area -->
       <text x="${pad.l + 8}" y="${pad.t + 16}" fill="#ff7a35" font-size="10" font-family="IBM Plex Mono">${locale.real.oligopoly}</text>
-      <text x="${px(7.5)}" y="${py(82)}" fill="#4a9eff" font-size="11" font-family="IBM Plex Mono">${locale.real.demand}</text>
-      <text x="${px(6)}" y="${py(58)}" fill="#ff7a35" font-size="11" font-family="IBM Plex Mono">${locale.real.supplyReal}</text>
-      <text x="${px(7.5)}" y="${py(55)}" fill="#3dbe8a" font-size="10" font-family="IBM Plex Mono" opacity="0.5">${locale.real.supplyIdeal}</text>
-      <!-- Annotations -->
+      <text x="${px(7)}" y="${py(88 - 5 * 7) - 6}" fill="#4a9eff" font-size="11" font-family="IBM Plex Mono" text-anchor="end">${locale.real.demand}</text>
+      <text x="${px(7)}" y="${py(30 + 4 * 7) + 14}" fill="#ff7a35" font-size="11" font-family="IBM Plex Mono" text-anchor="start">${locale.real.supplyReal}</text>
+      <text x="${px(6.5)}" y="${py(10 + 7 * 6.5) - 6}" fill="#3dbe8a" font-size="10" font-family="IBM Plex Mono" text-anchor="start" opacity="0.5">${locale.real.supplyIdeal}</text>
+      <!-- Bottom note -->
       <text x="${pad.l + 5}" y="${H - 8}" fill="#8a8878" font-size="9" font-family="IBM Plex Mono">${locale.real.note}</text>
     `;
 
@@ -1440,7 +1441,10 @@ function initDrumSelector() {
 // ═══ FEATURE 3: COLOR MODE TOGGLE ═══
 
 /**
- * Read the user's preferred color mode from localStorage or system preference.
+ * Read the user's preferred color mode.
+ * Priority: 1) explicit localStorage preference, 2) time-of-day in local timezone,
+ * 3) system prefers-color-scheme.
+ * Day = 07:00–20:00 local time → light mode. Night = 20:00–07:00 → dark mode.
  * @returns {'light'|'dark'}
  */
 function getInitialColorMode() {
@@ -1448,6 +1452,13 @@ function getInitialColorMode() {
     const saved = localStorage.getItem('site-color-scheme');
     if (saved) return saved;
   } catch {}
+
+  // Auto: use local hour to pick day/night
+  const hour = new Date().getHours();
+  const isDaytime = hour >= 7 && hour < 20;
+  if (isDaytime) return 'light';
+
+  // Fallback to system preference
   return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
 }
 
