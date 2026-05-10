@@ -927,31 +927,35 @@ function drawMarketSvg(mode) {
   if (!svg) return;
   const locale = getMarketLocale();
 
-  const W = 560, H = 260;
-  const pad = { l: 60, r: 70, t: 36, b: 50 };
-  const pw = W - pad.l - pad.r;
-  const ph = H - pad.t - pad.b;
+  // Layout: wider viewBox, generous right padding so labels never clip
+  const W = 620, H = 290;
+  const pad = { l: 68, r: 20, t: 44, b: 60 };
+  const pw = W - pad.l - pad.r;   // 532 — plot width
+  const ph = H - pad.t - pad.b;   // 186 — plot height
 
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
   function px(q) { return pad.l + (q / 10) * pw; }
   function py(p) { return pad.t + ph - (p / 100) * ph; }
 
-  // Axis label text — full words for clarity
-  const priceLabel  = isEnglish() ? 'Price (P)' : 'Precio (P)';
-  const quantLabel  = isEnglish() ? 'Quantity (Q)' : 'Cantidad (Q)';
+  const priceLabel = isEnglish() ? 'Precio (P)' : 'Precio (P)';
+  const quantLabel = isEnglish() ? 'Cantidad (Q)' : 'Cantidad (Q)';
 
-  // Use a neutral dark color for axes/labels that works on both themes
-  const axisColor   = '#6b7280';
-  const axisStroke  = '#4b5563';
+  const axisColor  = '#6b7280';
+  const axisStroke = '#4b5563';
 
+  // Precio (P) label: rotated on the Y axis, left of origin
+  // Cantidad (Q) label: below the X axis end, anchored to end so it stays inside
   let svgContent = `
     <!-- Axes -->
     <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1.5"/>
     <line x1="${pad.l}" y1="${pad.t + ph}" x2="${pad.l + pw}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1.5"/>
-    <!-- Axis labels -->
-    <text x="${pad.l - 10}" y="${pad.t - 8}" fill="${axisColor}" font-size="11" font-family="IBM Plex Mono" text-anchor="middle">${priceLabel}</text>
-    <text x="${pad.l + pw + 4}" y="${pad.t + ph + 18}" fill="${axisColor}" font-size="11" font-family="IBM Plex Mono" text-anchor="start">${quantLabel}</text>
+    <!-- Arrowheads -->
+    <polygon points="${pad.l - 4},${pad.t + 6} ${pad.l + 4},${pad.t + 6} ${pad.l},${pad.t}" fill="${axisStroke}"/>
+    <polygon points="${pad.l + pw - 6},${pad.t + ph - 4} ${pad.l + pw - 6},${pad.t + ph + 4} ${pad.l + pw},${pad.t + ph}" fill="${axisStroke}"/>
+    <!-- Axis labels — inside viewBox -->
+    <text x="${pad.l - 8}" y="${pad.t - 10}" fill="${axisColor}" font-size="12" font-family="IBM Plex Mono" text-anchor="middle" font-weight="500">${priceLabel}</text>
+    <text x="${pad.l + pw}" y="${pad.t + ph + 22}" fill="${axisColor}" font-size="12" font-family="IBM Plex Mono" text-anchor="end" font-weight="500">${quantLabel}</text>
   `;
 
   if (mode === 'ideal') {
@@ -967,30 +971,29 @@ function drawMarketSvg(mode) {
     const eq_q = (90 - 10) / 14;
     const eq_p = 10 + 7 * eq_q;
 
-    // Labels anchored well inside the plot
-    const demandLabelX = px(8.5);
-    const demandLabelY = py(90 - 7 * 8.5) - 8;
-    const supplyLabelX = px(8.5);
-    const supplyLabelY = py(10 + 7 * 8.5) + 16;
-    // Equilibrium label: left of the point if near right edge
-    const eqLabelX = px(eq_q) - 8;
-    const eqLabelY = py(eq_p) - 10;
+    // Demand label: upper-right area, anchored end so it stays inside
+    const dLx = px(9.0), dLy = py(90 - 7 * 9.0) - 8;
+    // Supply label: lower-right area
+    const sLx = px(9.0), sLy = py(10 + 7 * 9.0) + 18;
+    // Equilibrium label: left of the point
+    const eLx = px(eq_q) - 10, eLy = py(eq_p) - 10;
 
     svgContent += `
       <polyline points="${demandPath.join(' ')}" fill="none" stroke="#4a9eff" stroke-width="2.5"/>
       <polyline points="${supplyPath.join(' ')}" fill="none" stroke="#3dbe8a" stroke-width="2.5"/>
-      <!-- Equilibrium dashed lines -->
-      <line x1="${px(eq_q)}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${py(0)}" stroke="${axisStroke}" stroke-width="1" stroke-dasharray="4,3"/>
-      <line x1="${pad.l}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${py(eq_p)}" stroke="${axisStroke}" stroke-width="1" stroke-dasharray="4,3"/>
-      <!-- Equilibrium point -->
-      <circle cx="${px(eq_q)}" cy="${py(eq_p)}" r="6" fill="#f0ece0" stroke="${axisStroke}" stroke-width="1"/>
-      <!-- Curve labels with background for legibility -->
-      <rect x="${demandLabelX - 42}" y="${demandLabelY - 13}" width="44" height="16" rx="3" fill="rgba(74,158,255,0.15)"/>
-      <text x="${demandLabelX}" y="${demandLabelY}" fill="#4a9eff" font-size="12" font-family="IBM Plex Mono" font-weight="500" text-anchor="end">${locale.ideal.demand}</text>
-      <rect x="${supplyLabelX - 2}" y="${supplyLabelY - 13}" width="44" height="16" rx="3" fill="rgba(61,190,138,0.15)"/>
-      <text x="${supplyLabelX}" y="${supplyLabelY}" fill="#3dbe8a" font-size="12" font-family="IBM Plex Mono" font-weight="500" text-anchor="start">${locale.ideal.supply}</text>
-      <rect x="${eqLabelX - 56}" y="${eqLabelY - 13}" width="58" height="16" rx="3" fill="rgba(107,114,128,0.2)"/>
-      <text x="${eqLabelX}" y="${eqLabelY}" fill="${axisColor}" font-size="11" font-family="IBM Plex Mono" text-anchor="end">${locale.ideal.equilibrium}</text>
+      <!-- Equilibrium dashed guides -->
+      <line x1="${px(eq_q)}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>
+      <line x1="${pad.l}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${py(eq_p)}" stroke="${axisStroke}" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>
+      <circle cx="${px(eq_q)}" cy="${py(eq_p)}" r="6" fill="#f0ece0" stroke="${axisStroke}" stroke-width="1.5"/>
+      <!-- Demand label -->
+      <rect x="${dLx - 58}" y="${dLy - 14}" width="60" height="18" rx="3" fill="rgba(74,158,255,0.18)"/>
+      <text x="${dLx - 2}" y="${dLy}" fill="#4a9eff" font-size="12" font-family="IBM Plex Mono" font-weight="600" text-anchor="end">${locale.ideal.demand}</text>
+      <!-- Supply label -->
+      <rect x="${sLx - 2}" y="${sLy - 14}" width="52" height="18" rx="3" fill="rgba(61,190,138,0.18)"/>
+      <text x="${sLx + 2}" y="${sLy}" fill="#3dbe8a" font-size="12" font-family="IBM Plex Mono" font-weight="600" text-anchor="start">${locale.ideal.supply}</text>
+      <!-- Equilibrium label -->
+      <rect x="${eLx - 62}" y="${eLy - 14}" width="64" height="18" rx="3" fill="rgba(107,114,128,0.18)"/>
+      <text x="${eLx - 2}" y="${eLy}" fill="${axisColor}" font-size="11" font-family="IBM Plex Mono" text-anchor="end">${locale.ideal.equilibrium}</text>
     `;
 
     if (caption) caption.textContent = locale.ideal.caption;
@@ -1014,20 +1017,40 @@ function drawMarketSvg(mode) {
       if (ps >= 0 && ps <= 100) idealSupplyPath.push(`${px(q)},${py(ps)}`);
     }
 
+    // Split the long note into two lines
+    const noteText = locale.real.note;
+    const noteMid  = Math.floor(noteText.length / 2);
+    const noteBreak = noteText.lastIndexOf(' ', noteMid);
+    const noteLine1 = noteText.slice(0, noteBreak);
+    const noteLine2 = noteText.slice(noteBreak + 1);
+
+    // Demand label: upper-left of the crossing zone
+    const dLx = px(4.5), dLy = py(88 - 5 * 4.5) - 10;
+    // Supply label: below the crossing zone, separated vertically
+    const sLx = px(5.5), sLy = py(30 + 4 * 5.5) + 22;
+    // Ideal supply label: mid-chart, above the dashed line
+    const iLx = px(3.5), iLy = py(10 + 7 * 3.5) - 8;
+
     svgContent += `
       <polyline points="${idealSupplyPath.join(' ')}" fill="none" stroke="#3dbe8a" stroke-width="1" stroke-dasharray="5,4" opacity="0.35"/>
       <polyline points="${demandPath.join(' ')}" fill="none" stroke="#4a9eff" stroke-width="2.5"/>
       <polyline points="${supplyPath.join(' ')}" fill="none" stroke="#ff7a35" stroke-width="2.5"/>
-      <!-- Labels with background rects -->
-      <rect x="${pad.l + 6}" y="${pad.t + 4}" width="90" height="16" rx="3" fill="rgba(255,122,53,0.15)"/>
-      <text x="${pad.l + 10}" y="${pad.t + 16}" fill="#ff7a35" font-size="11" font-family="IBM Plex Mono">${locale.real.oligopoly}</text>
-      <rect x="${px(6.5) - 46}" y="${py(88 - 5 * 6.5) - 16}" width="48" height="16" rx="3" fill="rgba(74,158,255,0.15)"/>
-      <text x="${px(6.5)}" y="${py(88 - 5 * 6.5) - 4}" fill="#4a9eff" font-size="12" font-family="IBM Plex Mono" font-weight="500" text-anchor="end">${locale.real.demand}</text>
-      <rect x="${px(6.5) + 2}" y="${py(30 + 4 * 6.5) + 2}" width="60" height="16" rx="3" fill="rgba(255,122,53,0.15)"/>
-      <text x="${px(6.5) + 4}" y="${py(30 + 4 * 6.5) + 14}" fill="#ff7a35" font-size="12" font-family="IBM Plex Mono" font-weight="500">${locale.real.supplyReal}</text>
-      <text x="${px(5)}" y="${py(10 + 7 * 5) - 6}" fill="#3dbe8a" font-size="10" font-family="IBM Plex Mono" opacity="0.6" text-anchor="start">${locale.real.supplyIdeal}</text>
-      <!-- Bottom note -->
-      <text x="${pad.l + 5}" y="${H - 6}" fill="${axisColor}" font-size="9" font-family="IBM Plex Mono">${locale.real.note}</text>
+      <!-- Oligopoly label top-left -->
+      <rect x="${pad.l + 8}" y="${pad.t + 6}" width="108" height="18" rx="3" fill="rgba(255,122,53,0.15)"/>
+      <text x="${pad.l + 12}" y="${pad.t + 19}" fill="#ff7a35" font-size="11" font-family="IBM Plex Mono">${locale.real.oligopoly}</text>
+      <!-- Demand label -->
+      <rect x="${dLx - 58}" y="${dLy - 14}" width="60" height="18" rx="3" fill="rgba(74,158,255,0.18)"/>
+      <text x="${dLx - 2}" y="${dLy}" fill="#4a9eff" font-size="12" font-family="IBM Plex Mono" font-weight="600" text-anchor="end">${locale.real.demand}</text>
+      <!-- Supply real label -->
+      <rect x="${sLx - 2}" y="${sLy - 14}" width="72" height="18" rx="3" fill="rgba(255,122,53,0.18)"/>
+      <text x="${sLx + 2}" y="${sLy}" fill="#ff7a35" font-size="12" font-family="IBM Plex Mono" font-weight="600" text-anchor="start">${locale.real.supplyReal}</text>
+      <!-- Ideal supply label -->
+      <text x="${iLx}" y="${iLy}" fill="#3dbe8a" font-size="10" font-family="IBM Plex Mono" opacity="0.65" text-anchor="start">${locale.real.supplyIdeal}</text>
+      <!-- Bottom note — two lines -->
+      <text fill="${axisColor}" font-size="9" font-family="IBM Plex Mono">
+        <tspan x="${pad.l + 5}" y="${H - 22}">${noteLine1}</tspan>
+        <tspan x="${pad.l + 5}" dy="13">${noteLine2}</tspan>
+      </text>
     `;
 
     if (caption) caption.textContent = locale.real.caption;
