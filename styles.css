@@ -2077,6 +2077,9 @@ body {
 }
 
 /* Light mode variables */
+/* pre-light on <html> fires synchronously from the inline script in <head>
+   to prevent FOUC — same variables as body.light-mode */
+html.pre-light,
 body.light-mode {
   --clr-bg:          #f5f4f0;
   --clr-bg-2:        #eeede8;
@@ -2089,48 +2092,60 @@ body.light-mode {
 }
 
 /* Light mode — footer overrides */
+html.pre-light .site-footer,
 body.light-mode .site-footer {
   background: var(--clr-bg-3) !important;
   border-top-color: var(--clr-border);
 }
 
+html.pre-light .site-footer__title,
+html.pre-light .site-footer__card-title,
 body.light-mode .site-footer__title,
 body.light-mode .site-footer__card-title {
   color: var(--clr-text-bright);
 }
 
+html.pre-light .site-footer__summary,
+html.pre-light .site-footer__card-copy,
 body.light-mode .site-footer__summary,
 body.light-mode .site-footer__card-copy {
   color: var(--clr-text);
 }
 
+html.pre-light .site-footer__eyebrow,
+html.pre-light .site-footer__card-label,
 body.light-mode .site-footer__eyebrow,
 body.light-mode .site-footer__card-label {
   color: var(--clr-accent);
 }
 
+html.pre-light .site-footer__card,
 body.light-mode .site-footer__card {
   background: rgba(0, 0, 0, 0.04);
   border-color: var(--clr-border);
   box-shadow: none;
 }
 
+html.pre-light .site-footer__link,
 body.light-mode .site-footer__link {
   background: rgba(0, 0, 0, 0.04);
   border-color: var(--clr-border);
   color: var(--clr-text);
 }
 
+html.pre-light .site-footer__link:hover,
 body.light-mode .site-footer__link:hover {
   background: var(--clr-accent-dim);
   border-color: var(--clr-accent-mid);
   color: var(--clr-text-bright);
 }
 
+html.pre-light .site-footer__badge,
 body.light-mode .site-footer__badge {
   color: var(--clr-text-bright);
 }
 
+html.pre-light .site-footer__meta-text,
 body.light-mode .site-footer__meta-text {
   color: var(--clr-text-dim);
   border-color: var(--clr-border);

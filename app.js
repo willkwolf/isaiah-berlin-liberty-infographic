@@ -1467,6 +1467,9 @@ function getInitialColorMode() {
  * @param {'light'|'dark'} mode
  */
 function setColorMode(mode) {
+  // Remove the pre-light class from <html> — JS now owns the color mode
+  document.documentElement.classList.remove('pre-light');
+
   document.body.classList.toggle('light-mode', mode === 'light');
 
   const btn = qs('#colorModeBtn');
