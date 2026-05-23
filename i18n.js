@@ -158,6 +158,9 @@ window.I18N_CONTENT.locales.en.staticContent.push(
   { selector: '#sen .sen-intro-quote p', type: 'text', value: '“Development can be seen as a process of expanding the real freedoms that people enjoy.”' },
   { selector: '#sen .sen-intro-quote cite', type: 'html', value: 'Amartya Sen, <em>Development as Freedom</em> (1999)' },
   { selector: '#sen .sen-caps-intro', type: 'text', value: 'Activate or deactivate capabilities to see how effective freedom changes:' },
+  { selector: '#sen .sen-profile-label', type: 'text', value: 'Capabilities Profile' },
+  { selector: '#sen #senProfileDesc', type: 'text', value: 'Activate capabilities in the grid to evaluate the person\'s effective freedom profile.' },
+  { selector: '#sen #senProfileBadge', type: 'text', value: 'No basic capabilities' },
   { selector: '#sen .sen-indices__title', type: 'text', value: 'Measurement in practice' },
   { selector: '#sen .sen-index-card:nth-child(1) .sen-index-full', type: 'text', value: 'Human Development Index' },
   { selector: '#sen .sen-index-card:nth-child(1) p', type: 'text', value: 'It combines life expectancy, education, and income. It measures more than GDP, but it is still a rough proxy for real capabilities.' },
@@ -342,6 +345,7 @@ Object.assign(window.I18N_CONTENT.locales.en.sen, {
 });
 
 Object.assign(window.I18N_CONTENT.locales.en.colombia, {
+  tableHeaders: ['Index', 'Negative Liberty', 'Positive Liberty', 'Capabilities', 'Economic-Libertarian'],
   indicators: [
     { id: 'economic_freedom', source: 'Fraser Institute', name: 'Economic Freedom of the World', unit: '/ 100', rank: '94 / 165' },
     { id: 'freedom_world', source: 'Freedom House', name: 'Freedom in the World', unit: '/ 100', rank: 'Partly Free' },

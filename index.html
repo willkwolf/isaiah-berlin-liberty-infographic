@@ -228,6 +228,9 @@
           </div>
 
           <div class="conflict-loss-panel" aria-live="polite">
+            <div class="conflict-curve-container" style="margin-bottom: 1.25rem;">
+              <svg id="conflictCurveSvg" viewBox="0 0 500 120" style="width:100%; height:120px; display:block;"></svg>
+            </div>
             <div class="loss-row">
               <span class="loss-row__label">Libertad negativa restringida</span>
               <div class="loss-bar-track"><div class="loss-bar loss-bar--neg" id="lossBarNeg"></div></div>
@@ -260,16 +263,15 @@
         <div class="power-wrap">
           <svg id="powerDiagram" viewBox="0 0 500 380" class="power-svg" role="group" aria-label="Diagrama de relaciones de poder">
             <defs>
-              <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-                <polygon points="0 0, 10 3.5, 0 7" class="arrow-marker"/>
+              <!-- Arrowheads: refX is offset to sit exactly at the node circle boundaries -->
+              <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+                <polygon points="0 0, 6 3, 0 6" class="arrow-marker"/>
+              </marker>
+              <marker id="arrowhead-double" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                <polygon points="6 0, 0 3, 6 6" class="arrow-marker"/>
               </marker>
             </defs>
-            <line class="power-edge" x1="250" y1="210" x2="250" y2="116"/>
-            <line class="power-edge" x1="250" y1="210" x2="176" y2="295"/>
-            <line class="power-edge" x1="250" y1="210" x2="324" y2="295"/>
-            <line class="power-edge" x1="250" y1="116" x2="176" y2="295"/>
-            <line class="power-edge" x1="250" y1="116" x2="324" y2="295"/>
-            <line class="power-edge" x1="176" y1="295" x2="324" y2="295"/>
+            <g id="powerEdges"></g>
 
             <g class="power-node" data-node="individuo" tabindex="0" role="button" aria-label="Individuo: sujeto político">
               <circle cx="250" cy="210" r="44"/>
@@ -436,12 +438,13 @@
         <div class="sen-caps-section">
           <p class="sen-caps-intro">Activa o desactiva capacidades para ver cómo cambia la libertad efectiva:</p>
           <div class="sen-caps-grid" id="senCapsGrid" role="group" aria-label="Capacidades de Sen"></div>
-          <div class="sen-meter">
-            <div class="sen-meter__label">Libertad efectiva estimada</div>
-            <div class="sen-meter__track">
-              <div class="sen-meter__fill" id="senFreedomBar"></div>
+          <div class="sen-profile-dashboard" id="senProfileDashboard" aria-live="polite">
+            <div class="sen-profile-header">
+              <span class="sen-profile-label">Perfil de Capacidades</span>
+              <span class="sen-profile-badge" id="senProfileBadge">Sin capacidades básicas</span>
             </div>
-            <div class="sen-meter__val" id="senFreedomVal">0%</div>
+            <p class="sen-profile-desc" id="senProfileDesc">Activa capacidades en la grilla para evaluar el perfil de libertad efectiva de la persona.</p>
+            <div class="sen-profile-radar" id="senProfileRadar"></div>
           </div>
           <p class="sen-caveat" id="senFreedomCaveat"></p>
         </div>
@@ -479,7 +482,9 @@
         <h2 id="colombia-title" class="section__title">Colombia<br/><em>bajo tres índices</em></h2>
         <p class="section__subtitle">Los mismos datos. Tres índices. Cuatro lecturas posibles. Cambia el lente — observa cómo el diagnóstico cambia radicalmente.</p>
 
-        <div class="colombia-dashboard" id="colombiaDashboard"></div>
+        <div class="colombia-table-container">
+          <table class="colombia-table" id="colombiaTable" aria-label="Tabla de comparación de índices de Colombia bajo diferentes lentes teóricos"></table>
+        </div>
 
         <div class="colombia-reading" aria-live="polite">
           <h3 class="colombia-reading__title">Diagnóstico bajo el marco activo</h3>
@@ -499,6 +504,10 @@
         <div class="system-toggle-bar">
           <button class="system-btn active" id="systemClosedBtn" aria-pressed="true">Sistema cerrado</button>
           <button class="system-btn" id="systemPluralBtn" aria-pressed="false">Sistema plural</button>
+        </div>
+
+        <div class="system-curve-container" style="margin-bottom: 1.25rem;">
+          <svg id="systemCurveSvg" viewBox="0 0 500 120" style="width:100%; height:120px; display:block;"></svg>
         </div>
 
         <div class="system-narrative" id="systemNarrative" aria-live="polite"></div>

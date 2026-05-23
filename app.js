@@ -585,6 +585,10 @@ function setLens(lens) {
   // Colombia
   updateColombiaDashboard();
 
+  // Dynamic curves & arrows (Tufte visual integrity and dynamic flow)
+  drawConflictCurveSvg(state.conflictValue);
+  updatePowerDiagramEdges(lens);
+
   // Announce
   const announce = qs('#lensAnnounce');
   if (announce) {
@@ -735,41 +739,65 @@ function initDivergenceCanvas() {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  let t = 0;
-
   function draw() {
     const w = canvas.width, h = canvas.height;
     ctx.clearRect(0, 0, w, h);
     const values = getCanvasValues();
 
     const cx = w / 2, cy = h / 2;
-    const baseR = 28;
     const maxR = 120;
-    const progress = (Math.sin(t * 0.008) + 1) / 2; // 0..1
+    const progress = 0.85; // Static high-tension factor (Tufte visual stability)
+
+    // Concentric guidelines (3 levels of dashed circles for baseline reference)
+    const levels = [0.35, 0.65, 0.95];
+    levels.forEach(lvl => {
+      ctx.beginPath();
+      ctx.arc(cx, cy, lvl * maxR, 0, Math.PI * 2);
+      ctx.strokeStyle = state.colorMode === 'light' ? 'rgba(0, 0, 0, 0.07)' : 'rgba(255, 255, 255, 0.05)';
+      ctx.lineWidth = 0.75;
+      ctx.setLineDash([3, 4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    });
 
     values.forEach(v => {
       const rad = (v.angle - 90) * Math.PI / 180;
-      const r = lerp(baseR, maxR, progress);
+      const r = progress * maxR;
       const x = cx + Math.cos(rad) * r;
       const y = cy + Math.sin(rad) * r;
 
-      // Line from center
+      // Line from center (thin axis)
       ctx.beginPath();
       ctx.moveTo(cx, cy);
       ctx.lineTo(x, y);
-      ctx.strokeStyle = v.color + '55';
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = v.color + '33';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Web connections between neighboring values (Tension Web)
+      // Connect each value to the next in order
+      const idx = values.indexOf(v);
+      const nextVal = values[(idx + 1) % values.length];
+      const nextRad = (nextVal.angle - 90) * Math.PI / 180;
+      const nextX = cx + Math.cos(nextRad) * r;
+      const nextY = cy + Math.sin(nextRad) * r;
+
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(nextX, nextY);
+      ctx.strokeStyle = state.colorMode === 'light' ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)';
+      ctx.lineWidth = 0.75;
       ctx.stroke();
 
       // Node
       ctx.beginPath();
-      ctx.arc(x, y, 5, 0, Math.PI * 2);
+      ctx.arc(x, y, 4.5, 0, Math.PI * 2);
       ctx.fillStyle = v.color;
       ctx.fill();
 
       // Label
       ctx.font = '11px "IBM Plex Mono", monospace';
-      ctx.fillStyle = v.color + 'cc';
+      ctx.fillStyle = state.colorMode === 'light' ? '#374151' : v.color + 'dd';
       ctx.textAlign = x > cx ? 'left' : x < cx - 10 ? 'right' : 'center';
       const labelX = x + (x > cx ? 8 : x < cx - 10 ? -8 : 0);
       const labelY = y + (y > cy ? 14 : -8);
@@ -778,11 +806,11 @@ function initDivergenceCanvas() {
 
     // Center node
     ctx.beginPath();
-    ctx.arc(cx, cy, 8, 0, Math.PI * 2);
-    ctx.fillStyle = '#d4d0c8';
+    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+    ctx.fillStyle = state.colorMode === 'light' ? '#4b5563' : '#d4d0c8';
     ctx.fill();
 
-    t++;
+    // Redraw loop on animation frames so color mode and language changes update instantly
     requestAnimationFrame(draw);
   }
 
@@ -856,6 +884,86 @@ function updateConflictSlider(val) {
   if (note)   note.textContent = getConflictNote(val);
 
   slider.setAttribute('aria-valuenow', val);
+  
+  // Dynamic non-linear trajectory chart (Tufte multivariate + integrity)
+  drawConflictCurveSvg(val);
+}
+
+function drawConflictCurveSvg(val) {
+  const svg = qs('#conflictCurveSvg');
+  if (!svg) return;
+
+  const W = 500, H = 120;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+  const pad = { l: 68, r: 25, t: 18, b: 24 };
+  const pw = W - pad.l - pad.r;
+  const ph = H - pad.t - pad.b;
+
+  function px(x) { return pad.l + (x / 100) * pw; }
+  function py(y) { return pad.t + ph - (y / 100) * ph; }
+
+  const lens = state.currentLens;
+  const activeColor = LENS_DATA[lens].color;
+
+  let points = [];
+  let currentY = 50;
+
+  for (let x = 0; x <= 100; x += 2) {
+    let y = 50;
+    if (lens === 'negativa') {
+      y = Math.pow(x / 100, 2.2) * 100;
+    } else if (lens === 'capacidades') {
+      y = Math.sqrt(x / 100) * 80 + (x > 80 ? (x - 80) * 1.0 : 0);
+    } else if (lens === 'positiva') {
+      y = Math.sin((x / 100) * Math.PI / 2) * 75;
+    } else {
+      y = x;
+    }
+    points.push(`${px(x)},${py(y)}`);
+    if (x === Math.round(val / 2) * 2) {
+      currentY = y;
+    }
+  }
+
+  const labelX = isEnglish() ? 'Equality' : 'Igualdad';
+  const labelY = isEnglish() ? 'Loss / Cost' : 'Costo / Pérdida';
+  const curveLabel = isEnglish()
+    ? `${LENS_DATA[lens].name} Curve`
+    : `Curva de ${LENS_DATA[lens].name}`;
+
+  const axisColor = '#6b7280';
+  const axisStroke = '#4b5563';
+
+  let svgContent = `
+    <!-- Axes -->
+    <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1"/>
+    <line x1="${pad.l}" y1="${pad.t + ph}" x2="${pad.l + pw}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1"/>
+
+    <!-- Axis Labels -->
+    <text x="${pad.l - 6}" y="${pad.t - 4}" fill="${axisColor}" font-size="8" font-family="IBM Plex Mono" text-anchor="middle">${labelY}</text>
+    <text x="${pad.l + pw}" y="${pad.t + ph + 16}" fill="${axisColor}" font-size="8" font-family="IBM Plex Mono" text-anchor="end">${labelX}</text>
+
+    <!-- Trajectory Curve -->
+    <polyline points="${points.join(' ')}" fill="none" stroke="${activeColor}" stroke-width="2"/>
+
+    <!-- Intersection Guide lines -->
+    <line x1="${px(val)}" y1="${py(currentY)}" x2="${px(val)}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>
+    <line x1="${pad.l}" y1="${py(currentY)}" x2="${px(val)}" y2="${py(currentY)}" stroke="${axisStroke}" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>
+
+    <!-- Current value dot -->
+    <circle cx="${px(val)}" cy="${py(currentY)}" r="4.5" fill="#f0ece0" stroke="${activeColor}" stroke-width="2"/>
+
+    <!-- Text annotation -->
+    <text x="${px(val) + (val > 65 ? -10 : 10)}" y="${py(currentY) - 8}" fill="${activeColor}" font-size="9" font-family="IBM Plex Mono" font-weight="600" text-anchor="${val > 65 ? 'end' : 'start'}">
+      ${val}%: ${Math.round(currentY)}% ${isEnglish() ? 'Loss' : 'Pérdida'}
+    </text>
+
+    <!-- Curve indicator label -->
+    <text x="${pad.l + 10}" y="${pad.t + 12}" fill="${activeColor}" font-size="9" font-family="IBM Plex Mono" font-weight="600" opacity="0.75">${curveLabel}</text>
+  `;
+
+  svg.innerHTML = svgContent;
 }
 
 function initConflictSlider() {
@@ -891,6 +999,7 @@ function initPowerDiagram() {
   });
 
   renderPowerInfo();
+  updatePowerDiagramEdges(state.currentLens);
 }
 
 function renderPowerInfo() {
@@ -903,6 +1012,7 @@ function renderPowerInfo() {
     infoPanel.innerHTML = isEnglish()
       ? '<p class="power-info__hint">Tap a node to see the kind of restriction it exerts on the individual.</p>'
       : '<p class="power-info__hint">Haz clic en un nodo para ver el tipo de restricción que ejerce sobre el individuo.</p>';
+    updatePowerDiagramEdges(state.currentLens);
     return;
   }
 
@@ -915,6 +1025,126 @@ function renderPowerInfo() {
     <p class="power-info__desc">${data.desc}</p>
     <p class="power-info__mechanism">${data.mechanism}</p>
   `;
+  
+  updatePowerDiagramEdges(state.currentLens);
+}
+
+function updatePowerDiagramEdges(lens) {
+  const edgesGroup = qs('#powerEdges');
+  if (!edgesGroup) return;
+
+  // Circle coordinates and radii exactly matched to DOM elements
+  const nodes = {
+    estado:    { x: 250, y: 80,  r: 36 },
+    individuo: { x: 250, y: 210, r: 44 },
+    mercado:   { x: 140, y: 320, r: 36 },
+    sociedad:  { x: 360, y: 320, r: 36 }
+  };
+
+  const connections = [
+    { from: 'estado',    to: 'individuo' },
+    { from: 'mercado',   to: 'individuo' },
+    { from: 'sociedad',  to: 'individuo' },
+    { from: 'estado',    to: 'mercado'   },
+    { from: 'estado',    to: 'sociedad'  },
+    { from: 'mercado',   to: 'sociedad'  }
+  ];
+
+  let html = '';
+
+  connections.forEach(conn => {
+    const n1 = nodes[conn.from];
+    const n2 = nodes[conn.to];
+
+    const dx = n2.x - n1.x;
+    const dy = n2.y - n1.y;
+    const d = Math.sqrt(dx * dx + dy * dy);
+    const ux = dx / d;
+    const uy = dy / d;
+
+    // Start exactly at boundary of source circle
+    const x1 = n1.x + ux * n1.r;
+    const y1 = n1.y + uy * n1.r;
+
+    // End exactly at boundary of destination circle, leaving 6px for arrowhead
+    const arrowPadding = 6;
+    const x2 = n2.x - ux * (n2.r + arrowPadding);
+    const y2 = n2.y - uy * (n2.r + arrowPadding);
+
+    let strokeColor = 'var(--clr-border)';
+    let strokeWidth = 1.5;
+    let dashArray = '';
+    let markerId = 'arrowhead';
+
+    const isActive = !state.activePowerNode || 
+                     (state.activePowerNode === conn.from) || 
+                     (state.activePowerNode === conn.to);
+
+    if (lens === 'negativa') {
+      if (conn.from === 'estado' && conn.to === 'individuo') {
+        strokeColor = 'var(--clr-neg)';
+        strokeWidth = 3;
+      } else if (conn.from === 'sociedad' && conn.to === 'individuo') {
+        strokeColor = 'rgba(74, 158, 255, 0.4)';
+        strokeWidth = 2;
+      }
+    } else if (lens === 'positiva') {
+      if (conn.from === 'estado' && conn.to === 'individuo') {
+        strokeColor = 'var(--clr-pos)';
+        strokeWidth = 3;
+        dashArray = '5,3'; // Represents active positive enablement
+      } else if (conn.from === 'sociedad' && conn.to === 'individuo') {
+        strokeColor = 'rgba(255, 122, 53, 0.6)';
+        strokeWidth = 2.5;
+      } else if (conn.from === 'mercado' && conn.to === 'individuo') {
+        strokeColor = 'rgba(255, 122, 53, 0.6)';
+        strokeWidth = 2.5;
+      }
+    } else if (lens === 'capacidades') {
+      if (conn.from === 'estado' && conn.to === 'individuo') {
+        strokeColor = 'var(--clr-cap)';
+        strokeWidth = 3;
+        dashArray = '6,3'; // Capability-building provision
+      } else if (conn.from === 'mercado' && conn.to === 'individuo') {
+        strokeColor = 'rgba(61, 190, 138, 0.7)';
+        strokeWidth = 3; // Severe capability deprivation
+      } else if (conn.from === 'sociedad' && conn.to === 'individuo') {
+        strokeColor = 'rgba(61, 190, 138, 0.6)';
+        strokeWidth = 2.5;
+      }
+    } else if (lens === 'libertario') {
+      if (conn.from === 'estado' && conn.to === 'individuo') {
+        strokeColor = '#e05555'; // Hostile coercion/interference
+        strokeWidth = 3;
+      } else if (conn.from === 'mercado' && conn.to === 'individuo') {
+        strokeColor = 'var(--clr-lib)';
+        strokeWidth = 3;
+        markerId = 'arrowhead-double'; // Bidirectional voluntary contract
+      } else if (conn.from === 'estado' && conn.to === 'mercado') {
+        strokeColor = '#e05555';
+        strokeWidth = 2;
+        dashArray = '3,3';
+      }
+    }
+
+    const opacity = state.activePowerNode 
+      ? (isActive ? 1.0 : 0.25)
+      : 0.85;
+
+    html += `
+      <line class="power-edge" 
+            x1="${x1}" y1="${y1}" 
+            x2="${x2}" y2="${y2}" 
+            stroke="${strokeColor}" 
+            stroke-width="${strokeWidth}" 
+            ${dashArray ? `stroke-dasharray="${dashArray}"` : ''} 
+            marker-end="url(#${markerId})" 
+            opacity="${opacity}" 
+            style="transition: stroke 0.35s, stroke-width 0.35s, opacity 0.35s;" />
+    `;
+  });
+
+  edgesGroup.innerHTML = html;
 }
 
 // ═══════════════════════════════════════════════
@@ -944,16 +1174,17 @@ function drawMarketSvg(mode) {
   const axisColor  = '#6b7280';
   const axisStroke = '#4b5563';
 
-  // Precio (P) label: rotated on the Y axis, left of origin
-  // Cantidad (Q) label: below the X axis end, anchored to end so it stays inside
+  // Tufte Range Frame: axes only extend as far as the actual data range (e.g. from lowest price to highest price represented)
+  const minYVal = mode === 'ideal' ? py(90) : py(88);
+  const maxYVal = py(10);
+  const minXVal = px(0);
+  const maxXVal = px(9.0);
+
   let svgContent = `
-    <!-- Axes -->
-    <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1.5"/>
-    <line x1="${pad.l}" y1="${pad.t + ph}" x2="${pad.l + pw}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1.5"/>
-    <!-- Arrowheads -->
-    <polygon points="${pad.l - 4},${pad.t + 6} ${pad.l + 4},${pad.t + 6} ${pad.l},${pad.t}" fill="${axisStroke}"/>
-    <polygon points="${pad.l + pw - 6},${pad.t + ph - 4} ${pad.l + pw - 6},${pad.t + ph + 4} ${pad.l + pw},${pad.t + ph}" fill="${axisStroke}"/>
-    <!-- Axis labels — inside viewBox -->
+    <!-- Axes (Tufte Range Frames - interrupted to show actual data boundaries) -->
+    <line x1="${pad.l}" y1="${minYVal}" x2="${pad.l}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1.25"/>
+    <line x1="${pad.l}" y1="${pad.t + ph}" x2="${maxXVal}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1.25"/>
+    <!-- Axis labels — inside viewBox and floating cleanly -->
     <text x="${pad.l - 8}" y="${pad.t - 10}" fill="${axisColor}" font-size="12" font-family="IBM Plex Mono" text-anchor="middle" font-weight="500">${priceLabel}</text>
     <text x="${pad.l + pw}" y="${pad.t + ph + 22}" fill="${axisColor}" font-size="12" font-family="IBM Plex Mono" text-anchor="end" font-weight="500">${quantLabel}</text>
   `;
@@ -979,21 +1210,18 @@ function drawMarketSvg(mode) {
     const eLx = px(eq_q) - 10, eLy = py(eq_p) - 10;
 
     svgContent += `
-      <polyline points="${demandPath.join(' ')}" fill="none" stroke="#4a9eff" stroke-width="2.5"/>
-      <polyline points="${supplyPath.join(' ')}" fill="none" stroke="#3dbe8a" stroke-width="2.5"/>
+      <polyline points="${demandPath.join(' ')}" fill="none" stroke="#4a9eff" stroke-width="2"/>
+      <polyline points="${supplyPath.join(' ')}" fill="none" stroke="#3dbe8a" stroke-width="2"/>
       <!-- Equilibrium dashed guides -->
-      <line x1="${px(eq_q)}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>
-      <line x1="${pad.l}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${py(eq_p)}" stroke="${axisStroke}" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>
-      <circle cx="${px(eq_q)}" cy="${py(eq_p)}" r="6" fill="#f0ece0" stroke="${axisStroke}" stroke-width="1.5"/>
-      <!-- Demand label -->
-      <rect x="${dLx - 58}" y="${dLy - 14}" width="60" height="18" rx="3" fill="rgba(74,158,255,0.18)"/>
-      <text x="${dLx - 2}" y="${dLy}" fill="#4a9eff" font-size="12" font-family="IBM Plex Mono" font-weight="600" text-anchor="end">${locale.ideal.demand}</text>
-      <!-- Supply label -->
-      <rect x="${sLx - 2}" y="${sLy - 14}" width="52" height="18" rx="3" fill="rgba(61,190,138,0.18)"/>
-      <text x="${sLx + 2}" y="${sLy}" fill="#3dbe8a" font-size="12" font-family="IBM Plex Mono" font-weight="600" text-anchor="start">${locale.ideal.supply}</text>
-      <!-- Equilibrium label -->
-      <rect x="${eLx - 62}" y="${eLy - 14}" width="64" height="18" rx="3" fill="rgba(107,114,128,0.18)"/>
-      <text x="${eLx - 2}" y="${eLy}" fill="${axisColor}" font-size="11" font-family="IBM Plex Mono" text-anchor="end">${locale.ideal.equilibrium}</text>
+      <line x1="${px(eq_q)}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="0.75" stroke-dasharray="4,3" opacity="0.5"/>
+      <line x1="${pad.l}" y1="${py(eq_p)}" x2="${px(eq_q)}" y2="${py(eq_p)}" stroke="${axisStroke}" stroke-width="0.75" stroke-dasharray="4,3" opacity="0.5"/>
+      <circle cx="${px(eq_q)}" cy="${py(eq_p)}" r="4.5" fill="#f0ece0" stroke="${axisStroke}" stroke-width="1.5"/>
+      <!-- Demand label - cleanly floating text (no border box) -->
+      <text x="${dLx - 2}" y="${dLy}" fill="#4a9eff" font-size="11" font-family="IBM Plex Mono" font-weight="600" text-anchor="end">${locale.ideal.demand}</text>
+      <!-- Supply label - cleanly floating text -->
+      <text x="${sLx + 2}" y="${sLy}" fill="#3dbe8a" font-size="11" font-family="IBM Plex Mono" font-weight="600" text-anchor="start">${locale.ideal.supply}</text>
+      <!-- Equilibrium label - cleanly floating text -->
+      <text x="${eLx - 2}" y="${eLy}" fill="${axisColor}" font-size="10" font-family="IBM Plex Mono" text-anchor="end">${locale.ideal.equilibrium}</text>
     `;
 
     if (caption) caption.textContent = locale.ideal.caption;
@@ -1032,20 +1260,17 @@ function drawMarketSvg(mode) {
     const iLx = px(3.5), iLy = py(10 + 7 * 3.5) - 8;
 
     svgContent += `
-      <polyline points="${idealSupplyPath.join(' ')}" fill="none" stroke="#3dbe8a" stroke-width="1" stroke-dasharray="5,4" opacity="0.35"/>
-      <polyline points="${demandPath.join(' ')}" fill="none" stroke="#4a9eff" stroke-width="2.5"/>
-      <polyline points="${supplyPath.join(' ')}" fill="none" stroke="#ff7a35" stroke-width="2.5"/>
-      <!-- Oligopoly label top-left -->
-      <rect x="${pad.l + 8}" y="${pad.t + 6}" width="108" height="18" rx="3" fill="rgba(255,122,53,0.15)"/>
-      <text x="${pad.l + 12}" y="${pad.t + 19}" fill="#ff7a35" font-size="11" font-family="IBM Plex Mono">${locale.real.oligopoly}</text>
-      <!-- Demand label -->
-      <rect x="${dLx - 58}" y="${dLy - 14}" width="60" height="18" rx="3" fill="rgba(74,158,255,0.18)"/>
-      <text x="${dLx - 2}" y="${dLy}" fill="#4a9eff" font-size="12" font-family="IBM Plex Mono" font-weight="600" text-anchor="end">${locale.real.demand}</text>
-      <!-- Supply real label -->
-      <rect x="${sLx - 2}" y="${sLy - 14}" width="72" height="18" rx="3" fill="rgba(255,122,53,0.18)"/>
-      <text x="${sLx + 2}" y="${sLy}" fill="#ff7a35" font-size="12" font-family="IBM Plex Mono" font-weight="600" text-anchor="start">${locale.real.supplyReal}</text>
-      <!-- Ideal supply label -->
-      <text x="${iLx}" y="${iLy}" fill="#3dbe8a" font-size="10" font-family="IBM Plex Mono" opacity="0.65" text-anchor="start">${locale.real.supplyIdeal}</text>
+      <polyline points="${idealSupplyPath.join(' ')}" fill="none" stroke="#3dbe8a" stroke-width="0.75" stroke-dasharray="5,4" opacity="0.35"/>
+      <polyline points="${demandPath.join(' ')}" fill="none" stroke="#4a9eff" stroke-width="2"/>
+      <polyline points="${supplyPath.join(' ')}" fill="none" stroke="#ff7a35" stroke-width="2"/>
+      <!-- Oligopoly label top-left (floating text) -->
+      <text x="${pad.l + 12}" y="${pad.t + 19}" fill="#ff7a35" font-size="10" font-family="IBM Plex Mono" font-weight="600">${locale.real.oligopoly}</text>
+      <!-- Demand label - cleanly floating text -->
+      <text x="${dLx - 2}" y="${dLy}" fill="#4a9eff" font-size="11" font-family="IBM Plex Mono" font-weight="600" text-anchor="end">${locale.real.demand}</text>
+      <!-- Supply real label - cleanly floating text -->
+      <text x="${sLx + 2}" y="${sLy}" fill="#ff7a35" font-size="11" font-family="IBM Plex Mono" font-weight="600" text-anchor="start">${locale.real.supplyReal}</text>
+      <!-- Ideal supply label - cleanly floating text -->
+      <text x="${iLx}" y="${iLy}" fill="#3dbe8a" font-size="9" font-family="IBM Plex Mono" opacity="0.6" text-anchor="start">${locale.real.supplyIdeal}</text>
       <!-- Bottom note — two lines -->
       <text fill="${axisColor}" font-size="9" font-family="IBM Plex Mono">
         <tspan x="${pad.l + 5}" y="${H - 22}">${noteLine1}</tspan>
@@ -1111,36 +1336,82 @@ function renderSenCapabilities() {
 
 function updateSenMeter() {
   const capabilities = getSenCapabilities();
-  const locale = getSenLocale();
-  let total = 0;
+  const activeIds = state.senActiveCaps;
 
+  // Update capability button states
   capabilities.forEach(cap => {
     const btn = qs(`.sen-cap-btn[data-id="${cap.id}"]`);
-    const active = state.senActiveCaps.has(cap.id);
     if (btn) {
+      const active = activeIds.has(cap.id);
       btn.classList.toggle('active', active);
       btn.setAttribute('aria-pressed', String(active));
     }
-    if (active) total += cap.weight;
   });
 
-  const bar = qs('#senFreedomBar');
-  const val = qs('#senFreedomVal');
+  const badge = qs('#senProfileBadge');
+  const desc = qs('#senProfileDesc');
+  const radar = qs('#senProfileRadar');
   const caveat = qs('#senFreedomCaveat');
-  const label = qs('#sen .sen-meter__label');
 
-  if (bar) bar.style.width = total + '%';
-  if (val) val.textContent = total + '%';
-  if (label) label.textContent = locale.meterLabel;
+  let badgeText = '';
+  let descText = '';
 
-  let msg = locale.messages.zero;
-  if (total === 0) msg = locale.messages.zero;
-  else if (total < 30) msg = locale.messages.low;
-  else if (total < 60) msg = locale.messages.mid;
-  else if (total < 85) msg = locale.messages.high;
-  else msg = locale.messages.full;
+  const hasHealth = activeIds.has('salud');
+  const hasEducation = activeIds.has('educacion');
+  const hasWork = activeIds.has('trabajo');
+  const hasParticipation = activeIds.has('participacion');
+  const hasMobility = activeIds.has('movilidad');
 
-  if (caveat) caveat.textContent = msg ? `${msg} ${locale.caveat}` : locale.caveat;
+  if (activeIds.size === 0) {
+    badgeText = isEnglish() ? 'Null Real Freedom' : 'Sin libertad real';
+    descText = isEnglish()
+      ? 'The individual lacks all basic capabilities. Formal negative liberty might exist, but actual agency is non-existent.'
+      : 'El individuo carece de toda capacidad básica. La libertad formal puede existir, pero la agencia real es nula.';
+  } else if ((hasHealth || hasEducation) && !hasWork && !hasParticipation) {
+    badgeText = isEnglish() ? 'Frustrated Agency' : 'Agencia Frustrada';
+    descText = isEnglish()
+      ? 'The person is educated or healthy, but has no options for dignified work or civic voice. The capabilities cannot be actualized.'
+      : 'La persona posee salud o educación, pero carece de opciones de trabajo digno y de participación cívica. Las capacidades están bloqueadas.';
+  } else if ((hasWork || hasMobility) && !hasHealth && !hasEducation) {
+    badgeText = isEnglish() ? 'Paternalistic Survival' : 'Supervivencia Paternalista';
+    descText = isEnglish()
+      ? 'The individual can move and produce economic value, but without health and education, they cannot act as a self-determined agent.'
+      : 'El individuo puede moverse y trabajar para producir valor, pero sin salud y educación es incapaz de actuar con autonomía real.';
+  } else if (activeIds.size >= 5) {
+    badgeText = isEnglish() ? 'Robust Capabilities' : 'Capacidades Robustas';
+    descText = isEnglish()
+      ? 'A highly developed capabilities profile. The person possesses real, substantial freedoms to lead the life they have reason to value.'
+      : 'Un perfil de capacidades altamente desarrollado. La persona cuenta con libertades reales sólidas para habitar el mundo autónomamente.';
+  } else {
+    badgeText = isEnglish() ? 'Fragmented Freedom' : 'Libertad Fragmentada';
+    descText = isEnglish()
+      ? 'The profile shows partial capabilities. Some dimensions of functioning are secured, but severe deprivations persist.'
+      : 'El perfil muestra capacidades fragmentadas. Algunas dimensiones básicas están cubiertas, pero persisten privaciones graves.';
+  }
+
+  if (badge) badge.textContent = badgeText;
+  if (desc) desc.textContent = descText;
+
+  // Render minimal profile radar dots
+  if (radar) {
+    radar.innerHTML = capabilities.map(cap => {
+      const active = activeIds.has(cap.id);
+      const dotColor = active ? 'var(--clr-cap)' : 'var(--clr-border)';
+      const opacity = active ? '1' : '0.4';
+      return `
+        <div class="sen-radar-item" style="opacity:${opacity}">
+          <span class="sen-radar-dot" style="background-color:${dotColor}"></span>
+          <span class="sen-radar-name">${cap.name}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  if (caveat) {
+    caveat.textContent = isEnglish()
+      ? 'Note: These qualitative profiles reflect Sen\'s insistence that capabilities cannot be aggregated into a single numeric average.'
+      : 'Nota: Estos perfiles cualitativos reflejan la insistencia de Sen en que las capacidades no deben promediarse en un índice lineal.';
+  }
 }
 
 function initSenCapacidades() {
@@ -1152,31 +1423,102 @@ function initSenCapacidades() {
 // ═══════════════════════════════════════════════
 
 function updateColombiaDashboard() {
-  const dash = qs('#colombiaDashboard');
+  const table = qs('#colombiaTable');
   const reading = qs('#colombiaLensReading');
-  if (!dash) return;
+  if (!table) return;
 
   const lens = state.currentLens;
-  const lensColor = LENS_DATA[lens].color;
   const locale = getColombiaContent();
 
-  dash.innerHTML = COLOMBIA_DATA.indicators.map(ind => {
-    const localeIndicator = locale.indicators.find(item => item.id === ind.id) || ind;
-    const pct = (ind.value / ind.max) * 100;
-    const barColor = ind.color_by_lens[lens] || lensColor;
-    return `
-      <div class="colombia-indicator">
-        <div class="colombia-indicator__source">${localeIndicator.source || ind.source}</div>
-        <div class="colombia-indicator__name">${localeIndicator.name || ind.name}</div>
-        <div class="colombia-indicator__value" style="color:${barColor}">${ind.value}</div>
-        <div class="colombia-indicator__rank">${localeIndicator.rank || ind.rank}</div>
-        <div class="colombia-indicator__bar-track">
-          <div class="colombia-indicator__bar" style="width:${pct}%;background:${barColor}"></div>
-        </div>
-        <div class="colombia-indicator__scale">${isEnglish() ? 'Scale' : 'Escala'}: ${localeIndicator.unit || ind.unit}</div>
-      </div>
+  const headers = isEnglish()
+    ? ['Indicator / Index', 'Negative Liberty', 'Positive Liberty', 'Capabilities', 'Economic-Libertarian']
+    : ['Indicador / Índice', 'Libertad Negativa', 'Libertad Positiva', 'Capacidades', 'Económico-Libertario'];
+
+  const rowsData = [
+    {
+      id: 'economic_freedom',
+      name: isEnglish() ? 'Economic Freedom (Fraser)' : 'Libertad Económica (Fraser)',
+      value: '65.6 / 100',
+      evaluations: isEnglish() ? {
+        negativa: 'State overregulation',
+        positiva: 'Capital privilege',
+        capacidades: 'Nominal transaction',
+        libertario: 'Excessive bureaucracy'
+      } : {
+        negativa: 'Exceso de regulación',
+        positiva: 'Privilegio de capital',
+        capacidades: 'Transacción nominal',
+        libertario: 'Exceso de burocracia'
+      }
+    },
+    {
+      id: 'freedom_world',
+      name: isEnglish() ? 'Freedom in the World (FH)' : 'Libertad en el Mundo (FH)',
+      value: '69 / 100',
+      evaluations: isEnglish() ? {
+        negativa: 'Partly Free (coerced)',
+        positiva: 'Unequal formal freedom',
+        capacidades: 'Agency deprivation',
+        libertario: 'Insecure property rights'
+      } : {
+        negativa: 'Parcialmente Libre',
+        positiva: 'Libertad formal desigual',
+        capacidades: 'Privación de agencia',
+        libertario: 'Propiedad insegura'
+      }
+    },
+    {
+      id: 'hdi',
+      name: isEnglish() ? 'Human Development Index (UNDP)' : 'Desarrollo Humano (PNUD)',
+      value: '0.754 (0-1)',
+      evaluations: isEnglish() ? {
+        negativa: 'Irrelevant metric',
+        positiva: 'Average hides inequality',
+        capacidades: 'Invisible regional gaps',
+        libertario: 'Market growth proxy'
+      } : {
+        negativa: 'Métrica irrelevante',
+        positiva: 'Promedio oculta brechas',
+        capacidades: 'Privación regional invisible',
+        libertario: 'Proxy de crecimiento'
+      }
+    }
+  ];
+
+  const columnsKeys = ['negativa', 'positiva', 'capacidades', 'libertario'];
+
+  let html = `
+    <thead>
+      <tr>
+        <th>${headers[0]}</th>
+        ${columnsKeys.map((colKey, i) => {
+          const isActive = colKey === lens;
+          const activeClass = isActive ? 'class="active-column-header"' : '';
+          return `<th ${activeClass}>${headers[i+1]}</th>`;
+        }).join('')}
+      </tr>
+    </thead>
+    <tbody>
+  `;
+
+  rowsData.forEach(row => {
+    html += `
+      <tr>
+        <td class="table-indicator-name">
+          <strong>${row.name}</strong>
+          <span class="table-indicator-val">${row.value}</span>
+        </td>
+        ${columnsKeys.map(colKey => {
+          const isActive = colKey === lens;
+          const activeClass = isActive ? 'class="active-column-cell"' : '';
+          return `<td ${activeClass}>${row.evaluations[colKey]}</td>`;
+        }).join('')}
+      </tr>
     `;
-  }).join('');
+  });
+
+  html += `</tbody>`;
+  table.innerHTML = html;
 
   if (reading) {
     reading.textContent = locale.readings[lens] || COLOMBIA_DATA.readings[lens] || '';
@@ -1222,6 +1564,72 @@ function renderSystemNarrative() {
     <ul>${data.implications.map(i => `<li>${i}</li>`).join('')}</ul>
     <p style="margin-top:1rem;font-size:0.82rem;color:var(--clr-text-dim);border-top:1px solid var(--clr-border);padding-top:0.75rem;font-style:italic">${data.warning}</p>
   `;
+
+  // Draw visual curves illustrating value monism vs pluralism
+  drawSystemCurveSvg(state.systemMode);
+}
+
+function drawSystemCurveSvg(mode) {
+  const svg = qs('#systemCurveSvg');
+  if (!svg) return;
+
+  const W = 500, H = 120;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+  const pad = { l: 50, r: 50, t: 20, b: 20 };
+  const pw = W - pad.l - pad.r;
+  const ph = H - pad.t - pad.b;
+
+  const axisStroke = '#4b5563';
+  const axisColor = '#6b7280';
+
+  let svgContent = `
+    <!-- Axes -->
+    <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1" opacity="0.25"/>
+    <line x1="${pad.l}" y1="${pad.t + ph}" x2="${pad.l + pw}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1" opacity="0.4"/>
+  `;
+
+  // Helper to calculate bell curve points
+  function getBellPoints(mean, stdDev, amp) {
+    const pts = [];
+    for (let x = 0; x <= 100; x += 2) {
+      const exponent = -Math.pow((x - mean) / stdDev, 2) / 2;
+      const y = amp * Math.exp(exponent);
+      pts.push(`${pad.l + (x / 100) * pw},${pad.t + ph - (y / 100) * ph}`);
+    }
+    return pts.join(' ');
+  }
+
+  if (mode === 'closed') {
+    // Single isolated high peak representing Value Monism
+    const points = getBellPoints(50, 9, 85);
+    const label = isEnglish() ? 'Supreme Value (Monism)' : 'Valor Supremo (Monismo)';
+    svgContent += `
+      <polyline points="${points}" fill="none" stroke="var(--clr-accent)" stroke-width="2.5"/>
+      <text x="${pad.l + pw/2}" y="${pad.t + 10}" fill="var(--clr-accent)" font-size="10" font-family="IBM Plex Mono" font-weight="600" text-anchor="middle">${label}</text>
+    `;
+  } else {
+    // Three colliding/overlapping bell curves representing Value Pluralism
+    const p1 = getBellPoints(28, 12, 60);
+    const p2 = getBellPoints(50, 12, 65);
+    const p3 = getBellPoints(72, 12, 60);
+
+    const l1 = isEnglish() ? 'Equality' : 'Igualdad';
+    const l2 = isEnglish() ? 'Liberty' : 'Libertad';
+    const l3 = isEnglish() ? 'Security' : 'Seguridad';
+
+    svgContent += `
+      <polyline points="${p1}" fill="none" stroke="var(--clr-cap)" stroke-width="2" opacity="0.8"/>
+      <polyline points="${p2}" fill="none" stroke="var(--clr-neg)" stroke-width="2" opacity="0.8"/>
+      <polyline points="${p3}" fill="none" stroke="var(--clr-pos)" stroke-width="2" opacity="0.8"/>
+
+      <text x="${pad.l + (28/100)*pw}" y="${pad.t + ph - (60/100)*ph - 8}" fill="var(--clr-cap)" font-size="9" font-family="IBM Plex Mono" font-weight="500" text-anchor="middle">${l1}</text>
+      <text x="${pad.l + (50/100)*pw}" y="${pad.t + ph - (65/100)*ph - 8}" fill="var(--clr-neg)" font-size="9" font-family="IBM Plex Mono" font-weight="500" text-anchor="middle">${l2}</text>
+      <text x="${pad.l + (72/100)*pw}" y="${pad.t + ph - (60/100)*ph - 8}" fill="var(--clr-pos)" font-size="9" font-family="IBM Plex Mono" font-weight="500" text-anchor="middle">${l3}</text>
+    `;
+  }
+
+  svg.innerHTML = svgContent;
 }
 
 // ═══ FEATURE 1: SCROLL-AWARE LENS PANEL ═══
