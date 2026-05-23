@@ -207,12 +207,12 @@ window.I18N_CONTENT.locales.en.staticContent.push(
 );
 
 window.I18N_CONTENT.locales.en.canvasValues.push(
-  { label: 'Liberty', angle: -60, color: '#4a9eff' },
-  { label: 'Equality', angle: 60, color: '#3dbe8a' },
-  { label: 'Security', angle: 180, color: '#ff7a35' },
-  { label: 'Efficiency', angle: 0, color: '#b0b0aa' },
-  { label: 'Solidarity', angle: 120, color: '#ff7a35' },
-  { label: 'Autonomy', angle: -120, color: '#4a9eff' }
+  { label: 'Liberty', angle: -60, color: '#4a9eff', desc: 'Absence of external locks or interference.' },
+  { label: 'Equality', angle: 60, color: '#3dbe8a', desc: 'Fair distribution and resource equity.' },
+  { label: 'Security', angle: 180, color: '#ff7a35', desc: 'Collective protection against risks and threats.' },
+  { label: 'Efficiency', angle: 0, color: '#b0b0aa', desc: 'Optimal coordination of resources and markets.' },
+  { label: 'Solidarity', angle: 120, color: '#ff7a35', desc: 'Cohesion, mutual support, and civic fraternity.' },
+  { label: 'Autonomy', angle: -120, color: '#4a9eff', desc: 'Real capacity to choose one\'s own destiny.' }
 );
 
 window.I18N_CONTENT.locales.en.conflictNotes.push(
@@ -347,9 +347,45 @@ Object.assign(window.I18N_CONTENT.locales.en.sen, {
 Object.assign(window.I18N_CONTENT.locales.en.colombia, {
   tableHeaders: ['Index', 'Negative Liberty', 'Positive Liberty', 'Capabilities', 'Economic-Libertarian'],
   indicators: [
-    { id: 'economic_freedom', source: 'Fraser Institute', name: 'Economic Freedom of the World', unit: '/ 100', rank: '94 / 165' },
-    { id: 'freedom_world', source: 'Freedom House', name: 'Freedom in the World', unit: '/ 100', rank: 'Partly Free' },
-    { id: 'hdi', source: 'UNDP', name: 'Human Development Index', unit: '(0-1)', rank: '91 / 193' }
+    {
+      id: 'economic_freedom',
+      source: 'Fraser Institute',
+      name: 'Economic Freedom of the World',
+      unit: '/ 100',
+      rank: '94 / 165',
+      evaluations: {
+        negativa: 'State overregulation',
+        positiva: 'Capital privilege',
+        capacidades: 'Nominal transaction',
+        libertario: 'Excessive bureaucracy'
+      }
+    },
+    {
+      id: 'freedom_world',
+      source: 'Freedom House',
+      name: 'Freedom in the World',
+      unit: '/ 100',
+      rank: 'Partly Free',
+      evaluations: {
+        negativa: 'Partly Free (coerced)',
+        positiva: 'Unequal formal freedom',
+        capacidades: 'Agency deprivation',
+        libertario: 'Insecure property rights'
+      }
+    },
+    {
+      id: 'hdi',
+      source: 'UNDP',
+      name: 'Human Development Index',
+      unit: '(0-1)',
+      rank: '91 / 193',
+      evaluations: {
+        negativa: 'Irrelevant metric',
+        positiva: 'Average hides inequality',
+        capacidades: 'Invisible regional gaps',
+        libertario: 'Market growth proxy'
+      }
+    }
   ],
   readings: {
     negativa: 'From a negative-liberty reading, Colombia\'s central problems are coercive actors, insecurity, and institutional weakness rather than the absence of material provision.',

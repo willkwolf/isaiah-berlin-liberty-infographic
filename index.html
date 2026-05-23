@@ -474,18 +474,25 @@
         </div>
       </div>
     </section>
-
     <!-- VIII — COLOMBIA -->
     <section id="colombia" class="section" data-lens-context="colombia" aria-labelledby="colombia-title">
       <div class="section__inner">
         <div class="section__num" aria-hidden="true">VIII</div>
-        <h2 id="colombia-title" class="section__title">Colombia<br/><em>bajo tres índices</em></h2>
+        <h2 id="colombia-title" class="section__title">Colombia<br/><em id="colombia-subtitle-indices">bajo tres índices</em></h2>
         <p class="section__subtitle">Los mismos datos. Tres índices. Cuatro lecturas posibles. Cambia el lente — observa cómo el diagnóstico cambia radicalmente.</p>
+
+        <!-- Inline coach banner for first-time column tap -->
+        <div class="colombia-coach-banner" id="colombiaCoachBanner" aria-live="polite" hidden>
+          <span class="colombia-coach-banner__pulse" aria-hidden="true"></span>
+          <p class="colombia-coach-banner__text" id="colombiaCoachBannerText">
+            ¿Primera vez aquí? Toca cualquier columna de la tabla para cambiar instantáneamente el marco teórico.
+          </p>
+          <button class="colombia-coach-banner__close" id="colombiaCoachBannerClose" type="button" aria-label="Cerrar guía">×</button>
+        </div>
 
         <div class="colombia-table-container">
           <table class="colombia-table" id="colombiaTable" aria-label="Tabla de comparación de índices de Colombia bajo diferentes lentes teóricos"></table>
         </div>
-
         <div class="colombia-reading" aria-live="polite">
           <h3 class="colombia-reading__title">Diagnóstico bajo el marco activo</h3>
           <p class="colombia-reading__text" id="colombiaLensReading"></p>

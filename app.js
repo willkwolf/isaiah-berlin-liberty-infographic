@@ -92,6 +92,12 @@ const COLOMBIA_DATA = {
         positiva: '#ff7a35',
         capacidades: '#3dbe8a',
         libertario: '#b0b0aa'
+      },
+      evaluations: {
+        negativa: 'Exceso de regulación',
+        positiva: 'Privilegio de capital',
+        capacidades: 'Transacción nominal',
+        libertario: 'Exceso de burocracia'
       }
     },
     {
@@ -108,6 +114,12 @@ const COLOMBIA_DATA = {
         positiva: '#ff7a35',
         capacidades: '#3dbe8a',
         libertario: '#b0b0aa'
+      },
+      evaluations: {
+        negativa: 'Parcialmente Libre',
+        positiva: 'Libertad formal desigual',
+        capacidades: 'Privación de agencia',
+        libertario: 'Propiedad insegura'
       }
     },
     {
@@ -124,6 +136,12 @@ const COLOMBIA_DATA = {
         positiva: '#ff7a35',
         capacidades: '#3dbe8a',
         libertario: '#b0b0aa'
+      },
+      evaluations: {
+        negativa: 'Métrica irrelevante',
+        positiva: 'Promedio oculta brechas',
+        capacidades: 'Privación regional invisible',
+        libertario: 'Proxy de crecimiento'
       }
     }
   ],
@@ -298,12 +316,12 @@ function getLensDefinition(lens) {
 
 function getCanvasValues() {
   return isEnglish() ? getEnglishLocale().canvasValues : [
-    { label: 'Libertad', angle: -60, color: '#4a9eff' },
-    { label: 'Igualdad', angle: 60, color: '#3dbe8a' },
-    { label: 'Seguridad', angle: 180, color: '#ff7a35' },
-    { label: 'Eficiencia', angle: 0, color: '#b0b0aa' },
-    { label: 'Solidaridad', angle: 120, color: '#ff7a35' },
-    { label: 'Autonomía', angle: -120, color: '#4a9eff' },
+    { label: 'Libertad', angle: -60, color: '#4a9eff', desc: 'Ausencia de trabas o interferencia externa.' },
+    { label: 'Igualdad', angle: 60, color: '#3dbe8a', desc: 'Distribución justa y equidad de recursos.' },
+    { label: 'Seguridad', angle: 180, color: '#ff7a35', desc: 'Protección colectiva ante riesgos y amenazas.' },
+    { label: 'Eficiencia', angle: 0, color: '#b0b0aa', desc: 'Coordinación óptima de recursos y mercado.' },
+    { label: 'Solidaridad', angle: 120, color: '#ff7a35', desc: 'Cohesión, apoyo mutuo y fraternidad cívica.' },
+    { label: 'Autonomía', angle: -120, color: '#4a9eff', desc: 'Capacidad real de elegir el propio destino.' },
   ];
 }
 
@@ -739,6 +757,49 @@ function initDivergenceCanvas() {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
+  let rotationAngle = 0;
+  let mouseX = -999, mouseY = -999;
+  let centerRadius = 6; // Animatable center circle radius
+
+  // Track mouse coordinates on the canvas
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    // Account for high-DPI scaling (canvas.width vs rect.width)
+    mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
+    mouseY = (e.clientY - rect.top) * (canvas.height / rect.height);
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    mouseX = -999;
+    mouseY = -999;
+  });
+
+  // Helper to draw wrapped text centered inside a canvas area
+  function wrapText(context, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(' ');
+    let line = '';
+    const lines = [];
+
+    for (let n = 0; n < words.length; n++) {
+      let testLine = line + words[n] + ' ';
+      let metrics = context.measureText(testLine);
+      let testWidth = metrics.width;
+      if (testWidth > maxWidth && n > 0) {
+        lines.push(line);
+        line = words[n] + ' ';
+      } else {
+        line = testLine;
+      }
+    }
+    lines.push(line);
+
+    const totalHeight = lines.length * lineHeight;
+    let startY = y - totalHeight / 2 + lineHeight / 2;
+    for (let i = 0; i < lines.length; i++) {
+      context.fillText(lines[i].trim(), x, startY + i * lineHeight);
+    }
+  }
+
   function draw() {
     const w = canvas.width, h = canvas.height;
     ctx.clearRect(0, 0, w, h);
@@ -746,9 +807,33 @@ function initDivergenceCanvas() {
 
     const cx = w / 2, cy = h / 2;
     const maxR = 120;
-    const progress = 0.85; // Static high-tension factor (Tufte visual stability)
+    const progress = 0.85; // Static high-tension factor
+    const r = progress * maxR;
 
-    // Concentric guidelines (3 levels of dashed circles for baseline reference)
+    // 1. Elegantly slow cosmic rotation (0.00045 radians per frame)
+    // Altering the coordinates over time while keeping relative distances constant
+    rotationAngle += 0.00045;
+
+    // 2. Proximity calculation to find the hovered node
+    let hoveredIdx = -1;
+    let minDistance = 25; // Focus activation boundary in pixels
+
+    values.forEach((v, idx) => {
+      const rad = (v.angle - 90) * Math.PI / 180 + rotationAngle;
+      const x = cx + Math.cos(rad) * r;
+      const y = cy + Math.sin(rad) * r;
+      const dist = Math.hypot(mouseX - x, mouseY - y);
+      if (dist < minDistance) {
+        minDistance = dist;
+        hoveredIdx = idx;
+      }
+    });
+
+    // 3. Smooth expansion/collapse transition of the center circle
+    const targetCenterRadius = hoveredIdx !== -1 ? 52 : 6;
+    centerRadius = lerp(centerRadius, targetCenterRadius, 0.12);
+
+    // 4. Draw Concentric Guidelines (dashed baseline reference)
     const levels = [0.35, 0.65, 0.95];
     levels.forEach(lvl => {
       ctx.beginPath();
@@ -760,57 +845,95 @@ function initDivergenceCanvas() {
       ctx.setLineDash([]);
     });
 
-    values.forEach(v => {
-      const rad = (v.angle - 90) * Math.PI / 180;
-      const r = progress * maxR;
+    // 5. Draw Axis Lines, Tension Webs, and Nodes
+    values.forEach((v, idx) => {
+      const rad = (v.angle - 90) * Math.PI / 180 + rotationAngle;
       const x = cx + Math.cos(rad) * r;
       const y = cy + Math.sin(rad) * r;
 
-      // Line from center (thin axis)
+      const isHovered = idx === hoveredIdx;
+
+      // Axis line from center
       ctx.beginPath();
       ctx.moveTo(cx, cy);
       ctx.lineTo(x, y);
-      ctx.strokeStyle = v.color + '33';
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = isHovered ? v.color + '88' : v.color + '26';
+      ctx.lineWidth = isHovered ? 2 : 0.85;
       ctx.stroke();
 
-      // Web connections between neighboring values (Tension Web)
-      // Connect each value to the next in order
-      const idx = values.indexOf(v);
+      // Tension Web connection to the next node
       const nextVal = values[(idx + 1) % values.length];
-      const nextRad = (nextVal.angle - 90) * Math.PI / 180;
+      const nextRad = (nextVal.angle - 90) * Math.PI / 180 + rotationAngle;
       const nextX = cx + Math.cos(nextRad) * r;
       const nextY = cy + Math.sin(nextRad) * r;
 
       ctx.beginPath();
       ctx.moveTo(x, y);
       ctx.lineTo(nextX, nextY);
-      ctx.strokeStyle = state.colorMode === 'light' ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)';
+      ctx.strokeStyle = state.colorMode === 'light' ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)';
       ctx.lineWidth = 0.75;
       ctx.stroke();
 
-      // Node
+      // Node highlighting with beautiful aura
+      if (isHovered) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x, y, 9, 0, Math.PI * 2);
+        ctx.fillStyle = v.color + '33'; // Semi-transparent glow ring
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Main node dot
       ctx.beginPath();
-      ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+      ctx.arc(x, y, isHovered ? 5.5 : 4.5, 0, Math.PI * 2);
       ctx.fillStyle = v.color;
       ctx.fill();
 
-      // Label
-      ctx.font = '11px "IBM Plex Mono", monospace';
-      ctx.fillStyle = state.colorMode === 'light' ? '#374151' : v.color + 'dd';
+      // Clean floating typography labels (Tufte style)
+      ctx.font = isHovered ? 'bold 11px "IBM Plex Mono", monospace' : '11px "IBM Plex Mono", monospace';
+      ctx.fillStyle = state.colorMode === 'light' 
+        ? (isHovered ? '#000000' : '#4b5563') 
+        : (isHovered ? '#ffffff' : v.color + 'dd');
+
       ctx.textAlign = x > cx ? 'left' : x < cx - 10 ? 'right' : 'center';
-      const labelX = x + (x > cx ? 8 : x < cx - 10 ? -8 : 0);
-      const labelY = y + (y > cy ? 14 : -8);
+      const labelX = x + (x > cx ? 10 : x < cx - 10 ? -10 : 0);
+      const labelY = y + (y > cy ? 15 : -8);
       ctx.fillText(v.label, labelX, labelY);
     });
 
-    // Center node
+    // 6. Center Glossary Circle & Translucent Card Overlay
+    ctx.save();
     ctx.beginPath();
-    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
-    ctx.fillStyle = state.colorMode === 'light' ? '#4b5563' : '#d4d0c8';
-    ctx.fill();
+    ctx.arc(cx, cy, centerRadius, 0, Math.PI * 2);
+    if (hoveredIdx !== -1) {
+      // Glow shadow for the expanded center glossary card
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+      ctx.shadowBlur = 15;
+      ctx.fillStyle = state.colorMode === 'light' ? 'rgba(238, 237, 232, 0.95)' : 'rgba(14, 14, 16, 0.95)';
+      ctx.strokeStyle = values[hoveredIdx].color + '44';
+      ctx.lineWidth = 1;
+      ctx.fill();
+      ctx.stroke();
+    } else {
+      ctx.fillStyle = state.colorMode === 'light' ? '#4b5563' : '#d4d0c8';
+      ctx.fill();
+    }
+    ctx.restore();
 
-    // Redraw loop on animation frames so color mode and language changes update instantly
+    // 7. Write description inside the expanded glossary circle
+    if (hoveredIdx !== -1 && centerRadius > 44) {
+      const activeVal = values[hoveredIdx];
+      ctx.fillStyle = state.colorMode === 'light' ? '#000000' : '#ffffff';
+      ctx.font = 'bold 9px "IBM Plex Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(activeVal.label.toUpperCase(), cx, cy - 18);
+
+      ctx.fillStyle = state.colorMode === 'light' ? '#4b5563' : '#a1a1aa';
+      ctx.font = '9px "IBM Plex Sans", sans-serif';
+      wrapText(ctx, activeVal.desc, cx, cy + 6, 76, 12);
+    }
+
     requestAnimationFrame(draw);
   }
 
@@ -1422,68 +1545,80 @@ function initSenCapacidades() {
 // SECTION VIII — COLOMBIA DASHBOARD
 // ═══════════════════════════════════════════════
 
+function updateColombiaCoachBanner() {
+  const banner = qs('#colombiaCoachBanner');
+  const text = qs('#colombiaCoachBannerText');
+  if (!banner) return;
+
+  const seen = localStorage.getItem('site-colombia-tap-seen') === 'true';
+  if (seen) {
+    banner.hidden = true;
+    return;
+  }
+
+  if (text) {
+    text.textContent = isEnglish()
+      ? 'First time here? Tap any column in the table to instantly switch the theoretical framework.'
+      : '¿Primera vez aquí? Toca cualquier columna de la tabla para cambiar de marco teórico e interpretar el país.';
+  }
+
+  banner.hidden = false;
+}
+
+function initColombiaCoachBanner() {
+  const banner = qs('#colombiaCoachBanner');
+  const closeBtn = qs('#colombiaCoachBannerClose');
+  if (!banner) return;
+
+  closeBtn?.addEventListener('click', () => {
+    localStorage.setItem('site-colombia-tap-seen', 'true');
+    banner.hidden = true;
+  });
+
+  updateColombiaCoachBanner();
+}
+
 function updateColombiaDashboard() {
   const table = qs('#colombiaTable');
   const reading = qs('#colombiaLensReading');
+  const subtitle = qs('#colombia-subtitle-indices');
   if (!table) return;
 
   const lens = state.currentLens;
-  const locale = getColombiaContent();
+  const content = getColombiaContent();
+
+  // Dynamic Title: "Colombia bajo {N} índices" / "Colombia under {N} indices"
+  const indicatorsCount = COLOMBIA_DATA.indicators.length;
+  if (subtitle) {
+    subtitle.innerHTML = isEnglish()
+      ? `under ${indicatorsCount} indices`
+      : `bajo ${indicatorsCount} índices`;
+  }
 
   const headers = isEnglish()
     ? ['Indicator / Index', 'Negative Liberty', 'Positive Liberty', 'Capabilities', 'Economic-Libertarian']
     : ['Indicador / Índice', 'Libertad Negativa', 'Libertad Positiva', 'Capacidades', 'Económico-Libertario'];
 
-  const rowsData = [
-    {
-      id: 'economic_freedom',
-      name: isEnglish() ? 'Economic Freedom (Fraser)' : 'Libertad Económica (Fraser)',
-      value: '65.6 / 100',
-      evaluations: isEnglish() ? {
-        negativa: 'State overregulation',
-        positiva: 'Capital privilege',
-        capacidades: 'Nominal transaction',
-        libertario: 'Excessive bureaucracy'
-      } : {
-        negativa: 'Exceso de regulación',
-        positiva: 'Privilegio de capital',
-        capacidades: 'Transacción nominal',
-        libertario: 'Exceso de burocracia'
-      }
-    },
-    {
-      id: 'freedom_world',
-      name: isEnglish() ? 'Freedom in the World (FH)' : 'Libertad en el Mundo (FH)',
-      value: '69 / 100',
-      evaluations: isEnglish() ? {
-        negativa: 'Partly Free (coerced)',
-        positiva: 'Unequal formal freedom',
-        capacidades: 'Agency deprivation',
-        libertario: 'Insecure property rights'
-      } : {
-        negativa: 'Parcialmente Libre',
-        positiva: 'Libertad formal desigual',
-        capacidades: 'Privación de agencia',
-        libertario: 'Propiedad insegura'
-      }
-    },
-    {
-      id: 'hdi',
-      name: isEnglish() ? 'Human Development Index (UNDP)' : 'Desarrollo Humano (PNUD)',
-      value: '0.754 (0-1)',
-      evaluations: isEnglish() ? {
-        negativa: 'Irrelevant metric',
-        positiva: 'Average hides inequality',
-        capacidades: 'Invisible regional gaps',
-        libertario: 'Market growth proxy'
-      } : {
-        negativa: 'Métrica irrelevante',
-        positiva: 'Promedio oculta brechas',
-        capacidades: 'Privación regional invisible',
-        libertario: 'Proxy de crecimiento'
-      }
+  // Map rows dynamically merging local numerical facts with translation data
+  const rows = COLOMBIA_DATA.indicators.map(ind => {
+    const trans = isEnglish()
+      ? content.indicators.find(ti => ti.id === ind.id)
+      : null;
+
+    let formattedVal = ind.value;
+    if (ind.id === 'hdi') {
+      formattedVal = ind.value + ' (0-1)';
+    } else {
+      formattedVal = ind.value + ' / 100';
     }
-  ];
+
+    return {
+      id: ind.id,
+      name: trans ? trans.name : ind.name,
+      value: formattedVal,
+      evaluations: trans ? trans.evaluations : ind.evaluations
+    };
+  });
 
   const columnsKeys = ['negativa', 'positiva', 'capacidades', 'libertario'];
 
@@ -1494,24 +1629,41 @@ function updateColombiaDashboard() {
         ${columnsKeys.map((colKey, i) => {
           const isActive = colKey === lens;
           const activeClass = isActive ? 'class="active-column-header"' : '';
-          return `<th ${activeClass}>${headers[i+1]}</th>`;
+          const label = isEnglish()
+            ? `Switch to ${headers[i+1]} framework`
+            : `Cambiar a marco ${headers[i+1]}`;
+
+          return `<th ${activeClass} 
+                      data-lens="${colKey}" 
+                      role="button" 
+                      tabindex="0" 
+                      aria-label="${label}" 
+                      aria-selected="${isActive ? 'true' : 'false'}">${headers[i+1]}</th>`;
         }).join('')}
       </tr>
     </thead>
     <tbody>
   `;
 
-  rowsData.forEach(row => {
+  rows.forEach(row => {
     html += `
       <tr>
         <td class="table-indicator-name">
           <strong>${row.name}</strong>
           <span class="table-indicator-val">${row.value}</span>
         </td>
-        ${columnsKeys.map(colKey => {
+        ${columnsKeys.map((colKey, i) => {
           const isActive = colKey === lens;
           const activeClass = isActive ? 'class="active-column-cell"' : '';
-          return `<td ${activeClass}>${row.evaluations[colKey]}</td>`;
+          const label = isEnglish()
+            ? `Interpret indicator under ${headers[i+1]}`
+            : `Interpretar indicador bajo marco ${headers[i+1]}`;
+
+          return `<td ${activeClass} 
+                      data-lens="${colKey}" 
+                      role="button" 
+                      tabindex="0" 
+                      aria-label="${label}">${row.evaluations[colKey]}</td>`;
         }).join('')}
       </tr>
     `;
@@ -1520,8 +1672,28 @@ function updateColombiaDashboard() {
   html += `</tbody>`;
   table.innerHTML = html;
 
+  // Add keyboard and click event listeners for each interactive column element
+  qsa('th[data-lens], td[data-lens]', table).forEach(el => {
+    const triggerAction = () => {
+      // Mark coach guide as seen
+      localStorage.setItem('site-colombia-tap-seen', 'true');
+      const banner = qs('#colombiaCoachBanner');
+      if (banner) banner.hidden = true;
+
+      setLens(el.dataset.lens);
+    };
+
+    el.addEventListener('click', triggerAction);
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        triggerAction();
+      }
+    });
+  });
+
   if (reading) {
-    reading.textContent = locale.readings[lens] || COLOMBIA_DATA.readings[lens] || '';
+    reading.textContent = content.readings[lens] || '';
   }
 }
 
@@ -2002,6 +2174,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSenCapacidades();
   updateColombiaDashboard();
   initSystemToggle();
+  initColombiaCoachBanner();
   initLensGuidance();
   initOnboarding();
   initFadeIn();
