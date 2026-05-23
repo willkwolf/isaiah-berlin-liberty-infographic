@@ -1550,7 +1550,13 @@ function updateColombiaCoachBanner() {
   const text = qs('#colombiaCoachBannerText');
   if (!banner) return;
 
-  const seen = localStorage.getItem('site-colombia-tap-seen') === 'true';
+  let seen = false;
+  try {
+    seen = localStorage.getItem('site-colombia-tap-seen') === 'true';
+  } catch (e) {
+    console.warn('LocalStorage is not available:', e);
+  }
+
   if (seen) {
     banner.hidden = true;
     return;
@@ -1571,7 +1577,11 @@ function initColombiaCoachBanner() {
   if (!banner) return;
 
   closeBtn?.addEventListener('click', () => {
-    localStorage.setItem('site-colombia-tap-seen', 'true');
+    try {
+      localStorage.setItem('site-colombia-tap-seen', 'true');
+    } catch (e) {
+      console.warn('LocalStorage is not available:', e);
+    }
     banner.hidden = true;
   });
 
@@ -1676,7 +1686,11 @@ function updateColombiaDashboard() {
   qsa('th[data-lens], td[data-lens]', table).forEach(el => {
     const triggerAction = () => {
       // Mark coach guide as seen
-      localStorage.setItem('site-colombia-tap-seen', 'true');
+      try {
+        localStorage.setItem('site-colombia-tap-seen', 'true');
+      } catch (e) {
+        console.warn('LocalStorage is not available:', e);
+      }
       const banner = qs('#colombiaCoachBanner');
       if (banner) banner.hidden = true;
 
