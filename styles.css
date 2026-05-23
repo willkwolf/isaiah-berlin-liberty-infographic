@@ -2388,20 +2388,20 @@ body.light-mode .colombia-table td[data-lens]:hover {
   background: none;
   border: none;
   color: var(--clr-text-dim);
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   cursor: pointer;
-  padding: 0.2rem 0.5rem;
+  padding: 0;
   border-radius: var(--radius);
   transition: color var(--transition), background var(--transition);
   line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   position: relative;
-  z-index: 10;
-  pointer-events: auto;
+  z-index: 99;
+  pointer-events: auto !important;
 }
 .colombia-coach-banner__close:hover {
   color: var(--clr-text-bright);
