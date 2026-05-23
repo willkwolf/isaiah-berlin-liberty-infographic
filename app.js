@@ -830,7 +830,7 @@ function initDivergenceCanvas() {
     });
 
     // 3. Smooth expansion/collapse transition of the center circle
-    const targetCenterRadius = hoveredIdx !== -1 ? 52 : 6;
+    const targetCenterRadius = hoveredIdx !== -1 ? 65 : 6;
     centerRadius = lerp(centerRadius, targetCenterRadius, 0.12);
 
     // 4. Draw Concentric Guidelines (dashed baseline reference)
@@ -891,7 +891,7 @@ function initDivergenceCanvas() {
       ctx.fill();
 
       // Clean floating typography labels (Tufte style)
-      ctx.font = isHovered ? 'bold 11px "IBM Plex Mono", monospace' : '11px "IBM Plex Mono", monospace';
+      ctx.font = isHovered ? 'bold 14px "IBM Plex Mono", monospace' : '14px "IBM Plex Mono", monospace';
       ctx.fillStyle = state.colorMode === 'light' 
         ? (isHovered ? '#000000' : '#4b5563') 
         : (isHovered ? '#ffffff' : v.color + 'dd');
@@ -922,16 +922,16 @@ function initDivergenceCanvas() {
     ctx.restore();
 
     // 7. Write description inside the expanded glossary circle
-    if (hoveredIdx !== -1 && centerRadius > 44) {
+    if (hoveredIdx !== -1 && centerRadius > 55) {
       const activeVal = values[hoveredIdx];
       ctx.fillStyle = state.colorMode === 'light' ? '#000000' : '#ffffff';
-      ctx.font = 'bold 9px "IBM Plex Mono", monospace';
+      ctx.font = 'bold 12px "IBM Plex Mono", monospace';
       ctx.textAlign = 'center';
-      ctx.fillText(activeVal.label.toUpperCase(), cx, cy - 18);
+      ctx.fillText(activeVal.label.toUpperCase(), cx, cy - 22);
 
       ctx.fillStyle = state.colorMode === 'light' ? '#4b5563' : '#a1a1aa';
-      ctx.font = '9px "IBM Plex Sans", sans-serif';
-      wrapText(ctx, activeVal.desc, cx, cy + 6, 76, 12);
+      ctx.font = '11px "IBM Plex Sans", sans-serif';
+      wrapText(ctx, activeVal.desc, cx, cy + 8, 98, 15);
     }
 
     requestAnimationFrame(draw);
