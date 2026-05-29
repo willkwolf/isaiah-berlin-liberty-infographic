@@ -1,176 +1,144 @@
-# Anatomía de la Libertad
+# 🗽 Anatomía de la Libertad · Paso 3 / Anatomy of Liberty · Step 3
 
-Una infografía interactiva sobre los marcos teóricos de la libertad política: Berlin, Sen, Hayek/Friedman. Diseñada como artefacto editorial navegable, no como resumen estático.
-
-Link: https://willkwolf.github.io/isaiah-berlin-liberty-infographic/
-
----
-
-## Motivación
-
-La motivación central de esta infografía es desmitificar el concepto de libertad, especialmente cuando es reducido, apropiado o instrumentalizado por sectores políticos como si tuviera un único significado obvio.
-
-Isaiah Berlin es útil precisamente porque interrumpe esa simplificación. Su trabajo ayuda a mostrar que la libertad no es un eslogan, no es una marca política y no es un único resultado de política pública. Es un campo de interpretación en disputa, ligado al poder, la igualdad, la capacidad, la coacción, las instituciones y el conflicto.
-
-Este proyecto convierte esa tensión filosófica en un formato que puede explorarse sección por sección, lente por lente, con un interés particular en cómo estos debates resuenan en Colombia.
-
-### Conexión con el Dataísmo
-
-El proyecto también dialoga con la pregunta que el dataísmo plantea de fondo: si los datos son la nueva forma de autoridad epistémica, ¿qué ocurre cuando los mismos datos producen diagnósticos radicalmente distintos según el marco teórico que los lee? Esta infografía es una respuesta práctica a esa pregunta. Los índices de Colombia (IDH, IPM, Economic Freedom, Freedom in the World) no cambian. Lo que cambia es la interpretación — y esa diferencia no es un error de lectura, sino el núcleo del problema político.
-
-El dataísmo tiende a asumir que más datos producen más claridad. Berlin diría que el problema no es la cantidad de datos sino la pluralidad irreducible de los valores que los organizan.
+### *Infografía interactiva y ensayo editorial sobre los marcos teóricos de la libertad política: Berlin, Sen, Hayek/Friedman.*
+### *An interactive infographic and editorial essay on the theoretical frameworks of political liberty: Berlin, Sen, Hayek/Friedman.*
 
 ---
 
-## Qué intenta hacer esta infografía
-
-Esta infografía está construida para darle al usuario un artefacto práctico para navegar comprensiones en competencia sobre la libertad.
-
-Está pensada para ayudar al lector a preguntarse:
-
-- ¿Qué cambia cuando la libertad se entiende como no-interferencia, autodeterminación, capacidad o libertad económica?
-- ¿De dónde viene realmente la coacción: del Estado, del mercado, de la sociedad, o de combinaciones de los tres?
-- ¿Pueden armonizarse igualdad y libertad, o son con frecuencia intercambios trágicos?
-- ¿Qué ocurre cuando los mismos indicadores empíricos se leen desde marcos teóricos distintos?
-- ¿Cómo puede Berlin ayudarnos a resistir las simplificaciones ideológicas de la libertad?
+[![Demo Live](https://img.shields.io/badge/demo-live-brightgreen?style=for-the-badge&logo=github)](https://willkwolf.github.io/isaiah-berlin-liberty-infographic/)
+[![Ecosistema: Paso 3](https://img.shields.io/badge/Ruta_Pensamiento_Crítico-Paso_3-blue?style=for-the-badge)](https://github.com/willkwolf/isaiah-berlin-liberty-infographic)
+[![Licencia CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-orange.svg?style=for-the-badge)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+[![Jest Tests](https://img.shields.io/badge/Jest-passed-46c117?style=for-the-badge&logo=jest)](https://jestjs.io/)
 
 ---
 
-## Arquitectura visual
-
-La infografía está organizada como una secuencia de scrollytelling con un lente teórico fijo que reinterpreta secciones clave en tiempo real.
-
-Su arquitectura visual tiene cuatro capas principales:
-
-- **Columna narrativa:** diez secciones que van desde el problema del desacuerdo hasta Berlin, el conflicto, el poder, los límites, la economía, Sen, Colombia, el pluralismo y el cierre.
-- **Sistema de lentes:** el usuario puede alternar entre libertad negativa, libertad positiva, capacidades y una lectura económico-libertaria.
-- **Diagramas interactivos:** sliders, toggles, gráficos, diagramas de nodos y controles de capacidades convierten distinciones abstractas en contrastes legibles.
-- **Cierre editorial:** la sección final y el footer ubican la pieza dentro de un proyecto de divulgación más amplio, invitan a una lectura más profunda y conectan el artefacto con su infraestructura de fuentes.
+## 🌐 Demo en Vivo / Live Demo
+**👉 [Ver en vivo en GitHub Pages](https://willkwolf.github.io/isaiah-berlin-liberty-infographic/)**
 
 ---
 
-## Exploración de fuentes
+## 🧭 La Ruta del Pensamiento Crítico (El Ecosistema)
+Este proyecto forma parte de **"La Ruta del Pensamiento Crítico"**, una red interactiva de 5 webs estáticas de `@willkwolf` que conectan teoría económica, dilemas políticos, brechas materiales y contextos locales.
 
-Para trabajo de fuentes más profundo y rastros de investigación, usa el cuaderno de NotebookLM:
+```mermaid
+graph TD
+    A["Paso 1: EcoSchoolMap (Comprender)<br><i>mapa-escuelas-politicas</i>"] -- "Cócteles Ideológicos" --> B["Paso 2: BAR-Economic (Mezclar)<br><i>BAR-Economic</i>"]
+    B -- "Test de Sobriedad" --> C["Paso 3: liberty-infographic (Contrastar)<br><i>Isaiah Berlin</i>"]
+    C -- "Límites de la Libertad" --> D["Paso 4: global-inequality (Escalar)<br><i>Igualdad-Economica-2025</i>"]
+    D -- "Contexto Local" --> E["Paso 5: colombia-palma-desigualdad (Aterrizar)<br><i>Desigualdad de Palma</i>"]
+    E -- "Reflexión Ética" --> C
+```
 
-- Cuaderno de fuentes: https://notebooklm.google.com/notebook/5ce143e6-2b6f-41e3-a96d-eb58c6fbb2a1
-
-Este repositorio es el artefacto público. El cuaderno es el lugar para continuar explorando notas, referencias y material de apoyo detrás de la infografía.
-
----
-
-## Más contexto
-
-Más trabajo de divulgación sobre Isaiah Berlin, anclado en preguntas y debates colombianos, está disponible en el podcast de Spotify de William Camilo Artunduaga Viana:
-
-- Podcast en Spotify: https://open.spotify.com/show/4hRC6rIFVIozooGV6OdWOI?si=e500cb9f38684cc2
-
----
-
-## Internacionalización (i18n)
-
-El sitio soporta español e inglés de forma nativa. El sistema de i18n está implementado en `i18n.js` como un objeto `window.I18N_CONTENT` que carga el locale `en` sobre el contenido estático en español del HTML.
-
-El cambio de idioma es en tiempo real: no recarga la página. Cada sección, etiqueta ARIA, texto de interpretación de lente y copia de la interfaz tiene su traducción al inglés registrada en `i18n.js`.
-
-Para añadir un nuevo idioma:
-1. Añadir el código de idioma al array `supportedLanguages` en `i18n.js`.
-2. Crear un objeto `locales.<código>` con la misma estructura que `locales.en`.
-3. Registrar las entradas de `staticContent`, `lenses`, `conflictNotes`, `canvasValues`, `powerNodes`, `market`, `sen`, `colombia` y `systemNarratives`.
-
-El idioma preferido se persiste en `localStorage` bajo la clave `site-language`.
+> [!NOTE]
+> **Estás en el Paso 3: Contrastar**. En los pasos anteriores comprendiste y mezclaste escuelas. Aquí confrontas las tensiones filosóficas sobre qué significa ser libre. Al final, las limitaciones materiales de la libertad te invitarán a explorar la escala de la brecha económica en el **Paso 4: Desigualdad Global: ¿A qué altura vives?**
 
 ---
 
-## Licencia
+## 🔍 Contexto Temático / Philosophical Context
 
-Este proyecto presenta la infografía bajo un enfoque Creative Commons BY-NC-SA 4.0 para circulación educativa, citación y adaptación con atribución, uso no comercial y términos de compartir-igual.
+### Español
+La motivación central de esta infografía interactiva es desmitificar el concepto de **libertad**, especialmente cuando es reducido, apropiado o instrumentalizado por sectores políticos como si tuviera un único significado obvio. **Isaiah Berlin** es útil precisamente porque interrumpe esa simplificación. Su trabajo ayuda a mostrar que la libertad no es un eslogan, no es una marca política y no es un único resultado de política pública. Es un campo de interpretación en disputa, ligado al poder, la igualdad, la capacidad, la coacción, las instituciones y el conflicto social.
 
----
----
-
-# Anatomy of Liberty
-
-An interactive infographic about the theoretical frameworks of political liberty: Berlin, Sen, Hayek/Friedman. Designed as a navigable editorial artifact rather than a static summary.
+El proyecto también dialoga con la pregunta que el **dataísmo** plantea de fondo: si los datos son la nueva forma de autoridad epistémica, ¿qué ocurre cuando los mismos datos producen diagnósticos radicalmente distintos según el marco teórico que los lee? Esta infografía es una respuesta práctica. Los índices reales de Colombia (IDH, IPM, Libertad Económica, Freedom House) no cambian. Lo que cambia es la interpretación — y esa diferencia no es un error de lectura, sino el núcleo del conflicto político.
 
 ---
 
-## Motivation
+### English
+The main motivation behind this infographic is to demystify the concept of **liberty**, especially when it is reduced, appropriated, or weaponized by political sectors as if it had only one obvious meaning. **Isaiah Berlin** is useful precisely because he interrupts that simplification. His work helps show that liberty is not a slogan, not a branding device, and not a single policy outcome. It is a contested field of interpretation tied to power, equality, capability, coercion, institutions, and social conflict.
 
-The main motivation behind this infographic is to demystify the concept of liberty, especially when it is reduced, appropriated, or weaponized by political sectors as if it had only one obvious meaning.
-
-Isaiah Berlin is useful precisely because he interrupts that simplification. His work helps show that liberty is not a slogan, not a branding device, and not a single policy outcome. It is a contested field of interpretation tied to power, equality, capacity, coercion, institutions, and conflict.
-
-This project turns that philosophical tension into a format that can be explored section by section, lens by lens, with a particular interest in how these debates resonate in Colombia.
-
-### Connection to Dataism
-
-The project also speaks to a question that dataism raises at its core: if data is the new form of epistemic authority, what happens when the same data produces radically different diagnoses depending on the theoretical framework reading it? This infographic is a practical answer to that question. Colombia's indices (HDI, MPI, Economic Freedom, Freedom in the World) do not change. What changes is the interpretation — and that difference is not a reading error. It is the heart of the political problem.
-
-Dataism tends to assume that more data produces more clarity. Berlin would say the problem is not the quantity of data but the irreducible plurality of the values that organize it.
+The project also speaks to a core question raised by **dataism**: if data is the new form of epistemic authority, what happens when the same data produces radically different diagnoses depending on the theoretical framework reading it? This infographic is a practical answer to that question. Colombia's empirical indices (HDI, MPI, Economic Freedom, Freedom House) do not change. What changes is the interpretation — and that difference is not a reading error, but the heart of the political problem.
 
 ---
 
-## What This Infographic Tries To Do
+## 🤓 Para el Lector más Nerd / Ficha Técnica (Deep Philosophical Insights)
 
-This infographic is built to give the user a practical artifact for navigating competing understandings of liberty.
+### 1. Sistema de Lentes Dinámicos (Real-time Lenses)
+El usuario puede cambiar en tiempo real entre cuatro marcos analíticos que reinterpretan la copia y los diagramas de todo el sitio:
+* **Libertad Negativa (Isaiah Berlin):** Entendida como no-interferencia y ausencia de obstáculos externos colocados por otros seres humanos.
+* **Libertad Positiva (Isaiah Berlin):** Entendida como autodeterminación, autonomía, control sobre el propio destino y auto-maestría.
+* **Enfoque de Capacidades (Amartya Sen / Martha Nussbaum):** Libertad sustantiva; oportunidades reales de ser y hacer lo que uno valora (salud, educación, agencia).
+* **Lectura Económico-Libertaria (Hayek / Friedman):** Libertad de mercado, propiedad privada, y limitación estricta de la planificación colectiva.
 
-It is meant to help the reader ask:
-
-- What changes when liberty is understood as non-interference, self-mastery, capability, or economic freedom?
-- Where does coercion really come from: the state, the market, society, or combinations of all three?
-- Can equality and liberty be harmonized, or are they often tragic trade-offs?
-- What happens when the same empirical indicators are read through different theoretical frameworks?
-- How can Berlin help us resist ideological oversimplifications of freedom?
-
----
-
-## Visual Architecture
-
-The infographic is organized as a scrollytelling sequence with a fixed theoretical lens that reinterprets key sections in real time.
-
-Its visual architecture has four main layers:
-
-- **Narrative spine:** ten sections move from the problem of disagreement to Berlin, conflict, power, limits, economy, Sen, Colombia, pluralism, and closure.
-- **Lens system:** the user can switch between negative liberty, positive liberty, capabilities, and an economic-libertarian reading.
-- **Interactive diagrams:** sliders, toggles, charts, node diagrams, and capability controls turn abstract distinctions into readable contrasts.
-- **Editorial closure:** the final section and footer locate the piece within a broader divulgation project, invite deeper reading, and connect the artifact to its source infrastructure.
+### 2. Diagramas Interactivos de Tensión Epistémica
+* **El Selector de Lentes:** Modifica en tiempo real los esquemas de color (`var(--clr-accent)`) sincronizándose cromáticamente con el marco elegido.
+* **Sliders de Coacción:** Visualiza de dónde proviene el obstáculo real de la acción: el Estado (coacción formal), el Mercado (barreras de capital) o la Sociedad (presiones colectivas).
+* **El Waffle de Capacidades:** Modela cómo la escasez material y nutricional destruye la libertad de agencia de una persona aun cuando no existan leyes que le impidan actuar.
 
 ---
 
-## Source Exploration
+## 🛠️ Stack Tecnológico / Technical Stack
 
-For deeper source work and research trails, use the NotebookLM notebook:
-
-- Source notebook: https://notebooklm.google.com/notebook/5ce143e6-2b6f-41e3-a96d-eb58c6fbb2a1
-
-This repository is the public-facing artifact. The notebook is the place to continue exploring notes, references, and supporting material behind the infographic.
-
----
-
-## More Context
-
-More divulgation work on Isaiah Berlin, grounded in Colombian questions and debates, is available in William Camilo Artunduaga Viana's Spotify podcast:
-
-- Spotify podcast: https://open.spotify.com/show/4hRC6rIFVIozooGV6OdWOI?si=e500cb9f38684cc2
+* **HTML5 & CSS3 Premium:** Con diseño editorial responsivo y variables CSS dinámicas para transiciones suaves de color según el lente activo.
+* **i18n Nativo (`i18n.js`):** Sistema bilingüe de traducción instantánea en tiempo real sin recarga de página que soporta español e inglés.
+* **Jest Testing (v30.4.2):** Suite completa de pruebas unitarias y de integración que valida de forma automatizada:
+  * El comportamiento de transiciones y sliders del DOM.
+  * La accesibilidad WCAG 2.1 AA utilizando `@axe-core` y `jest-axe`.
+  * La persistencia del idioma en `localStorage`.
 
 ---
 
-## Internationalization (i18n)
+## 📦 Instalación y Uso Local / Installation & Local Run
 
-The site natively supports Spanish and English. The i18n system is implemented in `i18n.js` as a `window.I18N_CONTENT` object that loads the `en` locale on top of the Spanish static HTML content.
+### Requisitos / Prerequisites
+* **Node.js** 18+ (para correr las suites de test)
 
-Language switching is real-time — no page reload. Every section, ARIA label, lens interpretation text, and UI copy has its English translation registered in `i18n.js`.
+### Servidor de Desarrollo / Development
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/willkwolf/isaiah-berlin-liberty-infographic.git
+cd isaiah-berlin-liberty-infographic/files
 
-To add a new language:
-1. Add the language code to the `supportedLanguages` array in `i18n.js`.
-2. Create a `locales.<code>` object with the same structure as `locales.en`.
-3. Register entries for `staticContent`, `lenses`, `conflictNotes`, `canvasValues`, `powerNodes`, `market`, `sen`, `colombia`, and `systemNarratives`.
+# 2. Servir la página localmente
+# Puedes usar cualquier servidor estático ligero
+npx live-server
+```
 
-The preferred language is persisted in `localStorage` under the key `site-language`.
+### Ejecutar Pruebas Automatizadas / Testing
+Para correr las pruebas unitarias Jest y auditorías de accesibilidad:
+```bash
+# Regresa al directorio raíz de desarrollo
+cd ..
+npm install
+npm test
+```
 
 ---
 
-## License
+## 🎙️ Podcast & Cuaderno de Fuentes / Research Trails
 
-This project currently presents the infographic under a Creative Commons BY-NC-SA 4.0 approach for educational circulation, citation, and adaptation with attribution, non-commercial use, and share-alike terms.
+* **Spotify Podcast:** Para profundizar en el pensamiento de Isaiah Berlin anclado en preguntas y debates reales del contexto colombiano, escucha el podcast oficial de **William Camilo Artunduaga Viana**:  
+  👉 [Escuchar en Spotify](https://open.spotify.com/show/4hRC6rIFVIozooGV6OdWOI?si=e500cb9f38684cc2)
+* **NotebookLM Notebook:** Explora notas de investigación, referencias académicas cruzadas y material de apoyo bibliográfico detallado:  
+  👉 [Ver el cuaderno de fuentes de NotebookLM](https://notebooklm.google.com/notebook/5ce143e6-2b6f-41e3-a96d-eb58c6fbb2a1)
+
+---
+
+## 📝 Cómo Citar / Citation (APA 7)
+
+**Referencia en formato APA 7ma Edición:**
+> Artunduaga Viana, W. C. (2026). *Anatomía de la Libertad: Una infografía interactiva sobre marcos teóricos de la libertad política y su tensión empírica en Colombia* [Visualización web interactiva]. GitHub. https://github.com/willkwolf/isaiah-berlin-liberty-infographic
+
+**BibTeX para referencias académicas:**
+```bibtex
+@software{artunduaga2026libertad,
+  author = {Artunduaga Viana, William Camilo},
+  title = {Anatomía de la Libertad},
+  year = {2026},
+  publisher = {GitHub},
+  url = {https://github.com/willkwolf/isaiah-berlin-liberty-infographic},
+  note = {Ensayo interactivo bilingüe basado en Isaiah Berlin, Amartya Sen y Milton Friedman}
+}
+```
+
+---
+
+## 📜 Licencia / License
+
+Este proyecto se publica bajo la licencia **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)**.
+
+[![CC BY-NC-SA 4.0](https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+**Bajo esta licencia puedes:**
+* **Compartir:** Copiar y redistribuir el material en cualquier soporte.
+* **Adaptar:** Mezclar, transformar y crear a partir del material de forma libre.
+* **Bajo las condiciones:** Dar crédito apropiado, uso estrictamente **No Comercial**, y licenciar tus adaptaciones derivadas bajo esta misma licencia exacta.
