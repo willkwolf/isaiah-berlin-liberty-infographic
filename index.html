@@ -315,43 +315,37 @@
         <h2 id="limites-title" class="section__title">Incapacidad<br/><em>versus coerción</em></h2>
         <p class="section__subtitle">Una distinción que Berlin considera fundamental: no toda restricción es falta de libertad política.</p>
 
-        <div class="limits-grid">
-          <div class="limits-card limits-card--physical">
-            <div class="limits-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 60 60" width="56" height="56">
-                <circle cx="30" cy="18" r="7" fill="none" stroke="currentColor" stroke-width="2.5"/>
-                <line x1="30" y1="25" x2="30" y2="40" stroke="currentColor" stroke-width="2.5"/>
-                <line x1="19" y1="32" x2="41" y2="32" stroke="currentColor" stroke-width="2.5"/>
-                <line x1="30" y1="40" x2="22" y2="54" stroke="currentColor" stroke-width="2.5"/>
-                <line x1="30" y1="40" x2="38" y2="54" stroke="currentColor" stroke-width="2.5"/>
-                <path d="M10 18 Q20 8 30 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.4"/>
-                <path d="M50 18 Q40 8 30 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.4"/>
-                <line x1="8" y1="26" x2="52" y2="10" stroke="#e55" stroke-width="2.5"/>
-              </svg>
-            </div>
-            <h3 class="limits-card__title">«No puedes volar»</h3>
-            <p class="limits-card__body">Un límite físico. No hay agente humano que te lo impida. Berlin es explícito: la incapacidad natural no es falta de libertad política. Si pudieras volar, nadie te lo estaría prohibiendo.</p>
-            <div class="limits-card__verdict limits-card__verdict--neutral">
-              <strong>Incapacidad.</strong> No es falta de libertad política. Es un hecho natural.
-            </div>
+        <!-- LABORATORIO DE FRONTERAS (NEW INTERACTIVE COMPONENT) -->
+        <div class="limits-lab">
+          <div class="limits-lab__header">
+            <span class="limits-lab__tag" id="limitsLabTag">Laboratorio Conceptual</span>
+            <h3 class="limits-lab__title" id="limitsLabTitle">¿Coerción o Incapacidad? Clasifica Escenarios del Mundo Real</h3>
+            <p class="limits-lab__subtitle" id="limitsLabSubtitle">Toca cada ficha de laboratorio para ver cómo reaccionan Berlin, Sen y Hayek ante el mismo dilema.</p>
           </div>
 
-          <div class="limits-card limits-card--coercion">
-            <div class="limits-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 60 60" width="56" height="56">
-                <circle cx="30" cy="18" r="7" fill="none" stroke="currentColor" stroke-width="2.5"/>
-                <line x1="30" y1="25" x2="30" y2="40" stroke="currentColor" stroke-width="2.5"/>
-                <line x1="19" y1="32" x2="41" y2="32" stroke="currentColor" stroke-width="2.5"/>
-                <line x1="30" y1="40" x2="22" y2="54" stroke="currentColor" stroke-width="2.5"/>
-                <line x1="30" y1="40" x2="38" y2="54" stroke="currentColor" stroke-width="2.5"/>
-                <rect x="6" y="45" width="48" height="8" rx="3" fill="currentColor" opacity="0.6"/>
-                <text x="30" y="51" text-anchor="middle" font-size="7" fill="var(--clr-bg)" font-family="monospace">PROHIBIDO</text>
-              </svg>
+          <div class="limits-lab__tabs" role="tablist" aria-label="Escenarios del laboratorio" id="limitsLabTabs">
+            <button class="lab-tab active" data-case="pasaje" role="tab" aria-selected="true" aria-controls="labPanel">
+              <span class="lab-tab__icon">🚶</span> <span class="lab-tab__name">Pasaje de autobús</span>
+            </button>
+            <button class="lab-tab" data-case="domingo" role="tab" aria-selected="false" aria-controls="labPanel">
+              <span class="lab-tab__icon">⚖</span> <span class="lab-tab__name">Cierre dominical</span>
+            </button>
+            <button class="lab-tab" data-case="licencia" role="tab" aria-selected="false" aria-controls="labPanel">
+              <span class="lab-tab__icon">🗳</span> <span class="lab-tab__name">Licencia costosa</span>
+            </button>
+            <button class="lab-tab" data-case="rampa" role="tab" aria-selected="false" aria-controls="labPanel">
+              <span class="lab-tab__icon">🫀</span> <span class="lab-tab__name">Falta de rampas</span>
+            </button>
+          </div>
+
+          <div class="limits-lab__panel" id="labPanel" role="tabpanel" aria-live="polite">
+            <div class="lab-scenario">
+              <div class="lab-scenario__label" id="labScenarioLabel">Escenario bajo análisis:</div>
+              <p class="lab-scenario__text" id="labScenarioText">Un ciudadano de bajos recursos en Bogotá no puede pagar el pasaje de autobús para ir a trabajar.</p>
             </div>
-            <h3 class="limits-card__title">«No te dejan moverte»</h3>
-            <p class="limits-card__body">Hay un agente que interviene: Estado, institución, otro individuo. Esto sí es coacción, y por tanto falta de libertad política. La pregunta relevante es <em>quién</em> impone la restricción.</p>
-            <div class="limits-card__verdict limits-card__verdict--alert">
-              <strong>Coacción.</strong> Sí es falta de libertad. Requiere justificación política.
+
+            <div class="lab-verdicts" id="labVerdicts">
+              <!-- Rendered dynamically -->
             </div>
           </div>
         </div>
@@ -397,20 +391,38 @@
           <p class="market-caption" id="marketCaption"></p>
         </div>
 
-        <div class="econ-critique">
-          <h3 class="econ-critique__title">La crítica</h3>
-          <div class="critique-grid">
-            <div class="critique-item">
-              <span class="critique-item__num">01</span>
-              <p>El mercado no es neutral: refleja y amplifica las asimetrías de poder preexistentes.</p>
+        <div class="econ-dialogue">
+          <h3 class="econ-dialogue__title" id="econDialogueTitle">El Mercado Libre en Debate</h3>
+          <div class="dialogue-grid">
+            <div class="dialogue-column dialogue-column--defense">
+              <h4 class="dialogue-column__title" id="econDefenseTitle">El Argumento Liberal</h4>
+              <div class="dialogue-card">
+                <span class="dialogue-card__num">01</span>
+                <p id="econDefense1"><strong>Escudo contra la servidumbre:</strong> El mercado libre dispersa el poder económico, impidiendo que una sola entidad central controle la vida y elecciones de los individuos.</p>
+              </div>
+              <div class="dialogue-card">
+                <span class="dialogue-card__num">02</span>
+                <p id="econDefense2"><strong>Coordinación voluntaria:</strong> El sistema de precios coordina el conocimiento descentralizado de millones de personas de manera voluntaria, sin coacción central.</p>
+              </div>
+              <div class="dialogue-card">
+                <span class="dialogue-card__num">03</span>
+                <p id="econDefense3"><strong>Prosperidad de opciones:</strong> El crecimiento económico derivado de la libre competencia multiplica las opciones reales disponibles para todos a través de la innovación.</p>
+              </div>
             </div>
-            <div class="critique-item">
-              <span class="critique-item__num">02</span>
-              <p>La «no interferencia» estatal es en sí misma una decisión política con ganadores y perdedores definidos.</p>
-            </div>
-            <div class="critique-item">
-              <span class="critique-item__num">03</span>
-              <p>La libertad formal sin recursos reales puede ser vacía — Sen llamará a esto «libertad sin capacidad».</p>
+            <div class="dialogue-column dialogue-column--critique">
+              <h4 class="dialogue-column__title" id="econCritiqueTitle">La Crítica Intervencionista</h4>
+              <div class="dialogue-card">
+                <span class="dialogue-card__num">01</span>
+                <p id="econCritique1"><strong>Asimetrías de poder fáctico:</strong> El mercado no opera en el vacío: refleja y amplifica las diferencias drásticas en el poder de negociación inicial y la riqueza heredada.</p>
+              </div>
+              <div class="dialogue-card">
+                <span class="dialogue-card__num">02</span>
+                <p id="econCritique2"><strong>No-interferencia política:</strong> La decisión estatal de no regular el mercado es en sí misma una elección política con ganadores y perdedores definidos, no un hecho neutro.</p>
+              </div>
+              <div class="dialogue-card">
+                <span class="dialogue-card__num">03</span>
+                <p id="econCritique3"><strong>Libertad formal vacía:</strong> La libertad formal de contratar o transar es inútil para quien carece de las condiciones materiales básicas para subsistir (libertad sin capacidad).</p>
+              </div>
             </div>
           </div>
         </div>
@@ -440,10 +452,33 @@
           <div class="sen-caps-grid" id="senCapsGrid" role="group" aria-label="Capacidades de Sen"></div>
           <div class="sen-profile-dashboard" id="senProfileDashboard" aria-live="polite">
             <div class="sen-profile-header">
-              <span class="sen-profile-label">Perfil de Capacidades</span>
+              <span class="sen-profile-label" id="senProfileLabel">Simulador de Intercambios (Trade-off)</span>
               <span class="sen-profile-badge" id="senProfileBadge">Sin capacidades básicas</span>
             </div>
             <p class="sen-profile-desc" id="senProfileDesc">Activa capacidades en la grilla para evaluar el perfil de libertad efectiva de la persona.</p>
+
+            <!-- DOUBLE INDICATOR METERS (NEW INTERACTIVE WIDGET) -->
+            <div class="sen-tradeoff-meters">
+              <div class="tradeoff-meter">
+                <div class="tradeoff-meter__header">
+                  <span class="tradeoff-meter__name" id="tradeoffSenLabel">Capacidades Reales (Sen)</span>
+                  <span class="tradeoff-meter__val text-cap" id="tradeoffSenVal">0%</span>
+                </div>
+                <div class="tradeoff-meter__track">
+                  <div class="tradeoff-meter__fill fill-cap" id="tradeoffSenFill" style="width: 0%;"></div>
+                </div>
+              </div>
+              <div class="tradeoff-meter">
+                <div class="tradeoff-meter__header">
+                  <span class="tradeoff-meter__name" id="tradeoffNegLabel">No-Interferencia (Berlin/Hayek)</span>
+                  <span class="tradeoff-meter__val text-neg" id="tradeoffNegVal">100%</span>
+                </div>
+                <div class="tradeoff-meter__track">
+                  <div class="tradeoff-meter__fill fill-neg" id="tradeoffNegFill" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+
             <div class="sen-profile-radar" id="senProfileRadar"></div>
           </div>
           <p class="sen-caveat" id="senFreedomCaveat"></p>
@@ -520,14 +555,23 @@
         <div class="system-narrative" id="systemNarrative" aria-live="polite"></div>
 
         <div class="superior-self">
-          <h3 class="superior-self__title">El «yo superior» — la estructura del argumento peligroso</h3>
-          <p>Berlin identifica el siguiente razonamiento como la puerta hacia el autoritarismo moderno:</p>
-          <ol class="superior-self__list">
-            <li>Existe un «yo real» o «yo racional» diferente de mis deseos actuales e imperfectos.</li>
-            <li>Alguien puede conocer mejor que yo lo que ese yo real querría.</li>
-            <li>Luego, coaccionarme para que haga lo que mi yo real querría es, en realidad, <em>liberarme</em>.</li>
-          </ol>
-          <p class="superior-self__conclusion">Esta lógica ha justificado tanto el socialismo de Estado como ciertas teocracias. El problema no está en la conclusión sino en la <strong>estructura del argumento</strong>.</p>
+          <h3 class="superior-self__title" id="superiorSelfTitle">Los Extremos del Monismo: Las Derivas Dogmáticas</h3>
+          <p class="superior-self__intro" id="superiorSelfIntro">Isaiah Berlin advirtió que cuando un valor se eleva a dogma absoluto y único, se justifica la opresión. Ambos conceptos de libertad tienen su propia deriva peligrosa cuando se vuelven monistas:</p>
+          
+          <div class="monism-dangers-grid">
+            <div class="monism-danger-card monism-danger-card--positive">
+              <h4 class="monism-danger-card__title" id="monismDangerPositiveTitle">Deriva de la Libertad Positiva: El «Yo Superior»</h4>
+              <p id="monismDangerPositiveText">Ocurre al asumir que hay un "yo racional" ideal y que el Estado o un líder ilustrado sabe mejor que el individuo lo que este "realmente" quiere. Coaccionarlo para que actúe racionalmente se etiqueta falazmente como <em>"liberarlo"</em>.</p>
+              <span class="monism-danger-card__conclusion" id="monismDangerPositiveConclusion">Históricamente ha justificado paternalismos extremos, teocracias y totalitarismos de Estado.</span>
+            </div>
+            <div class="monism-danger-card monism-danger-card--negative">
+              <h4 class="monism-danger-card__title" id="monismDangerNegativeTitle">Deriva de la Libertad Negativa: La «Dominación Privada»</h4>
+              <p id="monismDangerNegativeText">Ocurre al asumir que la no-interferencia estatal es el único bien supremo, ignorando las asimetrías extremas de poder fáctico. El abandono estatal absoluto se etiqueta falazmente como <em>"libertad"</em>, aunque deje al débil a merced del fuerte.</p>
+              <span class="monism-danger-card__conclusion" id="monismDangerNegativeConclusion">Históricamente ha justificado el darwinismo social, la explotación laboral y la concentración oligárquica sin límites.</span>
+            </div>
+          </div>
+          
+          <p class="superior-self__conclusion" id="superiorSelfConclusion">El peligro no reside en el contenido del valor elegido, sino en la <strong>estructura del argumento monista</strong>: la pretensión de que existe una sola respuesta correcta y armoniosa para la organización humana.</p>
         </div>
       </div>
     </section>
@@ -560,6 +604,21 @@
           </div>
 
           <p class="cierre-coda">Esta tensión no se resuelve.<br/><strong>Se habita.</strong></p>
+
+          <!-- ECOSISTEMA CALLOUT CARD (Link Building Paso 4) -->
+          <div class="ecosystem-callout-card">
+            <div class="callout-badge" aria-hidden="true">❖</div>
+            <div class="callout-body">
+              <span class="callout-tag" id="cierreEcosystemTag">Ruta del Pensamiento Crítico · Paso 4</span>
+              <h4 class="callout-title" id="cierreEcosystemTitle">Límites materiales de la libertad: ¿A qué altura vives?</h4>
+              <p class="callout-text" id="cierreEcosystemText">
+                ¿Puede una persona ser verdaderamente libre si carece de las condiciones materiales básicas para actuar? La libertad formal se estrella de frente con las brechas materiales reales de nuestro mundo.
+              </p>
+              <a href="https://willkwolf.github.io/global-inequality-21Century/Escala-visual-de-riqueza-mundial.html" target="_blank" rel="noopener" class="ecosystem-callout-btn" id="cierreEcosystemBtn">
+                Descubrir la Escala de Riqueza Global ➔
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -567,6 +626,56 @@
   </main>
 
   <footer class="site-footer" aria-labelledby="footerTitle">
+    <!-- Stepper del Ecosistema -->
+    <div class="ecosystem-stepper-section">
+      <h3 id="stepPathTitle">Ruta del Pensamiento Crítico</h3>
+      <p class="stepper-subtitle" id="stepPathSub">Una red de visualizaciones interactivas para explorar la economía y la sociedad</p>
+      <div class="ecosystem-stepper">
+        <a href="https://willkwolf.github.io/EcoSchoolMap/" class="step-item" target="_blank" rel="noopener">
+          <div class="step-badge">1</div>
+          <div class="step-meta">
+            <span class="step-title" id="stepTitle1">Comprender</span>
+            <span class="step-project" id="stepProject1">Mapa de Escuelas</span>
+            <span class="step-status" id="stepStatusExplore1">Explorar ➔</span>
+          </div>
+        </a>
+        <a href="https://willkwolf.github.io/economic-bar/" class="step-item" target="_blank" rel="noopener">
+          <div class="step-badge">2</div>
+          <div class="step-meta">
+            <span class="step-title" id="stepTitle2">Mezclar</span>
+            <span class="step-project" id="stepProject2">El Bar de Cocteles</span>
+            <span class="step-status" id="stepStatusExplore2">Explorar ➔</span>
+          </div>
+        </a>
+        <div class="step-item active">
+          <div class="step-badge">3</div>
+          <div class="step-meta">
+            <span class="step-title" id="stepTitle3">Contrastar</span>
+            <span class="step-project" id="stepProject3">Filosofía de la Libertad</span>
+            <span class="step-status" id="stepStatusHere">Estás aquí</span>
+          </div>
+        </div>
+        <a href="https://willkwolf.github.io/global-inequality-21Century/Escala-visual-de-riqueza-mundial.html" class="step-item" target="_blank" rel="noopener">
+          <div class="step-badge">4</div>
+          <div class="step-meta">
+            <span class="step-title" id="stepTitle4">Escalar</span>
+            <span class="step-project" id="stepProject4">Brecha de Riqueza Global</span>
+            <span class="step-status" id="stepStatusExplore4">Explorar ➔</span>
+          </div>
+        </a>
+        <a href="https://willkwolf.github.io/colombia-palma-desigualdad/" class="step-item" target="_blank" rel="noopener">
+          <div class="step-badge">5</div>
+          <div class="step-meta">
+            <span class="step-title" id="stepTitle5">Aterrizar</span>
+            <span class="step-project" id="stepProject5">Desigualdad en Colombia</span>
+            <span class="step-status" id="stepStatusExplore5">Explorar ➔</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <hr class="footer-divider">
+
     <div class="site-footer__inner">
       <div class="site-footer__lead">
         <p class="site-footer__eyebrow" id="footerEyebrow">Créditos y continuidad</p>

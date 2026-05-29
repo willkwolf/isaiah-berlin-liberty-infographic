@@ -203,7 +203,7 @@ const SYSTEM_NARRATIVES = {
       'Una autoridad que conozca el valor supremo puede imponerlo legítimamente.',
       'Los que resisten lo hacen porque no han alcanzado la comprensión correcta.',
     ],
-    warning: 'Esta estructura lógica ha sostenido proyectos tan distintos como el marxismo-leninismo, el fundamentalismo religioso y el ultraliberalismo de mercado. El contenido varía. La forma es la misma.'
+    warning: 'Esta estructura lógica ha sostenido proyectos históricos diversos bajo la bandera de dogmas absolutos, sean de planificación colectiva, pureza teocrática o visiones absolutistas de mercado. El contenido varía. La forma de demandar conformidad total es la misma.'
   },
   plural: {
     title: 'Sistema plural — pluralismo de valores',
@@ -218,6 +218,98 @@ const SYSTEM_NARRATIVES = {
   }
 };
 
+// Casos de estudio para el Laboratorio de Fronteras (Sección V)
+const LIMITS_LAB_CASES = [
+  {
+    id: 'pasaje',
+    title: 'Pasaje de autobús',
+    scenario: 'Un ciudadano de bajos recursos en Bogotá no puede pagar el pasaje de autobús para ir a trabajar.',
+    analysis: {
+      berlin: {
+        verdict: 'INCAPACIDAD',
+        class: 'neutral',
+        desc: 'No hay un agente humano específico impidiéndole subir de forma deliberada. Por ende, no es coacción directa ni falta de libertad política. Es una restricción de recursos materiales.'
+      },
+      sen: {
+        verdict: 'PRIVACIÓN DE LIBERTAD',
+        class: 'alert',
+        desc: 'Es una falta de libertad efectiva. La imposibilidad de moverse libremente para trabajar anula una capacidad básica. La distinción sobre "quién tiene la culpa" es secundaria ante la pérdida de agencia.'
+      },
+      hayek: {
+        verdict: 'ESCASEZ NATURAL',
+        class: 'neutral',
+        desc: 'Es un problema de escasez y falta de recursos económicos, no de coacción. El mercado libre, si no es distorsionado, es la mejor vía para generar los ingresos que permitan pagarlo.'
+      }
+    }
+  },
+  {
+    id: 'domingo',
+    title: 'Cierre dominical',
+    scenario: 'Una ley prohíbe por motivos regulatorios abrir establecimientos comerciales los días domingos.',
+    analysis: {
+      berlin: {
+        verdict: 'COERCIÓN DIRECTA',
+        class: 'alert',
+        desc: 'Es coacción política real y explícita. El Estado utiliza la amenaza de sanción legal para interferir directamente con la decisión voluntaria de comerciar del individuo.'
+      },
+      sen: {
+        verdict: 'RESTRICCIÓN DE AGENCIA',
+        class: 'alert',
+        desc: 'Representa una limitación en la capacidad de decidir libremente los tiempos de trabajo y desarrollo cultural, aunque el impacto total en capacidades básicas sea menor.'
+      },
+      hayek: {
+        verdict: 'COERCIÓN ESTATAL',
+        class: 'alert',
+        desc: 'Coerción estatal arbitraria que deforma el orden espontáneo del mercado. Destruye la libertad de comercio y la autonomía contractual de los ciudadanos.'
+      }
+    }
+  },
+  {
+    id: 'licencia',
+    title: 'Licencia costosa',
+    scenario: 'El Estado fija mediante regulación un costo de un millón de dólares para la licencia de espectro radioeléctrico.',
+    analysis: {
+      berlin: {
+        verdict: 'COERCIÓN ESTATAL',
+        class: 'alert',
+        desc: 'Es coacción directa sobre quienes quieren emitir pero no pueden debido a la barrera artificial impuesta deliberadamente por el Estado.'
+      },
+      sen: {
+        verdict: 'BARRERA DE PARTICIPACIÓN',
+        class: 'alert',
+        desc: 'Privación de la capacidad de participación pública, expresión y comunicación cívica para sectores que no disponen de gran capital.'
+      },
+      hayek: {
+        verdict: 'COERCIÓN / BARRERA',
+        class: 'alert',
+        desc: 'Es un privilegio monopólico creado por ley que restringe la libre competencia y coarta el ingreso de nuevos competidores al mercado.'
+      }
+    }
+  },
+  {
+    id: 'rampa',
+    title: 'Falta de rampas',
+    scenario: 'Una persona en silla de ruedas no puede ingresar a una alcaldía municipal porque el edificio carece de rampas de acceso.',
+    analysis: {
+      berlin: {
+        verdict: 'INCAPACIDAD FISICA',
+        class: 'neutral',
+        desc: 'Aunque es un hecho social lamentable, desde la libertad negativa pura es una incapacidad física o técnica del sujeto, no un acto de coacción intencional humana.'
+      },
+      sen: {
+        verdict: 'PRIVACIÓN DE AGENCIA',
+        class: 'alert',
+        desc: 'Es una violación de la libertad real. La falta de infraestructura adaptada anula la capacidad básica de movilidad y de interactuar con las instituciones cívicas sin humillación.'
+      },
+      hayek: {
+        verdict: 'FALTA DE INFRAESTRUCTURA',
+        class: 'neutral',
+        desc: 'Es una deficiencia en la provisión de bienes públicos por parte del municipio, pero no califica como coacción al individuo si no hay una ley que le prohíba el ingreso.'
+      }
+    }
+  }
+];
+
 // ═══════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════
@@ -229,6 +321,7 @@ const state = {
   marketMode: 'ideal',
   systemMode: 'closed',
   activePowerNode: null,
+  activeLabCase: 'pasaje',
   senActiveCaps: new Set(),
   conflictValue: 50,
   lensGuideSeen: new Set(),
@@ -692,6 +785,7 @@ function setLanguage(lang, { persist = true } = {}) {
   drawMarketSvg(state.marketMode);
   renderPowerInfo();
   renderSenCapabilities();
+  renderLimitsLab();
   updateColombiaDashboard();
   renderSystemNarrative();
   updateConflictSlider(state.conflictValue);
@@ -1471,6 +1565,33 @@ function updateSenMeter() {
     }
   });
 
+  // Calculate Capacidades Reales (Sen) score based on weights
+  let activeWeightSum = 0;
+  let totalWeightSum = 0;
+  capabilities.forEach(cap => {
+    totalWeightSum += cap.weight;
+    if (activeIds.has(cap.id)) {
+      activeWeightSum += cap.weight;
+    }
+  });
+  const senScore = totalWeightSum > 0 ? Math.round((activeWeightSum / totalWeightSum) * 100) : 0;
+
+  // Calculate No-Interferencia (Berlin/Hayek) score
+  // Purely pedagogical model: each state-provided capability subtracts from negative liberty.
+  // 100% at 0 active capabilities, and drops to 30% if all capabilities are active.
+  const negScore = Math.max(30, 100 - Math.round(senScore * 0.7));
+
+  // Update DOM tradeoff bars if they exist
+  const tradeoffSenFill = qs('#tradeoffSenFill');
+  const tradeoffSenVal = qs('#tradeoffSenVal');
+  const tradeoffNegFill = qs('#tradeoffNegFill');
+  const tradeoffNegVal = qs('#tradeoffNegVal');
+
+  if (tradeoffSenFill) tradeoffSenFill.style.width = senScore + '%';
+  if (tradeoffSenVal) tradeoffSenVal.textContent = senScore + '%';
+  if (tradeoffNegFill) tradeoffNegFill.style.width = negScore + '%';
+  if (tradeoffNegVal) tradeoffNegVal.textContent = negScore + '%';
+
   const badge = qs('#senProfileBadge');
   const desc = qs('#senProfileDesc');
   const radar = qs('#senProfileRadar');
@@ -1539,6 +1660,82 @@ function updateSenMeter() {
 
 function initSenCapacidades() {
   renderSenCapabilities();
+}
+
+// ═══════════════════════════════════════════════
+// LABORATORIO DE FRONTERAS (SECCIÓN V)
+// ═══════════════════════════════════════════════
+
+function getLimitsLabCases() {
+  const english = getEnglishLocale();
+  return isEnglish() && english?.limitsLab ? english.limitsLab.cases : LIMITS_LAB_CASES;
+}
+
+function renderLimitsLab() {
+  const cases = getLimitsLabCases();
+  const activeCaseId = state.activeLabCase || 'pasaje';
+  const activeCase = cases.find(c => c.id === activeCaseId) || cases[0];
+
+  const scenarioText = qs('#labScenarioText');
+  const verdictsContainer = qs('#labVerdicts');
+  const tabs = qsa('.lab-tab');
+
+  // Update tabs active state
+  tabs.forEach(tab => {
+    const isActive = tab.dataset.case === activeCaseId;
+    tab.classList.toggle('active', isActive);
+    tab.setAttribute('aria-selected', String(isActive));
+  });
+
+  if (scenarioText) {
+    scenarioText.textContent = activeCase.scenario;
+  }
+
+  if (verdictsContainer) {
+    verdictsContainer.innerHTML = '';
+    const authors = [
+      { key: 'berlin', name: 'Isaiah Berlin', frame: isEnglish() ? 'Negative Liberty' : 'Libertad Negativa' },
+      { key: 'sen', name: 'Amartya Sen', frame: isEnglish() ? 'Capabilities' : 'Capacidades' },
+      { key: 'hayek', name: 'Friedrich Hayek', frame: isEnglish() ? 'Libertarian' : 'Libertario' }
+    ];
+
+    authors.forEach(auth => {
+      const data = activeCase.analysis[auth.key];
+      const card = document.createElement('div');
+      card.className = 'lab-verdict-card';
+      
+      const badgeClass = data.class === 'alert' ? 'lab-verdict-card__badge--alert' : 'lab-verdict-card__badge--neutral';
+
+      card.innerHTML = `
+        <div class="lab-verdict-card__author">${auth.name}</div>
+        <div style="font-size:0.7rem; color:var(--clr-text-dim); margin-top:-2px;">${auth.frame}</div>
+        <div style="margin-top:4px;">
+          <span class="lab-verdict-card__badge ${badgeClass}">${data.verdict}</span>
+        </div>
+        <p class="lab-verdict-card__desc" style="margin-top:6px; font-size:0.84rem; line-height:1.6;">${data.desc}</p>
+      `;
+      verdictsContainer.appendChild(card);
+    });
+  }
+}
+
+function initLimitsLab() {
+  const tabs = qsa('.lab-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      state.activeLabCase = tab.dataset.case;
+      renderLimitsLab();
+    });
+    tab.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        state.activeLabCase = tab.dataset.case;
+        renderLimitsLab();
+      }
+    });
+  });
+
+  renderLimitsLab();
 }
 
 // ═══════════════════════════════════════════════
@@ -2184,6 +2381,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initBerlinToggle();
   initConflictSlider();
   initPowerDiagram();
+  initLimitsLab();
   initMarketToggle();
   initSenCapacidades();
   updateColombiaDashboard();

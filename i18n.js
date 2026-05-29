@@ -128,12 +128,14 @@ window.I18N_CONTENT.locales.en.staticContent.push(
   { selector: '.power-node[data-node="sociedad"] .power-node__sub', type: 'text', value: 'norm / culture' },
   { selector: '#limites-title', type: 'html', value: 'Incapacity<br/><em>versus coercion</em>' },
   { selector: '#limites .section__subtitle', type: 'text', value: 'A distinction Berlin considers fundamental: not every restriction is a lack of political freedom.' },
-  { selector: '#limites .limits-card--physical .limits-card__title', type: 'text', value: '“You cannot fly”' },
-  { selector: '#limites .limits-card--physical .limits-card__body', type: 'text', value: 'A physical limit. There is no human agent preventing you. Berlin is explicit: natural incapacity is not a lack of political freedom. If you could fly, nobody would be forbidding it.' },
-  { selector: '#limites .limits-card--physical .limits-card__verdict', type: 'html', value: '<strong>Incapacity.</strong> It is not a lack of political freedom. It is a natural fact.' },
-  { selector: '#limites .limits-card--coercion .limits-card__title', type: 'text', value: '“They do not let you move”' },
-  { selector: '#limites .limits-card--coercion .limits-card__body', type: 'html', value: 'There is an intervening agent: state, institution, or another individual. This <em>is</em> coercion, and therefore a lack of political freedom. The relevant question is <em>who</em> imposes the restriction.' },
-  { selector: '#limites .limits-card--coercion .limits-card__verdict', type: 'html', value: '<strong>Coercion.</strong> It is a lack of freedom. It requires political justification.' },
+  { selector: '#limitsLabTag', type: 'text', value: 'Conceptual Laboratory' },
+  { selector: '#limitsLabTitle', type: 'text', value: 'Coercion or Incapacity? Classify Real-World Scenarios' },
+  { selector: '#limitsLabSubtitle', type: 'text', value: 'Tap each lab card to see how Berlin, Sen, and Hayek react to the same dilemma.' },
+  { selector: '#limitsLabTabs button[data-case="pasaje"] .lab-tab__name', type: 'text', value: 'Bus fare' },
+  { selector: '#limitsLabTabs button[data-case="domingo"] .lab-tab__name', type: 'text', value: 'Sunday closing' },
+  { selector: '#limitsLabTabs button[data-case="licencia"] .lab-tab__name', type: 'text', value: 'Costly license' },
+  { selector: '#limitsLabTabs button[data-case="rampa"] .lab-tab__name', type: 'text', value: 'Lack of ramps' },
+  { selector: '#labScenarioLabel', type: 'text', value: 'Scenario under analysis:' },
   { selector: '#limites .limits-complication__title', type: 'text', value: 'The crack Berlin never fully closes' },
   { selector: '#limites .limits-complication p', type: 'html', value: 'What if you cannot pay for transportation? That is not a physical limit. There is an institutional system that organizes scarcity. Is that coercion? <strong>Sen will say it matters</strong>, regardless of whether there is an intentional agent. Berlin would say it depends on whether there is deliberate human intervention.' },
   { selector: '#economia-title', type: 'html', value: 'Hayek &amp; Friedman<br/><em>liberty as non-interference</em>' },
@@ -146,10 +148,15 @@ window.I18N_CONTENT.locales.en.staticContent.push(
   { selector: '#economia .market-btn[data-market="ideal"]', type: 'text', value: 'Ideal model' },
   { selector: '#economia .market-btn[data-market="real"]', type: 'text', value: 'Empirical evidence' },
   { selector: '#marketSvg', type: 'attr', attr: 'aria-label', value: 'Comparison of ideal and real market' },
-  { selector: '#economia .econ-critique__title', type: 'text', value: 'The critique' },
-  { selector: '#economia .critique-item:nth-child(1) p', type: 'text', value: 'The market is not neutral: it reflects and amplifies preexisting asymmetries of power.' },
-  { selector: '#economia .critique-item:nth-child(2) p', type: 'text', value: 'State “non-interference” is itself a political decision with clear winners and losers.' },
-  { selector: '#economia .critique-item:nth-child(3) p', type: 'text', value: 'Formal liberty without real resources may be empty. Sen will call this “freedom without capability.”' }
+  { selector: '#econDialogueTitle', type: 'text', value: 'The Free Market Debate' },
+  { selector: '#econDefenseTitle', type: 'text', value: 'The Liberal Argument' },
+  { selector: '#econDefense1', type: 'html', value: '<strong>Shield against serfdom:</strong> The free market disperses economic power, preventing any central entity from controlling the lives and choices of individuals.' },
+  { selector: '#econDefense2', type: 'html', value: '<strong>Voluntary coordination:</strong> The price system coordinates the decentralized knowledge of millions of people voluntarily, without central coercion.' },
+  { selector: '#econDefense3', type: 'html', value: '<strong>Prosperity of choices:</strong> Economic growth derived from free competition multiplies the actual life options available to all through innovation.' },
+  { selector: '#econCritiqueTitle', type: 'text', value: 'The Interventionist Critique' },
+  { selector: '#econCritique1', type: 'html', value: '<strong>Asymmetries of factual power:</strong> The market does not operate in a vacuum: it reflects and amplifies drastic differences in initial bargaining power and inherited wealth.' },
+  { selector: '#econCritique2', type: 'html', value: '<strong>State non-interference:</strong> The decision not to regulate is itself a political choice with defined winners and losers, not a natural state of neutrality.' },
+  { selector: '#econCritique3', type: 'html', value: '<strong>Empty formal freedom:</strong> The formal freedom to contract or trade is useless for those who lack the basic material conditions to survive (freedom without capability).' }
 );
 
 window.I18N_CONTENT.locales.en.staticContent.push(
@@ -158,7 +165,9 @@ window.I18N_CONTENT.locales.en.staticContent.push(
   { selector: '#sen .sen-intro-quote p', type: 'text', value: '“Development can be seen as a process of expanding the real freedoms that people enjoy.”' },
   { selector: '#sen .sen-intro-quote cite', type: 'html', value: 'Amartya Sen, <em>Development as Freedom</em> (1999)' },
   { selector: '#sen .sen-caps-intro', type: 'text', value: 'Activate or deactivate capabilities to see how effective freedom changes:' },
-  { selector: '#sen .sen-profile-label', type: 'text', value: 'Capabilities Profile' },
+  { selector: '#senProfileLabel', type: 'text', value: 'Trade-off Simulator' },
+  { selector: '#tradeoffSenLabel', type: 'text', value: 'Real Capabilities (Sen)' },
+  { selector: '#tradeoffNegLabel', type: 'text', value: 'Non-Interference (Berlin/Hayek)' },
   { selector: '#sen #senProfileDesc', type: 'text', value: 'Activate capabilities in the grid to evaluate the person\'s effective freedom profile.' },
   { selector: '#sen #senProfileBadge', type: 'text', value: 'No basic capabilities' },
   { selector: '#sen .sen-indices__title', type: 'text', value: 'Measurement in practice' },
@@ -176,12 +185,15 @@ window.I18N_CONTENT.locales.en.staticContent.push(
   { selector: '#comparacion .section__subtitle', type: 'text', value: 'Berlin warned: the greatest danger is not intellectual error, but the certainty of having found the only true value.' },
   { selector: '#systemClosedBtn', type: 'text', value: 'Closed system' },
   { selector: '#systemPluralBtn', type: 'text', value: 'Plural system' },
-  { selector: '#comparacion .superior-self__title', type: 'text', value: 'The “higher self” and the dangerous structure of the argument' },
-  { selector: '#comparacion .superior-self > p:nth-of-type(1)', type: 'text', value: 'Berlin identifies the following reasoning as the gateway to modern authoritarianism:' },
-  { selector: '#comparacion .superior-self__list li:nth-child(1)', type: 'text', value: 'There is a “real self” or “rational self” different from my current and imperfect desires.' },
-  { selector: '#comparacion .superior-self__list li:nth-child(2)', type: 'text', value: 'Someone may know better than I do what that real self would want.' },
-  { selector: '#comparacion .superior-self__list li:nth-child(3)', type: 'html', value: 'Therefore, coercing me to do what my real self would want is, in fact, <em>liberating</em> me.' },
-  { selector: '#comparacion .superior-self__conclusion', type: 'html', value: 'This logic has justified both state socialism and certain theocracies. The problem is not in the conclusion but in the <strong>structure of the argument</strong>.' },
+  { selector: '#superiorSelfTitle', type: 'text', value: 'The Extremes of Monism: Dogmatic Deviations' },
+  { selector: '#superiorSelfIntro', type: 'text', value: 'Isaiah Berlin warned that when any single value is elevated to an absolute and unique dogma, oppression is justified. Both concepts of liberty have their own dangerous slide when they become monistic:' },
+  { selector: '#monismDangerPositiveTitle', type: 'text', value: 'Positive Liberty Deviation: The “Higher Self”' },
+  { selector: '#monismDangerPositiveText', type: 'html', value: 'Occurs when assuming there is an ideal "rational self" and that the state or an enlightened leader knows better than the individual what they "really" want. Coercing them to act rationally is fallaciously labeled as <em>"liberating"</em> them.' },
+  { selector: '#monismDangerPositiveConclusion', type: 'text', value: 'Historically, it has justified extreme paternalisms, teocracies, and state totalitarianisms.' },
+  { selector: '#monismDangerNegativeTitle', type: 'text', value: 'Negative Liberty Deviation: The “Private Domination”' },
+  { selector: '#monismDangerNegativeText', type: 'html', value: 'Occurs when assuming that state non-interference is the sole supreme good, ignoring drastic asymmetries of factual power. Absolute state abandonment is fallaciously labeled as <em>"liberty"</em>, even if it leaves the weak at the mercy of the strong.' },
+  { selector: '#monismDangerNegativeConclusion', type: 'text', value: 'Historically, it has justified social Darwinism, labor exploitation, and boundless oligopolistic concentration.' },
+  { selector: '#superiorSelfConclusion', type: 'html', value: 'The danger does not lie in the content of the chosen value, but in the <strong>structure of the monistic argument</strong>: the pretense that there is a single correct, harmonious answer for human organization.' },
   { selector: '#cierre .cierre-epigraph', type: 'text', value: '“Out of the crooked timber of humanity no straight thing was ever made.”' },
   { selector: '#cierre .cierre-attribution', type: 'html', value: 'Immanuel Kant, <em>Idea for a Universal History</em> (1784)' },
   { selector: '#cierre .cierre-thesis:nth-child(1) p', type: 'text', value: 'Genuinely important values are incompatible with one another. There is no system that maximizes them all at once.' },
@@ -203,7 +215,29 @@ window.I18N_CONTENT.locales.en.staticContent.push(
   { selector: '#footerRightsLabel', type: 'text', value: 'Use and license' },
   { selector: '#footerRightsTitle', type: 'text', value: 'Creative Commons for educational circulation' },
   { selector: '#footerRightsCopy', type: 'text', value: 'Content prepared in March 2026. A Creative Commons BY-NC-SA 4.0 license is proposed so the material can be shared, cited, and adapted with attribution, without commercial use, and under the same license.' },
-  { selector: '#footerMetaDate', type: 'text', value: 'Prepared: March 2026' }
+  { selector: '#footerMetaDate', type: 'text', value: 'Prepared: March 2026' },
+  // Ecosystem Stepper and Callout
+  { selector: '#cierreEcosystemTag', type: 'text', value: 'Critical Thinking Path · Step 4' },
+  { selector: '#cierreEcosystemTitle', type: 'text', value: 'Material limits of liberty: What height do you live at?' },
+  { selector: '#cierreEcosystemText', type: 'text', value: 'Can a person be truly free if they lack the basic material conditions to act? Formal liberty crashes head-on with the real material gaps of our world.' },
+  { selector: '#cierreEcosystemBtn', type: 'text', value: 'Discover the Global Wealth Scale ➔' },
+  { selector: '#stepPathTitle', type: 'text', value: 'Critical Thinking Path' },
+  { selector: '#stepPathSub', type: 'text', value: 'A network of interactive visualizations to explore economics and society' },
+  { selector: '#stepTitle1', type: 'text', value: 'Understand' },
+  { selector: '#stepProject1', type: 'text', value: 'Schools Map' },
+  { selector: '#stepStatusExplore1', type: 'text', value: 'Explore ➔' },
+  { selector: '#stepTitle2', type: 'text', value: 'Mix' },
+  { selector: '#stepProject2', type: 'text', value: 'The Cocktail Bar' },
+  { selector: '#stepStatusExplore2', type: 'text', value: 'Explore ➔' },
+  { selector: '#stepTitle3', type: 'text', value: 'Contrast' },
+  { selector: '#stepProject3', type: 'text', value: 'Philosophy of Liberty' },
+  { selector: '#stepStatusHere', type: 'text', value: 'You are here' },
+  { selector: '#stepTitle4', type: 'text', value: 'Scale' },
+  { selector: '#stepProject4', type: 'text', value: 'Global Wealth Gap' },
+  { selector: '#stepStatusExplore4', type: 'text', value: 'Explore ➔' },
+  { selector: '#stepTitle5', type: 'text', value: 'Land' },
+  { selector: '#stepProject5', type: 'text', value: 'Inequality in Colombia' },
+  { selector: '#stepStatusExplore5', type: 'text', value: 'Explore ➔' }
 );
 
 window.I18N_CONTENT.locales.en.canvasValues.push(
@@ -419,3 +453,84 @@ Object.assign(window.I18N_CONTENT.locales.en.systemNarratives, {
     warning: 'Pluralism is not relativism. You may recognize multiple genuine values without concluding that every compromise is equally valid or that all distinctions collapse.'
   }
 });
+
+window.I18N_CONTENT.locales.en.limitsLab = {
+  cases: [
+    {
+      id: 'pasaje',
+      title: 'Bus fare',
+      scenario: 'A low-income citizen in Bogotá cannot afford the bus fare to go to work.',
+      analysis: {
+        berlin: {
+          verdict: 'INCAPACITY',
+          desc: 'There is no specific human agent deliberately preventing them from boarding. Hence, it is not direct coercion or lack of political freedom. It is a restriction of material resources.'
+        },
+        sen: {
+          verdict: 'LACK OF FREEDOM',
+          desc: 'It is a lack of effective freedom. The inability to move freely to work cancels a basic capability. Deciding "whose fault it is" is secondary to the actual loss of agency.'
+        },
+        hayek: {
+          verdict: 'NATURAL SCARCITY',
+          desc: 'It is a problem of scarcity and lack of economic resources, not coercion. The free market, if undistorted, is the best path to generate the income needed to pay for it.'
+        }
+      }
+    },
+    {
+      id: 'domingo',
+      title: 'Sunday closing',
+      scenario: 'A law prohibits commercial establishments from opening on Sundays for regulatory reasons.',
+      analysis: {
+        berlin: {
+          verdict: 'DIRECT COERCION',
+          desc: 'It is real and explicit political coercion. The state uses the threat of legal sanction to directly interfere with the individual\'s voluntary decision to trade.'
+        },
+        sen: {
+          verdict: 'AGENCY LIMITATION',
+          desc: 'It represents a limitation in the capability to freely decide working hours and cultural development, though the total impact on basic capabilities is minor.'
+        },
+        hayek: {
+          verdict: 'STATE COERCION',
+          desc: 'Arbitrary state coercion that distorts the spontaneous market order. It destroys commercial freedom and the contractual autonomy of citizens.'
+        }
+      }
+    },
+    {
+      id: 'licencia',
+      title: 'Costly license',
+      scenario: 'The state sets a one million dollar fee by regulation for a radio spectrum license.',
+      analysis: {
+        berlin: {
+          verdict: 'STATE COERCION',
+          desc: 'It is direct coercion on those who want to broadcast but cannot because of the artificial barrier deliberately imposed by the state.'
+        },
+        sen: {
+          verdict: 'PARTICIPATION BARRIER',
+          desc: 'Deprivation of the capability of public participation, expression, and civic communication for sectors that do not have large capital.'
+        },
+        hayek: {
+          verdict: 'COERCION / BARRIER',
+          desc: 'It is a monopoly privilege created by law that restricts free competition and coerces the entry of new competitors into the market.'
+        }
+      }
+    },
+    {
+      id: 'rampa',
+      title: 'Lack of ramps',
+      scenario: 'A person in a wheelchair cannot enter a municipal city hall because the building lacks access ramps.',
+      analysis: {
+        berlin: {
+          verdict: 'PHYSICAL INCAPACITY',
+          desc: 'Although it is a regrettable social fact, from pure negative liberty it is a physical or technical incapacity of the subject, not an act of intentional human coercion.'
+        },
+        sen: {
+          verdict: 'AGENCY DEPRIVATION',
+          desc: 'It is a violation of real freedom. The lack of adapted infrastructure cancels the basic capability of mobility and of interacting with civic institutions without humiliation.'
+        },
+        hayek: {
+          verdict: 'LACK OF INFRASTRUCTURE',
+          desc: 'It is a deficiency in the provision of public goods by the municipality, but it does not qualify as coercion of the individual if there is no law forbidding entry.'
+        }
+      }
+    }
+  ]
+};
