@@ -159,13 +159,13 @@ const COLOMBIA_DATA = {
 
 // Capacidades de Sen — mock pedagógico
 const SEN_CAPACIDADES = [
-  { id: 'salud',       icon: '🫀', name: 'Salud',          weight: 20, desc: 'Vivir una vida de duración normal, sin enfermedad prevenible.' },
-  { id: 'educacion',   icon: '📚', name: 'Educación',      weight: 18, desc: 'Leer, razonar, participar en la vida cívica y cultural.' },
-  { id: 'movilidad',   icon: '🚶', name: 'Movilidad',      weight: 12, desc: 'Moverse libremente en el espacio físico y geográfico.' },
-  { id: 'participacion',icon:'🗳', name: 'Participación',  weight: 14, desc: 'Participar en decisiones políticas que afectan tu vida.' },
-  { id: 'trabajo',     icon: '⚒',  name: 'Trabajo digno',  weight: 16, desc: 'Trabajar en condiciones humanas, sin explotación.' },
-  { id: 'afiliacion',  icon: '🤝', name: 'Afiliación',     weight: 12, desc: 'Vivir con y para otros, sin humillación ni discriminación.' },
-  { id: 'juego',       icon: '🎭', name: 'Juego / Cultura', weight: 8, desc: 'Reír, jugar, participar en la vida recreativa y cultural.' },
+  { id: 'salud',       icon: '◈', name: 'Salud',          weight: 20, desc: 'Vivir una vida de duración normal, sin enfermedad prevenible.' },
+  { id: 'educacion',   icon: '◈', name: 'Educación',      weight: 18, desc: 'Leer, razonar, participar en la vida cívica y cultural.' },
+  { id: 'movilidad',   icon: '◈', name: 'Movilidad',      weight: 12, desc: 'Moverse libremente en el espacio físico y geográfico.' },
+  { id: 'participacion',icon:'◈', name: 'Participación',  weight: 14, desc: 'Participar en decisiones políticas que afectan tu vida.' },
+  { id: 'trabajo',     icon: '◈', name: 'Trabajo digno',  weight: 16, desc: 'Trabajar en condiciones humanas, sin explotación.' },
+  { id: 'afiliacion',  icon: '◈', name: 'Afiliación',     weight: 12, desc: 'Vivir con y para otros, sin humillación ni discriminación.' },
+  { id: 'juego',       icon: '◈', name: 'Juego / Cultura', weight: 8, desc: 'Reír, jugar, participar en la vida recreativa y cultural.' },
 ];
 
 // Datos power diagram

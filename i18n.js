@@ -407,13 +407,13 @@ Object.assign(window.I18N_CONTENT.locales.en.market, {
 
 Object.assign(window.I18N_CONTENT.locales.en.sen, {
   capabilities: [
-    { id: 'salud', icon: '🫀', name: 'Health', weight: 20, desc: 'Living a normal-length life without preventable disease.' },
-    { id: 'educacion', icon: '📚', name: 'Education', weight: 18, desc: 'Reading, reasoning, and participating in civic and cultural life.' },
-    { id: 'movilidad', icon: '🚶', name: 'Mobility', weight: 12, desc: 'Moving freely through physical and geographic space.' },
-    { id: 'participacion', icon: '🗳', name: 'Participation', weight: 14, desc: 'Taking part in political decisions that affect your life.' },
-    { id: 'trabajo', icon: '⚒', name: 'Decent work', weight: 16, desc: 'Working under human conditions, without exploitation.' },
-    { id: 'afiliacion', icon: '🤝', name: 'Affiliation', weight: 12, desc: 'Living with and for others without humiliation or discrimination.' },
-    { id: 'juego', icon: '🎭', name: 'Play / Culture', weight: 8, desc: 'Laughing, playing, and joining recreational and cultural life.' }
+    { id: 'salud', icon: '◈', name: 'Health', weight: 20, desc: 'Living a normal-length life without preventable disease.' },
+    { id: 'educacion', icon: '◈', name: 'Education', weight: 18, desc: 'Reading, reasoning, and participating in civic and cultural life.' },
+    { id: 'movilidad', icon: '◈', name: 'Mobility', weight: 12, desc: 'Moving freely through physical and geographic space.' },
+    { id: 'participacion', icon: '◈', name: 'Participation', weight: 14, desc: 'Taking part in political decisions that affect your life.' },
+    { id: 'trabajo', icon: '◈', name: 'Decent work', weight: 16, desc: 'Working under human conditions, without exploitation.' },
+    { id: 'afiliacion', icon: '◈', name: 'Affiliation', weight: 12, desc: 'Living with and for others without humiliation or discrimination.' },
+    { id: 'juego', icon: '◈', name: 'Play / Culture', weight: 8, desc: 'Laughing, playing, and joining recreational and cultural life.' }
   ],
   meterLabel: 'Estimated effective freedom',
   caveat: 'Note: these percentages are pedagogical. Sen rejects reducing capabilities to a single index. Composition matters as much as the total.',
