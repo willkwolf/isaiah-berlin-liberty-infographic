@@ -596,112 +596,156 @@
           </p>
         </div>
 
-        <!-- MATRIZ CARTESIANA INTERACTIVA -->
-        <div class="genealogia-matrix-wrapper" id="genealogiaMatrixWrapper">
-          <div class="genealogia-matrix-header">
-            <h3 class="genealogia-matrix-title" id="matrixDiagramTitle">ARQUITECTURAS DE PODER: MONISMO vs. PLURALISMO</h3>
-            <p class="genealogia-matrix-subtitle" id="matrixDiagramSubtitle">Hegemonía histórica y marginalidad emergente, del pre-Estado al Estado moderno</p>
-            <p class="genealogia-matrix-axis-note" id="matrixDiagramAxisNote">El eje horizontal no representa izquierda-derecha; expresa hegemonía histórica relativa frente a emergencia, subordinación o declive</p>
-          </div>
-
-          <div class="genealogia-cartesian-diagram" id="genealogiaCartesianDiagram">
-            <!-- Eje Superior (Y-axis: Monismo) -->
-            <div class="cartesian-axis cartesian-axis--top">
-              <div class="cartesian-axis-badge cartesian-axis-badge--top" id="axisBadgeTop">
-                <span class="cartesian-axis-arrow" aria-hidden="true">▲</span>
-                <span class="cartesian-axis-title" id="axisLabelMonismo">MONISMO</span>
-                <span class="cartesian-axis-hint" id="axisHintMonismo">Concentración de la autoridad · Un solo fin supremo</span>
-              </div>
-            </div>
-
-            <!-- Eje Horizontal (X-axis: Hegemonía vs. Marginalidad) -->
-            <div class="cartesian-horizontal-track">
-              <div class="cartesian-axis-badge cartesian-axis-badge--left" id="axisBadgeLeft">
-                <span class="cartesian-axis-arrow" aria-hidden="true">◀</span>
-                <span class="cartesian-axis-title" id="axisLabelHegemonia">HEGEMONÍA HISTÓRICA CONSOLIDADA</span>
-                <span class="cartesian-axis-hint" id="axisHintHegemonia">Institucionalización dominante y coacción central</span>
-              </div>
-              <div class="cartesian-axis-crosshair" aria-hidden="true" title="Intersección de ejes cartesianos">
-                <svg class="cartesian-axis-crosshair__svg" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <line x1="7" y1="1" x2="7" y2="13" />
-                  <line x1="1" y1="7" x2="13" y2="7" />
-                </svg>
-              </div>
-              <div class="cartesian-axis-badge cartesian-axis-badge--right" id="axisBadgeRight">
-                <span class="cartesian-axis-title" id="axisLabelMarginalidad">MARGINALIDAD / RESISTENCIA EMERGENTE</span>
-                <span class="cartesian-axis-arrow" aria-hidden="true">▶</span>
-                <span class="cartesian-axis-hint" id="axisHintMarginalidad">Autonomías subalternas, declive o proyectos desde abajo</span>
-              </div>
-            </div>
-
-            <!-- Cuadrícula 2x2 de Cuadrantes -->
-            <div class="genealogia-quadrants-grid" id="genealogiaQuadrantsGrid">
-              <!-- Cuadrante 1: DOMINIO UNIFORME -->
-              <div class="genealogia-quadrant genealogia-quadrant--q1" id="quadrantQ1" data-quadrant="monismo_hegemonico">
-                <div class="quadrant-header">
-                  <div class="quadrant-badge-row">
-                    <span class="quadrant-tag">Q-I</span>
-                    <span class="quadrant-coord">Monismo · Hegemonía</span>
-                  </div>
-                  <h4 class="quadrant-title" id="q1Title">Dominio Uniforme</h4>
-                  <p class="quadrant-sub" id="q1Sub">Monismo hegemónico: imperios tributarios, monarquías absolutas y teocracias de Estado</p>
-                </div>
-                <div class="quadrant-items-list" id="q1ItemsList" role="list" aria-label="Arquitecturas de Dominio Uniforme"></div>
-              </div>
-
-              <!-- Cuadrante 2: AUTORIDAD CENTRALIZADA -->
-              <div class="genealogia-quadrant genealogia-quadrant--q2" id="quadrantQ2" data-quadrant="monismo_marginal">
-                <div class="quadrant-header">
-                  <div class="quadrant-badge-row">
-                    <span class="quadrant-tag">Q-II</span>
-                    <span class="quadrant-coord">Monismo · Marginalidad/Declive</span>
-                  </div>
-                  <h4 class="quadrant-title" id="q2Title">Autoridad Centralizada</h4>
-                  <p class="quadrant-sub" id="q2Sub">Monismo radical o autocrático: proyectos totalitarios, partido único y teocracias radicales</p>
-                </div>
-                <div class="quadrant-items-list" id="q2ItemsList" role="list" aria-label="Arquitecturas de Autoridad Centralizada"></div>
-              </div>
-
-              <!-- Cuadrante 3: HEGEMONÍA PLURALISTA -->
-              <div class="genealogia-quadrant genealogia-quadrant--q3" id="quadrantQ3" data-quadrant="pluralismo_consolidado">
-                <div class="quadrant-header">
-                  <div class="quadrant-badge-row">
-                    <span class="quadrant-tag">Q-III</span>
-                    <span class="quadrant-coord">Pluralismo · Hegemonía</span>
-                  </div>
-                  <h4 class="quadrant-title" id="q3Title">Hegemonía Pluralista</h4>
-                  <p class="quadrant-sub" id="q3Sub">Pluralismo consolidado: democracia constitucional, separación de poderes y republicanismo</p>
-                </div>
-                <div class="quadrant-items-list" id="q3ItemsList" role="list" aria-label="Arquitecturas de Hegemonía Pluralista"></div>
-              </div>
-
-              <!-- Cuadrante 4: PLURALISMO EMERGENTE -->
-              <div class="genealogia-quadrant genealogia-quadrant--q4" id="quadrantQ4" data-quadrant="pluralismo_emergente">
-                <div class="quadrant-header">
-                  <div class="quadrant-badge-row">
-                    <span class="quadrant-tag">Q-IV</span>
-                    <span class="quadrant-coord">Pluralismo · Emergencia</span>
-                  </div>
-                  <h4 class="quadrant-title" id="q4Title">Pluralismo Emergente</h4>
-                  <p class="quadrant-sub" id="q4Sub">Diversidad radical: anarquismo, bienes comunes, feminismo interseccional y autonomías</p>
-                </div>
-                <div class="quadrant-items-list" id="q4ItemsList" role="list" aria-label="Arquitecturas de Pluralismo Emergente"></div>
-              </div>
-            </div>
-
-            <!-- Eje Inferior (Y-axis: Pluralismo) -->
-            <div class="cartesian-axis cartesian-axis--bottom">
-              <div class="cartesian-axis-badge cartesian-axis-badge--bottom" id="axisBadgeBottom">
-                <span class="cartesian-axis-arrow" aria-hidden="true">▼</span>
-                <span class="cartesian-axis-title" id="axisLabelPluralismo">PLURALISMO</span>
-                <span class="cartesian-axis-hint" id="axisHintPluralismo">Distribución de la autoridad · Inconmensurabilidad de fines</span>
-              </div>
+        <!-- EXPLORADOR DE CUATRO CONCEPCIONES DEL PODER (COMPONENTES INDEPENDIENTES) -->
+        <div class="genealogia-explorer" id="genealogiaExplorer" role="region" aria-label="Explorador de concepciones de monismo y pluralismo">
+          <div class="genealogia-explorer__header">
+            <h3 class="genealogia-explorer__title" id="explorerTitle">Cuatro Concepciones Históricas del Orden y la Coacción</h3>
+            <p class="genealogia-explorer__desc" id="explorerDesc">
+              La libertad no se organiza en un vacío abstracto. A lo largo de la historia, las instituciones han encarnado concepciones monistas o pluralistas según alcancen una posición hegemónica dominante o surjan como emergencias marginales y contestatarias.
+            </p>
+            <div class="genealogia-explorer__caveat" id="explorerCaveat">
+              <span class="caveat-glyph" aria-hidden="true">◈</span>
+              <span class="caveat-text" id="explorerCaveatText">Advertencia heurística: Las categorías no son clasificaciones morales universales ni estáticas; su posición depende estrictamente del contexto histórico, geográfico y de la correlación de fuerzas institucional.</span>
             </div>
           </div>
 
-          <p class="genealogia-methodology-note" id="genealogiaMethodologyNote">
-            *NOTA METODOLÓGICA: Clasificación heurística: las posiciones son relativas y dependen del periodo, la región y la configuración institucional. Las categorías pueden combinarse y transformarse históricamente.
-          </p>
+          <div class="genealogia-categories-grid" id="genealogiaCategoriesGrid">
+            <!-- 1. Monistas Hegemónicos -->
+            <article class="power-category-card power-category-card--monismo_hegemonico" id="catCardMonismoHegemonico" data-category="monismo_hegemonico">
+              <div class="category-card__header">
+                <div class="category-card__badge-row">
+                  <span class="category-card__tag">1</span>
+                  <span class="category-card__badge badge--amber" id="badgeMonismoHegemonico">Monismo Hegemónico</span>
+                </div>
+                <h4 class="category-card__title" id="titleMonismoHegemonico">Monistas hegemónicos</h4>
+                <p class="category-card__subtitle" id="subMonismoHegemonico">Dominio institucional consolidado y soberanía unificada</p>
+              </div>
+              <div class="category-card__body">
+                <p class="category-card__summary" id="sumMonismoHegemonico">
+                  Concepciones que subordinan toda discrepancia a una sola instancia rectora o fin supremo (corona, fe revelada, razón de Estado). Concentran la autoridad para garantizar certidumbre y orden indivisible.
+                </p>
+                <div class="category-card__features">
+                  <div class="category-card__feature">
+                    <span class="feature-label">§ Mecanismo:</span>
+                    <span class="feature-val" id="featMecMonismoHegemonico">Monopolio coercitivo, aparato burocrático y ley dogmática</span>
+                  </div>
+                  <div class="category-card__feature">
+                    <span class="feature-label">¶ Compromiso:</span>
+                    <span class="feature-val" id="featCompMonismoHegemonico">Prioriza orden territorial a costa de anular la autonomía individual</span>
+                  </div>
+                </div>
+                <div class="category-card__samples" id="samplesMonismoHegemonico" role="group" aria-label="Tradiciones representativas"></div>
+              </div>
+              <div class="category-card__footer">
+                <button class="category-explore-btn" type="button" data-category="monismo_hegemonico" aria-haspopup="dialog" aria-expanded="false" id="btnExploreMonismoHegemonico">
+                  <span>Explorar concepción y tradiciones</span>
+                  <span class="explore-arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+            </article>
+
+            <!-- 2. Pluralistas Hegemónicos -->
+            <article class="power-category-card power-category-card--pluralismo_hegemonico" id="catCardPluralismoHegemonico" data-category="pluralismo_hegemonico">
+              <div class="category-card__header">
+                <div class="category-card__badge-row">
+                  <span class="category-card__tag">2</span>
+                  <span class="category-card__badge badge--blue" id="badgePluralismoHegemonico">Pluralismo Hegemónico</span>
+                </div>
+                <h4 class="category-card__title" id="titlePluralismoHegemonico">Pluralistas hegemónicos</h4>
+                <p class="category-card__subtitle" id="subPluralismoHegemonico">Institucionalización de contrapesos, derechos y división de poderes</p>
+              </div>
+              <div class="category-card__body">
+                <p class="category-card__summary" id="sumPluralismoHegemonico">
+                  Tradiciones consolidadas que asumen la irreductibilidad de valores incompatibles y distribuyen la autoridad entre jurisdicciones autónomas, tribunales independientes y cartas constitucionales.
+                </p>
+                <div class="category-card__features">
+                  <div class="category-card__feature">
+                    <span class="feature-label">§ Mecanismo:</span>
+                    <span class="feature-val" id="featMecPluralismoHegemonico">Imperio de la ley, frenos y contrapesos y deliberación reglada</span>
+                  </div>
+                  <div class="category-card__feature">
+                    <span class="feature-label">¶ Compromiso:</span>
+                    <span class="feature-val" id="featCompPluralismoHegemonico">Protege contra la tiranía a costa de lentitud decisional y fricción</span>
+                  </div>
+                </div>
+                <div class="category-card__samples" id="samplesPluralismoHegemonico" role="group" aria-label="Tradiciones representativas"></div>
+              </div>
+              <div class="category-card__footer">
+                <button class="category-explore-btn" type="button" data-category="pluralismo_hegemonico" aria-haspopup="dialog" aria-expanded="false" id="btnExplorePluralismoHegemonico">
+                  <span>Explorar concepción y tradiciones</span>
+                  <span class="explore-arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+            </article>
+
+            <!-- 3. Monistas Emergentes -->
+            <article class="power-category-card power-category-card--monismo_emergente" id="catCardMonismoEmergente" data-category="monismo_emergente">
+              <div class="category-card__header">
+                <div class="category-card__badge-row">
+                  <span class="category-card__tag">3</span>
+                  <span class="category-card__badge badge--crimson" id="badgeMonismoEmergente">Monismo Emergente</span>
+                </div>
+                <h4 class="category-card__title" id="titleMonismoEmergente">Monistas emergentes</h4>
+                <p class="category-card__subtitle" id="subMonismoEmergente">Corrientes contestatarias, vanguardias radicales o en ruptura</p>
+              </div>
+              <div class="category-card__body">
+                <p class="category-card__summary" id="sumMonismoEmergente">
+                  Vanguardias revolucionarias, nacionalismos radicales o teocracias insurgentes que impugnan el orden vigente en nombre de una verdad definitiva, rechazando el compromiso pluralista como debilidad.
+                </p>
+                <div class="category-card__features">
+                  <div class="category-card__feature">
+                    <span class="feature-label">§ Mecanismo:</span>
+                    <span class="feature-val" id="featMecMonismoEmergente">Disciplina de partido, movilización redentora y pureza doctrinal</span>
+                  </div>
+                  <div class="category-card__feature">
+                    <span class="feature-label">¶ Compromiso:</span>
+                    <span class="feature-val" id="featCompMonismoEmergente">Cohesión combativa total a costa de suprimir el disenso interno</span>
+                  </div>
+                </div>
+                <div class="category-card__samples" id="samplesMonismoEmergente" role="group" aria-label="Tradiciones representativas"></div>
+              </div>
+              <div class="category-card__footer">
+                <button class="category-explore-btn" type="button" data-category="monismo_emergente" aria-haspopup="dialog" aria-expanded="false" id="btnExploreMonismoEmergente">
+                  <span>Explorar concepción y tradiciones</span>
+                  <span class="explore-arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+            </article>
+
+            <!-- 4. Pluralistas Emergentes -->
+            <article class="power-category-card power-category-card--pluralismo_emergente" id="catCardPluralismoEmergente" data-category="pluralismo_emergente">
+              <div class="category-card__header">
+                <div class="category-card__badge-row">
+                  <span class="category-card__tag">4</span>
+                  <span class="category-card__badge badge--emerald" id="badgePluralismoEmergente">Pluralismo Emergente</span>
+                </div>
+                <h4 class="category-card__title" id="titlePluralismoEmergente">Pluralistas emergentes</h4>
+                <p class="category-card__subtitle" id="subPluralismoEmergente">Autonomías comunitarias, bienes comunes y diversidad desde abajo</p>
+              </div>
+              <div class="category-card__body">
+                <p class="category-card__summary" id="sumPluralismoEmergente">
+                  Movimientos que defienden la coexistencia horizontal y descentralizada de proyectos de vida autónomos sin recurrir al monopolio del Estado (comunes, feminismo interseccional, autogobierno indígena).
+                </p>
+                <div class="category-card__features">
+                  <div class="category-card__feature">
+                    <span class="feature-label">§ Mecanismo:</span>
+                    <span class="feature-val" id="featMecPluralismoEmergente">Asambleas de base, mandatos revocables y federaciones voluntarias</span>
+                  </div>
+                  <div class="category-card__feature">
+                    <span class="feature-label">¶ Compromiso:</span>
+                    <span class="feature-val" id="featCompPluralismoEmergente">Máxima autonomía participativa a costa de vulnerabilidad defensiva</span>
+                  </div>
+                </div>
+                <div class="category-card__samples" id="samplesPluralismoEmergente" role="group" aria-label="Tradiciones representativas"></div>
+              </div>
+              <div class="category-card__footer">
+                <button class="category-explore-btn" type="button" data-category="pluralismo_emergente" aria-haspopup="dialog" aria-expanded="false" id="btnExplorePluralismoEmergente">
+                  <span>Explorar concepción y tradiciones</span>
+                  <span class="explore-arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+            </article>
+          </div>
         </div>
 
         <div class="genealogia-closing">
@@ -719,27 +763,39 @@
       </div>
     </section>
 
-    <!-- MODAL DIALOG ACCESIBLE PARA DETALLE DE ARQUITECTURAS -->
+    <!-- MODAL DIALOG ACCESIBLE PARA EXPLORACIÓN DE CATEGORÍAS Y TRADICIONES -->
     <div class="genealogia-modal-backdrop" id="genealogiaModalBackdrop" aria-hidden="true">
-      <div class="genealogia-modal" id="genealogiaModal" role="dialog" aria-modal="true" aria-labelledby="modalArchTitle" aria-describedby="modalArchContext" tabindex="-1">
+      <div class="genealogia-modal" id="genealogiaModal" role="dialog" aria-modal="true" aria-labelledby="modalCategoryTitle" aria-describedby="modalCategoryContext" tabindex="-1">
         <div class="genealogia-modal__header">
           <div class="genealogia-modal__header-top">
             <div class="genealogia-modal__meta">
-              <span class="genealogia-modal__badge" id="modalArchBadge"></span>
-              <span class="genealogia-modal__period" id="modalArchPeriod"></span>
+              <span class="genealogia-modal__badge" id="modalCategoryBadge"></span>
+              <span class="genealogia-modal__count" id="modalTraditionsCount"></span>
             </div>
             <div class="genealogia-modal__header-actions">
-              <div class="genealogia-modal__nav" aria-label="Navegación entre arquitecturas">
-                <button type="button" class="modal-nav-btn modal-nav-btn--prev" id="modalPrevBtn" aria-label="Arquitectura anterior" title="Anterior (Flecha izquierda)">← Anterior</button>
-                <button type="button" class="modal-nav-btn modal-nav-btn--next" id="modalNextBtn" aria-label="Arquitectura siguiente" title="Siguiente (Flecha derecha)">Siguiente →</button>
+              <div class="genealogia-modal__nav" aria-label="Navegación entre categorías">
+                <button type="button" class="modal-nav-btn modal-nav-btn--prev" id="modalPrevBtn" aria-label="Categoría anterior" title="Anterior (Flecha izquierda)">← Anterior</button>
+                <button type="button" class="modal-nav-btn modal-nav-btn--next" id="modalNextBtn" aria-label="Categoría siguiente" title="Siguiente (Flecha derecha)">Siguiente →</button>
               </div>
               <button type="button" class="genealogia-modal__close-btn" id="modalCloseBtn" aria-label="Cerrar ventana modal" title="Cerrar (Esc)">&times;</button>
             </div>
           </div>
-          <h3 class="genealogia-modal__title" id="modalArchTitle"></h3>
-          <p class="genealogia-modal__context" id="modalArchContext"></p>
+          <h3 class="genealogia-modal__title" id="modalCategoryTitle"></h3>
+          <p class="genealogia-modal__context" id="modalCategoryContext"></p>
         </div>
-        <div class="genealogia-modal__body" id="modalArchBody"></div>
+
+        <div class="genealogia-modal__tabs" role="tablist" aria-label="Vistas de la categoría">
+          <button type="button" class="modal-tab-btn is-active" id="modalTabBtnOverview" role="tab" aria-selected="true" aria-controls="modalViewOverview">§ Fundamentos y Compromisos</button>
+          <button type="button" class="modal-tab-btn" id="modalTabBtnTraditions" role="tab" aria-selected="false" aria-controls="modalViewTraditions">¶ Tradiciones y Casos Históricos</button>
+        </div>
+
+        <div class="genealogia-modal__body" id="modalArchBody">
+          <!-- Vista 1: Fundamentos y Compromisos -->
+          <div class="modal-view-panel is-active" id="modalViewOverview" role="tabpanel" aria-labelledby="modalTabBtnOverview"></div>
+          <!-- Vista 2: Tradiciones y Casos Históricos -->
+          <div class="modal-view-panel" id="modalViewTraditions" role="tabpanel" aria-labelledby="modalTabBtnTraditions" hidden></div>
+        </div>
+
         <div class="genealogia-modal__footer">
           <span class="modal-shortcut-hint" id="modalShortcutHint">Navega con ← / → o cierra con Esc</span>
           <button type="button" class="modal-close-action-btn" id="modalCloseActionBtn">Cerrar</button>

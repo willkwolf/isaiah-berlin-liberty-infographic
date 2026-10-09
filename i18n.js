@@ -257,25 +257,31 @@ window.I18N_CONTENT.locales.en.staticContent.push(
   { selector: '#stepStatusExplore5', type: 'text', value: 'Explore ➔' },
   // Section X: Genealogía del poder
   { selector: '#genealogia-title', type: 'html', value: 'Genealogy of Power<br/><em>how we organize liberty</em>' },
-  { selector: '#genealogia .section__subtitle', type: 'text', value: 'Every political order claims to defend liberty. What actually changes is who gets to decide, who bears the costs, and which reasons are declared legitimate.' },
-  { selector: '#matrixDiagramTitle', type: 'text', value: 'ARCHITECTURES OF POWER: MONISM vs. PLURALISM' },
-  { selector: '#matrixDiagramSubtitle', type: 'text', value: 'Historical hegemony and emergent marginality, from the pre-state to modern governance' },
-  { selector: '#matrixDiagramAxisNote', type: 'text', value: 'The horizontal axis does not represent left vs. right; it captures relative historical hegemony versus emergence, subordination, or decline.' },
-  { selector: '#axisLabelMonismo', type: 'text', value: 'MONISM' },
-  { selector: '#axisHintMonismo', type: 'text', value: 'Concentration of authority · Single supreme end' },
-  { selector: '#axisLabelHegemonia', type: 'text', value: 'CONSOLIDATED HISTORICAL HEGEMONY' },
-  { selector: '#axisHintHegemonia', type: 'text', value: 'Dominant institutionalization & central coercion' },
-  { selector: '#axisLabelMarginalidad', type: 'text', value: 'MARGINALITY / EMERGENT RESISTANCE' },
-  { selector: '#axisHintMarginalidad', type: 'text', value: 'Subaltern autonomies, decline, or bottom-up projects' },
-  { selector: '#axisLabelPluralismo', type: 'text', value: 'PLURALISM' },
-  { selector: '#axisHintPluralismo', type: 'text', value: 'Distribution of authority · Incommensurable ends' },
+  { selector: '#genealogia .section__subtitle', type: 'text', value: 'From single-order uniformity to the coexistence of distinct orders: a history of restrictions, autonomies, and compromises.' },
+  { selector: '#genealogiaLeadText', type: 'html', value: 'Not all restrictions on liberty stem from the same premise. Some institutions concentrate authority around a single truth, faith, or univocal project (Monism). Others distribute power across autonomous jurisdictions and counterweights (Pluralism). <strong>Tap or click any conception below</strong> to inspect its foundational mechanisms, trade-offs, and historical traditions.' },
+  { selector: '#explorerTitle', type: 'text', value: 'Four Historical Conceptions of Order and Coercion' },
+  { selector: '#explorerDesc', type: 'text', value: 'Liberty is never organized in an abstract vacuum. Across history, institutions have embodied monist or pluralist conceptions depending on whether they achieve a dominant hegemonic position or emerge as marginal, contestatory counter-powers.' },
+  { selector: '#explorerCaveatText', type: 'text', value: 'Heuristic warning: Categories are neither static nor universally moral; their placement strictly depends on historical context, geographic era, and institutional balances of power.' },
+  { selector: '#titleMonismoHegemonico', type: 'text', value: 'Hegemonic monisms' },
+  { selector: '#subMonismoHegemonico', type: 'text', value: 'Consolidated institutional dominion and unified sovereignty' },
+  { selector: '#badgeMonismoHegemonico', type: 'text', value: 'Hegemonic Monism' },
+  { selector: '#titlePluralismoHegemonico', type: 'text', value: 'Hegemonic pluralisms' },
+  { selector: '#subPluralismoHegemonico', type: 'text', value: 'Institutionalization of counterweights, rights, and separation of powers' },
+  { selector: '#badgePluralismoHegemonico', type: 'text', value: 'Hegemonic Pluralism' },
+  { selector: '#titleMonismoEmergente', type: 'text', value: 'Emergent monisms' },
+  { selector: '#subMonismoEmergente', type: 'text', value: 'Contestatory currents, radical vanguards, or ruptures in revolt' },
+  { selector: '#badgeMonismoEmergente', type: 'text', value: 'Emergent Monism' },
+  { selector: '#titlePluralismoEmergente', type: 'text', value: 'Emergent pluralisms' },
+  { selector: '#subPluralismoEmergente', type: 'text', value: 'Community autonomies, common goods, and diversity from below' },
+  { selector: '#badgePluralismoEmergente', type: 'text', value: 'Emergent Pluralism' },
+  { selector: '#modalTabBtnOverview', type: 'text', value: '§ Foundations & Trade-offs' },
+  { selector: '#modalTabBtnTraditions', type: 'text', value: '¶ Traditions & Historical Cases' },
   { selector: '#modalShortcutHint', type: 'text', value: 'Navigate with ← / → or close with Esc' },
   { selector: '#modalCloseActionBtn', type: 'text', value: 'Close' },
-  { selector: '#genealogiaMethodologyNote', type: 'text', value: 'Pedagogical Cartography: This 2D matrix maps 23 institutional and theoretical architectures according to their value framework (Monism vs. Pluralism) and their historical degree of institutionalization. Tap any architecture to inspect its authority mechanisms, winners, losers, and academic sources in the modal dialog.' },
   { selector: '#genealogiaClosingTitle', type: 'text', value: 'The Historical Metamorphosis of Power' },
   { selector: '#genealogiaClosingText', type: 'text', value: 'Every political architecture constructs a legitimation narrative to naturalize its restrictions. When we examine history, freedom is never an abstract property: it is a precarious configuration of who has the power to restrict, who must obey, and what counterweights prevent the absolute domination of the weak.' },
   { selector: '#genealogiaClosingEyebrow', type: 'text', value: 'The Berlin Question for Any Political Architecture' },
-  { selector: '#genealogiaClosingQuote', type: 'text', value: '«Who governs me, to what extent, and what inviolable space remains where I may act without interference?»' }
+  { selector: '#genealogiaClosingQuote', type: 'text', value: '«What liberty is restricted, to protect which other, who decides, and how can that decision be challenged?»' }
 );
 
 window.I18N_CONTENT.locales.en.canvasValues.push(
@@ -578,6 +584,56 @@ window.I18N_CONTENT.locales.en.limitsLab = {
 };
 
 window.I18N_CONTENT.locales.en.genealogia = {
+  categories: [
+    {
+      id: 'monismo_hegemonico',
+      tag: '1',
+      badge: 'Hegemonic Monism',
+      title: 'Hegemonic monisms',
+      subtitle: 'Consolidated institutional dominion and unified sovereignty',
+      summary: 'Conceptions that subordinate all disagreement to a single governing authority or supreme end (crown, revealed dogma, reason of state). They concentrate authority to guarantee certainty and indivisible order.',
+      powerMechanism: 'Coercive monopoly, centralized bureaucratic apparatus, mandatory military levies, and dogmatic legal codification without estate consent.',
+      coercionForm: 'Compulsory penal subordination, proscription of heresy or disloyalty, and hierarchical absorption of local jurisdictions.',
+      tradeoffs: 'Maximizes territorial stability, predictability, and collective mobilization; at the cost of erasing individual autonomy, suppressing ethical pluralism, and subordinating peripheral populations.',
+      caveat: 'Hegemony is neither eternal nor universal: historically dominant empires fragmented and declined; their standing depends strictly on historical era and geopolitical context.'
+    },
+    {
+      id: 'pluralismo_hegemonico',
+      tag: '2',
+      badge: 'Hegemonic Pluralism',
+      title: 'Hegemonic pluralisms',
+      subtitle: 'Institutionalization of counterweights, rights, and separation of powers',
+      summary: 'Consolidated traditions that embrace the incommensurability of conflicting values and distribute authority across autonomous jurisdictions, independent courts, and constitutional charters.',
+      powerMechanism: 'Rule of law, constitutional checks and balances, periodic elections, independent judiciary, and regulated deliberation.',
+      coercionForm: 'Coercion measured by due process and mutual judicial oversight; nonetheless, vulnerable to de facto marginalization of underprivileged groups or capture by established elites.',
+      tradeoffs: 'Maximizes protections against tyranny, safeguards recognized minorities, and shields private non-interference; at the cost of slow decision-making, legislative gridlock, and potential corporate vetoes.',
+      caveat: 'Institutionalized pluralism runs the perpetual risk of calcifying into closed oligarchies if civic and deliberative counterweights lose vigor.'
+    },
+    {
+      id: 'monismo_emergente',
+      tag: '3',
+      badge: 'Emergent Monism',
+      title: 'Emergent monisms',
+      subtitle: 'Contestatory currents, radical vanguards, or ruptures in revolt',
+      summary: 'Revolutionary vanguards, radical nationalisms, or insurgent theocracies challenging established orders in the name of an ultimate truth, rejecting pluralist compromise as weakness.',
+      powerMechanism: 'Conspiratorial or vanguard party discipline, mass mobilization, redemptive propaganda, and claiming to embody the authentic will of the people or history.',
+      coercionForm: 'Implacable vertical discipline against ideological deviation; open conflict against institutional pluralism regarded as decadent or bourgeois sham.',
+      tradeoffs: 'Maximizes combat cohesion, strategic audacity, and radical transformation horizons; at the cost of suppressing dissent and laying foundations for new state autocracies.',
+      caveat: 'An insurgent vanguard that prevails often transforms into an authoritarian hegemonic monism, as repeatedly witnessed in twentieth-century revolutions.'
+    },
+    {
+      id: 'pluralismo_emergente',
+      tag: '4',
+      badge: 'Emergent Pluralism',
+      title: 'Emergent pluralisms',
+      subtitle: 'Community autonomies, common goods, and diversity from below',
+      summary: 'Movements defending the horizontal, decentralized coexistence of autonomous life projects without relying on the state\'s coercive monopoly (commons, intersectional feminism, indigenous self-governance).',
+      powerMechanism: 'Grassroots assemblies, revocable mandates, voluntary confederations, direct collective action, and horizontal co-management of shared resources.',
+      coercionForm: 'Community social sanction and consensual boundaries without professional punitive apparatuses; highly vulnerable to state or corporate coercion.',
+      tradeoffs: 'Maximizes participatory autonomy, intersectional inclusion, and resistance to hierarchy; at the cost of coordination difficulties at scale and defensive fragility.',
+      caveat: 'These currents operate primarily on the margins of statehood; their stability depends heavily on community cohesion and environmental pressure.'
+    }
+  ],
   quadrants: {
     monismo_hegemonico: {
       name: 'Uniform Dominion',

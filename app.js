@@ -318,43 +318,78 @@ const LIMITS_LAB_CASES = [
 // GENEALOGÍA DEL PODER — MATRIZ CARTESIANA Y ARQUITECTURAS
 // ═══════════════════════════════════════════════
 
-const GENEALOGIA_QUADRANTS = {
-  monismo_hegemonico: {
+const GENEALOGIA_CATEGORIES = [
+  {
     id: 'monismo_hegemonico',
-    name: 'DOMINIO UNIFORME',
-    subtitle: '(Monismo hegemónico)',
-    icons: '👑 🏛️',
+    alias: 'monismo_hegemonico',
+    tag: '1',
+    badge: 'Monismo Hegemónico',
     theme: 'amber',
-    badgeClass: 'badge--q1',
-    items: ['imperio_tributario', 'teocracia', 'monarquia', 'califato', 'confucianismo', 'nacionalismo_autoritario']
+    badgeClass: 'badge--amber',
+    title: 'Monistas hegemónicos',
+    subtitle: 'Dominio institucional consolidado y soberanía unificada',
+    summary: 'Concepciones que subordinan toda discrepancia a una sola instancia rectora o fin supremo (corona, fe revelada, razón de Estado). Concentran la autoridad para garantizar certidumbre y orden indivisible.',
+    powerMechanism: 'Monopolio coercitivo, aparato burocrático centralizado, leva militar forzosa y codificación dogmática de la ley sin consentimiento estamental.',
+    coercionForm: 'Subordinación penal obligatoria, proscripción de herejías o deslealtades, y absorción jerárquica de las jurisdicciones locales bajo el centro de mando.',
+    tradeoffs: 'Maximiza estabilidad territorial, predictibilidad y movilización colectiva; a costa de anular la autonomía individual, suprimir el pluralismo ético y subordinar a poblaciones periféricas.',
+    caveat: 'La hegemonía no es eterna ni universal: imperios que fueron hegemónicos sufrieron fragmentación y declive; su posición depende estrictamente del periodo y el espacio geopolítico.',
+    traditions: ['imperio_tributario', 'teocracia', 'monarquia', 'califato', 'confucianismo', 'nacionalismo_autoritario']
   },
-  monismo_marginal: {
-    id: 'monismo_marginal',
-    name: 'AUTORIDAD CENTRALIZADA',
-    subtitle: '(Monismo marginal o declinante)',
-    icons: '🥾 🗼',
-    theme: 'crimson',
-    badgeClass: 'badge--q2',
-    items: ['fascismo', 'marxismo_leninismo', 'teocracia_radical', 'conservadurismo_autoritario', 'nacionalismo_etnico']
-  },
-  pluralismo_consolidado: {
-    id: 'pluralismo_consolidado',
-    name: 'HEGEMONÍA PLURALISTA',
-    subtitle: '(Pluralismo consolidado)',
-    icons: '⚖️ 🗳️',
+  {
+    id: 'pluralismo_hegemonico',
+    alias: 'pluralismo_consolidado',
+    tag: '2',
+    badge: 'Pluralismo Hegemónico',
     theme: 'blue',
-    badgeClass: 'badge--q3',
-    items: ['republicanismo', 'liberalismo', 'democracia_constitucional', 'federalismo', 'ciudad_estado', 'tradiciones_feudales']
+    badgeClass: 'badge--blue',
+    title: 'Pluralistas hegemónicos',
+    subtitle: 'Institucionalización de contrapesos, derechos y división de poderes',
+    summary: 'Tradiciones consolidadas que asumen la irreductibilidad de valores incompatibles y distribuyen la autoridad entre jurisdicciones autónomas, tribunales independientes y cartas constitucionales.',
+    powerMechanism: 'Imperio de la ley, frenos y contrapesos constitucionales, elecciones periódicas, judicatura independiente y representación deliberativa.',
+    coercionForm: 'Coerción tasada por reglas de debido proceso y control judicial mutuo; sin embargo, puede excluir de facto a sectores marginados o ser capturada por élites consolidadas.',
+    tradeoffs: 'Maximiza garantías frente a la tiranía, protección de minorías reconocidas y espacios de no-interferencia; a costa de lentitud decisional, parálisis legislativa y posibles bloqueos corporativos.',
+    caveat: 'El pluralismo institucionalizado corre el riesgo constante de degradarse hacia oligarquías cerradas si los contrapesos pierden vitalidad cívica y deliberativa.',
+    traditions: ['republicanismo', 'liberalismo', 'democracia_constitucional', 'federalismo', 'ciudad_estado', 'tradiciones_feudales']
   },
-  pluralismo_emergente: {
+  {
+    id: 'monismo_emergente',
+    alias: 'monismo_marginal',
+    tag: '3',
+    badge: 'Monismo Emergente',
+    theme: 'crimson',
+    badgeClass: 'badge--crimson',
+    title: 'Monistas emergentes',
+    subtitle: 'Corrientes contestatarias, vanguardias radicales o en ruptura',
+    summary: 'Vanguardias revolucionarias, nacionalismos radicales o teocracias insurgentes que impugnan el orden vigente en nombre de una verdad definitiva, rechazando el compromiso pluralista como debilidad.',
+    powerMechanism: 'Disciplina conspirativa o de partido único, movilización de masas, propaganda redentora y pretensión de encarnar la voluntad auténtica del «pueblo» o la «historia».',
+    coercionForm: 'Coerción interna vertical e implacable contra la desviación ideológica; combate abierto contra el pluralismo institucional al que califica de farsa burguesa o decadente.',
+    tradeoffs: 'Maximiza cohesión combativa, audacia estratégica y horizonte de transformación radical; a costa de suprimir la disidencia interna y sentar las bases para nuevas autocracias de Estado.',
+    caveat: 'Una vanguardia insurgente que triunfa se transforma a menudo en monismo hegemónico autoritario (como se constató repetidamente en las revoluciones del siglo XX).',
+    traditions: ['fascismo', 'marxismo_leninismo', 'teocracia_radical', 'conservadurismo_autoritario', 'nacionalismo_etnico']
+  },
+  {
     id: 'pluralismo_emergente',
-    name: 'PLURALISMO EMERGENTE',
-    subtitle: '(Diversidad radical)',
-    icons: '🌐 🍃',
-    theme: 'green',
-    badgeClass: 'badge--q4',
-    items: ['anarquismo', 'feminismo_interseccional', 'ecologismo_radical', 'multiculturalismo', 'movimientos_indigenas', 'comunalismo']
+    alias: 'pluralismo_emergente',
+    tag: '4',
+    badge: 'Pluralismo Emergente',
+    theme: 'emerald',
+    badgeClass: 'badge--emerald',
+    title: 'Pluralistas emergentes',
+    subtitle: 'Autonomías comunitarias, bienes comunes y diversidad desde abajo',
+    summary: 'Movimientos que defienden la coexistencia horizontal y descentralizada de proyectos de vida autónomos sin recurrir al monopolio coactivo del Estado (bienes comunes, feminismo interseccional, autogobierno indígena).',
+    powerMechanism: 'Asambleas de base, mandatos revocables, pactos federativos voluntarios, acción comunitaria directa y cogestión horizontal de recursos compartidos.',
+    coercionForm: 'Sanción social comunitaria y límites consensuados, careciendo de aparato punitivo profesional; alta vulnerabilidad ante la coacción estatal o corporativa.',
+    tradeoffs: 'Maximiza autonomía participativa, inclusión interseccional y resistencia a la concentración jerárquica; a costa de dificultades de escala y fragilidad defensiva ante agresiones externas.',
+    caveat: 'Estas corrientes operan predominantemente en los márgenes de la estatalidad; su estabilidad depende fuertemente de la cohesión comunitaria y la presión del entorno.',
+    traditions: ['anarquismo', 'feminismo_interseccional', 'ecologismo_radical', 'multiculturalismo', 'movimientos_indigenas', 'comunalismo']
   }
+];
+
+const GENEALOGIA_QUADRANTS = {
+  monismo_hegemonico: GENEALOGIA_CATEGORIES[0],
+  monismo_marginal: GENEALOGIA_CATEGORIES[2],
+  pluralismo_consolidado: GENEALOGIA_CATEGORIES[1],
+  pluralismo_emergente: GENEALOGIA_CATEGORIES[3]
 };
 
 const GENEALOGIA_ARCHITECTURES = [
@@ -754,6 +789,8 @@ const state = {
   activeGenealogiaTimeline: 'imperios',
   activeGenealogiaFilter: 'all',
   activeGenealogiaLab: 'impuestos_educacion',
+  activeGenealogiaCategory: 'monismo_hegemonico',
+  activeGenealogiaModalTab: 'overview',
   activeGenealogiaArchitecture: null,
   lastFocusedElement: null,
   lensGuideTimer: null,
@@ -2800,7 +2837,8 @@ function initFadeIn() {
 // ═══════════════════════════════════════════════
 
 // ═══════════════════════════════════════════════
-// SECTION X — GENEALOGÍA DEL PODER (MATRIZ & MODAL)
+// ═══════════════════════════════════════════════
+// SECTION X — GENEALOGÍA DEL PODER (4 COMPONENTES & MODAL)
 // ═══════════════════════════════════════════════
 
 function getGenealogiaArchitectures() {
@@ -2813,86 +2851,146 @@ function getGenealogiaQuadrants() {
   return isEnglish() && english?.genealogia?.quadrants ? english.genealogia.quadrants : GENEALOGIA_QUADRANTS;
 }
 
-function renderGenealogiaMatrix() {
+function getGenealogiaCategories() {
+  const english = getEnglishLocale();
+  if (isEnglish() && english?.genealogia?.categories) {
+    return GENEALOGIA_CATEGORIES.map(baseCat => {
+      const enCat = english.genealogia.categories.find(c => c.id === baseCat.id);
+      return enCat ? { ...baseCat, ...enCat } : baseCat;
+    });
+  }
+  return GENEALOGIA_CATEGORIES;
+}
+
+function getTraditionsForCategory(categoryId) {
+  const categories = getGenealogiaCategories();
+  const cat = categories.find(c => c.id === categoryId || c.alias === categoryId);
   const archs = getGenealogiaArchitectures();
-  const quadrants = getGenealogiaQuadrants();
+  if (!cat) return [];
+  return archs.filter(a => a.quadrantId === cat.id || a.quadrantId === cat.alias || (cat.traditions && cat.traditions.includes(a.id)));
+}
 
-  const qMap = {
-    monismo_hegemonico: qs('#q1ItemsList'),
-    monismo_marginal: qs('#q2ItemsList'),
-    pluralismo_consolidado: qs('#q3ItemsList'),
-    pluralismo_emergente: qs('#q4ItemsList')
-  };
+function renderGenealogiaExplorer() {
+  const categories = getGenealogiaCategories();
 
-  // Update quadrant titles & subtitles if elements exist
-  Object.entries(quadrants).forEach(([qKey, qData]) => {
-    let titleEl, subEl;
-    if (qKey === 'monismo_hegemonico') { titleEl = qs('#q1Title'); subEl = qs('#q1Sub'); }
-    else if (qKey === 'monismo_marginal') { titleEl = qs('#q2Title'); subEl = qs('#q2Sub'); }
-    else if (qKey === 'pluralismo_consolidado') { titleEl = qs('#q3Title'); subEl = qs('#q3Sub'); }
-    else if (qKey === 'pluralismo_emergente') { titleEl = qs('#q4Title'); subEl = qs('#q4Sub'); }
+  const cardConfig = [
+    {
+      id: 'monismo_hegemonico',
+      cardEl: qs('#catCardMonismoHegemonico'),
+      samplesEl: qs('#samplesMonismoHegemonico'),
+      btnEl: qs('#btnExploreMonismoHegemonico'),
+      titleEl: qs('#titleMonismoHegemonico'),
+      subEl: qs('#subMonismoHegemonico'),
+      badgeEl: qs('#badgeMonismoHegemonico'),
+      sumEl: qs('#sumMonismoHegemonico'),
+      featMecEl: qs('#featMecMonismoHegemonico'),
+      featCompEl: qs('#featCompMonismoHegemonico')
+    },
+    {
+      id: 'pluralismo_hegemonico',
+      cardEl: qs('#catCardPluralismoHegemonico'),
+      samplesEl: qs('#samplesPluralismoHegemonico'),
+      btnEl: qs('#btnExplorePluralismoHegemonico'),
+      titleEl: qs('#titlePluralismoHegemonico'),
+      subEl: qs('#subPluralismoHegemonico'),
+      badgeEl: qs('#badgePluralismoHegemonico'),
+      sumEl: qs('#sumPluralismoHegemonico'),
+      featMecEl: qs('#featMecPluralismoHegemonico'),
+      featCompEl: qs('#featCompPluralismoHegemonico')
+    },
+    {
+      id: 'monismo_emergente',
+      cardEl: qs('#catCardMonismoEmergente'),
+      samplesEl: qs('#samplesMonismoEmergente'),
+      btnEl: qs('#btnExploreMonismoEmergente'),
+      titleEl: qs('#titleMonismoEmergente'),
+      subEl: qs('#subMonismoEmergente'),
+      badgeEl: qs('#badgeMonismoEmergente'),
+      sumEl: qs('#sumMonismoEmergente'),
+      featMecEl: qs('#featMecMonismoEmergente'),
+      featCompEl: qs('#featCompMonismoEmergente')
+    },
+    {
+      id: 'pluralismo_emergente',
+      cardEl: qs('#catCardPluralismoEmergente'),
+      samplesEl: qs('#samplesPluralismoEmergente'),
+      btnEl: qs('#btnExplorePluralismoEmergente'),
+      titleEl: qs('#titlePluralismoEmergente'),
+      subEl: qs('#subPluralismoEmergente'),
+      badgeEl: qs('#badgePluralismoEmergente'),
+      sumEl: qs('#sumPluralismoEmergente'),
+      featMecEl: qs('#featMecPluralismoEmergente'),
+      featCompEl: qs('#featCompPluralismoEmergente')
+    }
+  ];
 
-    if (titleEl) titleEl.textContent = qData.name;
-    if (subEl) subEl.textContent = qData.subtitle;
-  });
+  cardConfig.forEach(cfg => {
+    const cat = categories.find(c => c.id === cfg.id) || categories[0];
+    if (!cat) return;
 
-  // Render items in each quadrant
-  Object.entries(qMap).forEach(([qKey, listEl]) => {
-    if (!listEl) return;
-    const items = archs.filter(a => a.quadrantId === qKey);
+    if (cfg.titleEl) cfg.titleEl.textContent = cat.title;
+    if (cfg.subEl) cfg.subEl.textContent = cat.subtitle;
+    if (cfg.badgeEl) cfg.badgeEl.textContent = cat.badge;
+    if (cfg.sumEl) cfg.sumEl.textContent = cat.summary;
+    if (cfg.featMecEl) cfg.featMecEl.textContent = cat.powerMechanism;
+    if (cfg.featCompEl) cfg.featCompEl.textContent = cat.tradeoffs;
 
-    listEl.innerHTML = items.map(item => {
-      const isSelected = state.activeGenealogiaArchitecture === item.id;
-      return `
-        <div class="quadrant-item-wrapper">
-          <button class="arch-chip arch-chip--${item.quadrantId} ${isSelected ? 'is-active' : ''}"
-            type="button"
-            data-id="${item.id}"
-            aria-haspopup="dialog"
-            aria-selected="${isSelected}"
-            aria-label="${item.name}: ${item.period}">
-            <div class="arch-chip__main">
-              <span class="arch-chip__indicator" aria-hidden="true"></span>
-              <span class="arch-chip__name">${item.name}</span>
-            </div>
-            <div class="arch-chip__meta">
-              <span class="arch-chip__period-badge">${item.period}</span>
-              <span class="arch-chip__action" aria-hidden="true">↗</span>
-            </div>
-          </button>
-        </div>
-      `;
-    }).join('');
-  });
+    // Render sample tradition pills
+    if (cfg.samplesEl) {
+      const traditions = getTraditionsForCategory(cat.id);
+      const samples = traditions.slice(0, 4);
+      cfg.samplesEl.innerHTML = samples.map(t => `
+        <button type="button" class="sample-tradition-pill" data-category="${cat.id}" data-tradition="${t.id}" title="${t.name}: ${t.period}">
+          <span class="sample-tradition-dot" aria-hidden="true"></span>
+          <span class="sample-tradition-name">${t.name}</span>
+        </button>
+      `).join('');
 
-  // Attach event listeners to all arch chips
-  qsa('.arch-chip').forEach(btn => {
-    btn.addEventListener('click', () => {
-      openGenealogiaModal(btn.dataset.id);
-    });
-    btn.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openGenealogiaModal(btn.dataset.id);
-      }
-    });
+      qsa('.sample-tradition-pill', cfg.samplesEl).forEach(pill => {
+        pill.addEventListener('click', e => {
+          e.stopPropagation();
+          openGenealogiaCategoryModal(pill.dataset.category, pill.dataset.tradition, 'traditions');
+        });
+      });
+    }
+
+    // Wire explore button
+    if (cfg.btnEl) {
+      cfg.btnEl.onclick = e => {
+        e.stopPropagation();
+        openGenealogiaCategoryModal(cat.id, null, 'overview');
+      };
+    }
+
+    // Wire card element interaction
+    if (cfg.cardEl) {
+      cfg.cardEl.onclick = e => {
+        if (e.target.closest('button, a')) return;
+        openGenealogiaCategoryModal(cat.id, null, 'overview');
+      };
+      cfg.cardEl.setAttribute('tabindex', '0');
+      cfg.cardEl.setAttribute('role', 'article');
+      cfg.cardEl.onkeydown = e => {
+        if (e.target === cfg.cardEl && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          openGenealogiaCategoryModal(cat.id, null, 'overview');
+        }
+      };
+    }
   });
 }
 
-function syncActiveGenealogiaChip(id) {
-  qsa('.arch-chip').forEach(chip => {
-    const isActive = chip.dataset.id === id;
-    chip.classList.toggle('is-active', isActive);
-    chip.setAttribute('aria-selected', String(isActive));
-  });
-}
+function openGenealogiaCategoryModal(categoryId, traditionId = null, initialTab = 'overview') {
+  const categories = getGenealogiaCategories();
+  const targetCat = categories.find(c => c.id === categoryId || c.alias === categoryId) || categories[0];
+  if (!targetCat) return;
 
-function openGenealogiaModal(id) {
-  state.activeGenealogiaArchitecture = id;
+  state.activeGenealogiaCategory = targetCat.id;
+  state.activeGenealogiaArchitecture = traditionId;
+  state.activeGenealogiaModalTab = initialTab;
   state.lastFocusedElement = document.activeElement;
 
-  syncActiveGenealogiaChip(id);
-  renderGenealogiaModalContent(id);
+  renderGenealogiaCategoryModalContent(targetCat.id, traditionId, initialTab);
 
   const backdrop = qs('#genealogiaModalBackdrop');
   const modal = qs('#genealogiaModal');
@@ -2904,7 +3002,7 @@ function openGenealogiaModal(id) {
   }
 }
 
-function closeGenealogiaModal() {
+function closeGenealogiaCategoryModal() {
   const backdrop = qs('#genealogiaModalBackdrop');
   if (backdrop) {
     backdrop.classList.remove('is-open');
@@ -2912,159 +3010,332 @@ function closeGenealogiaModal() {
   }
   document.body.classList.remove('modal-open');
   state.activeGenealogiaArchitecture = null;
-  syncActiveGenealogiaChip(null);
 
   if (state.lastFocusedElement && typeof state.lastFocusedElement.focus === 'function') {
     state.lastFocusedElement.focus();
   }
 }
 
-function renderGenealogiaModalContent(id) {
-  const archs = getGenealogiaArchitectures();
-  const item = archs.find(a => a.id === id) || archs[0];
-  if (!item) return;
+function switchGenealogiaModalTab(tabKey) {
+  state.activeGenealogiaModalTab = tabKey;
+  const isOverview = tabKey === 'overview';
 
-  syncActiveGenealogiaChip(item.id);
+  const tabBtnOverview = qs('#modalTabBtnOverview');
+  const tabBtnTraditions = qs('#modalTabBtnTraditions');
+  const viewOverview = qs('#modalViewOverview');
+  const viewTraditions = qs('#modalViewTraditions');
 
-  const badgeEl = qs('#modalArchBadge');
-  const titleEl = qs('#modalArchTitle');
-  const periodEl = qs('#modalArchPeriod');
-  const contextEl = qs('#modalArchContext');
-  const bodyEl = qs('#modalArchBody');
+  if (tabBtnOverview) {
+    tabBtnOverview.classList.toggle('is-active', isOverview);
+    tabBtnOverview.setAttribute('aria-selected', String(isOverview));
+  }
+  if (tabBtnTraditions) {
+    tabBtnTraditions.classList.toggle('is-active', !isOverview);
+    tabBtnTraditions.setAttribute('aria-selected', String(!isOverview));
+  }
+
+  if (viewOverview) {
+    viewOverview.classList.toggle('is-active', isOverview);
+    if (isOverview) {
+      viewOverview.removeAttribute('hidden');
+    } else {
+      viewOverview.setAttribute('hidden', '');
+    }
+  }
+  if (viewTraditions) {
+    viewTraditions.classList.toggle('is-active', !isOverview);
+    if (!isOverview) {
+      viewTraditions.removeAttribute('hidden');
+    } else {
+      viewTraditions.setAttribute('hidden', '');
+    }
+  }
+}
+
+function renderGenealogiaCategoryModalContent(categoryId, traditionId = null, tab = 'overview') {
+  const categories = getGenealogiaCategories();
+  const cat = categories.find(c => c.id === categoryId || c.alias === categoryId) || categories[0];
+  if (!cat) return;
+
+  const traditions = getTraditionsForCategory(cat.id);
+  const badgeEl = qs('#modalCategoryBadge');
+  const countEl = qs('#modalTraditionsCount');
+  const titleEl = qs('#modalCategoryTitle');
+  const contextEl = qs('#modalCategoryContext');
   const prevBtn = qs('#modalPrevBtn');
   const nextBtn = qs('#modalNextBtn');
 
   if (badgeEl) {
-    badgeEl.textContent = item.quadrantLabel;
-    badgeEl.className = `genealogia-modal__badge badge--${item.quadrantId}`;
+    badgeEl.textContent = cat.badge;
+    badgeEl.className = `genealogia-modal__badge ${cat.badgeClass || ('badge--' + cat.theme)}`;
   }
-  if (titleEl) titleEl.textContent = item.name;
-  if (periodEl) periodEl.textContent = item.period;
-  if (contextEl) contextEl.textContent = item.context;
+  if (countEl) {
+    countEl.textContent = isEnglish()
+      ? `${traditions.length} documented traditions`
+      : `${traditions.length} tradiciones documentadas`;
+  }
+  if (titleEl) titleEl.textContent = cat.title;
+  if (contextEl) contextEl.textContent = cat.subtitle;
 
-  const lblAuthority = isEnglish() ? 'Authority form' : 'Forma de autoridad';
-  const lblMechanism = isEnglish() ? 'Restriction mechanism' : 'Mecanismo de restricción';
-  const lblJustification = isEnglish() ? 'Claimed justification' : 'Justificación alegada';
-  const lblGainers = isEnglish() ? 'Who gains decision power' : 'Quién gana capacidad de decisión';
-  const lblCost = isEnglish() ? 'Who bears the costs' : 'Quién soporta los costes';
-  const lblCounter = isEnglish() ? 'Counterweights & limits' : 'Contrapesos y límites institucionales';
-  const lblLens = isEnglish() ? 'Theoretical reading on liberty' : 'Lectura desde los marcos de la libertad';
-  const lblRef = isEnglish() ? 'Academic references' : 'Referencias académicas';
+  // Overview Panel (Tab 1)
+  const viewOverview = qs('#modalViewOverview');
+  if (viewOverview) {
+    const activeLensName = LENS_DATA[state.currentLens]?.name || (isEnglish() ? 'Negative Liberty' : 'Libertad Negativa');
+    const activeLensColor = LENS_DATA[state.currentLens]?.color || 'var(--clr-accent)';
 
-  // Active theoretical lens name
-  const activeLensName = LENS_DATA[state.currentLens]?.name || '';
+    const lblSummary = isEnglish() ? 'Conceptual Framework' : 'Marco conceptual';
+    const lblPowerMech = isEnglish() ? 'Power Organization Mechanism' : 'Mecanismo de organización del poder';
+    const lblCoercion = isEnglish() ? 'Form of Liberty Restriction' : 'Forma de restricción de la libertad';
+    const lblTradeoffs = isEnglish() ? 'Value Tensions and Trade-offs (Non-Hierarchical)' : 'Tensiones de valor y compromisos (Sin jerarquía moral)';
+    const lblTradeoffsCopy = isEnglish()
+      ? 'Isaiah Berlin demonstrated that fundamental human values (Liberty, Equality, Authority, and Autonomy) clash irreconcilably. No institutional architecture harmonizes all of them simultaneously:'
+      : 'Isaiah Berlin demostró que los valores humanos fundamentales (Libertad, Igualdad, Autoridad y Autonomía) colisionan de forma irreductible. Ninguna arquitectura institucional los armoniza a todos a la vez:';
+    const lblLensReading = isEnglish() ? 'Reading from Active Theoretical Lens' : 'Lectura desde el marco teórico activo';
+    const lblCaveat = isEnglish() ? 'Epistemic and Historical Warning' : 'Advertencia heurística e histórica';
 
-  if (bodyEl) {
-    bodyEl.innerHTML = `
-      <div class="modal-fields-grid">
-        <div class="modal-field-card">
-          <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">§</span> ${lblAuthority}</span>
-          <p class="modal-field-text">${item.authority}</p>
-        </div>
-        <div class="modal-field-card">
-          <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">▸</span> ${lblMechanism}</span>
-          <p class="modal-field-text">${item.mechanism}</p>
-        </div>
-        <div class="modal-field-card">
-          <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">¶</span> ${lblJustification}</span>
-          <p class="modal-field-text">${item.justification}</p>
-        </div>
-        <div class="modal-field-card">
-          <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">↗</span> ${lblGainers}</span>
-          <p class="modal-field-text">${item.gainers}</p>
-        </div>
-        <div class="modal-field-card">
-          <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">⤸</span> ${lblCost}</span>
-          <p class="modal-field-text">${item.costBearers}</p>
-        </div>
-        <div class="modal-field-card">
-          <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">⌁</span> ${lblCounter}</span>
-          <p class="modal-field-text">${item.counterweights}</p>
-        </div>
-      </div>
+    let categoryLensAnalysis = '';
+    if (state.currentLens === 'negativa') {
+      categoryLensAnalysis = isEnglish()
+        ? 'From Berlin\'s negative liberty lens, this category defines a specific boundary of state interference. While hegemonic monism crushes non-interference, pluralism establishes institutional barriers against state coercion, though it must vigilantly guard against private factions.'
+        : 'Desde la libertad negativa de Berlin, esta categoría define una frontera específica de no-interferencia estatal. Mientras el monismo hegemónico suprime todo espacio de acción privada sin coacción, el pluralismo busca blindar al individuo frente al mandato arbitrario del Estado.';
+    } else if (state.currentLens === 'positiva') {
+      categoryLensAnalysis = isEnglish()
+        ? 'From the positive liberty perspective (self-mastery and democratic self-governance), this category examines who wields genuine collective decision-making power and whether the civic body actively governs itself or remains subordinated to an external hierarchy.'
+        : 'Desde la libertad positiva (autogobierno y realización colectiva), esta concepción examina quién ejerce la agencia decisional real y si la comunidad participa efectivamente en las decisiones públicas o permanece subordinada a un centro jerárquico.';
+    } else if (state.currentLens === 'capacidades') {
+      categoryLensAnalysis = isEnglish()
+        ? 'Through Amartya Sen\'s capabilities lens, institutions in this category either expand or diminish substantive freedoms to be and do. Nominal legal rights are insufficient if structural coercion denies basic functionings.'
+        : 'A través del marco de capacidades de Amartya Sen, las instituciones de esta categoría expanden o destruyen las libertades sustantivas reales (hacer y ser). Los derechos formales son estériles si las relaciones de poder privan a los sujetos de agencia básica.';
+    } else {
+      categoryLensAnalysis = isEnglish()
+        ? 'Under the libertarian/spontaneous order framework (Hayek), this category demonstrates the contrast between centralized state coercion and voluntary contractual coordination among decentralized agents.'
+        : 'Bajo la perspectiva del orden espontáneo y mercado libre (Hayek), esta categoría contrasta el monopolio de la planificación estatal con la coordinación descentralizada y voluntaria entre actores individuales.';
+    }
 
-      <div class="modal-lens-card">
-        <div class="modal-lens-card__header">
-          <span class="modal-lens-tag"><span class="modal-lens-glyph" aria-hidden="true">◈</span> ${lblLens}</span>
-          <span class="modal-lens-badge" style="color: ${LENS_DATA[state.currentLens]?.color}; font-weight: 600;">${activeLensName}</span>
+    viewOverview.innerHTML = `
+      <div class="category-overview-grid">
+        <div class="category-overview-card category-overview-card--hero">
+          <div class="category-overview-card__header">
+            <span class="overview-card-tag"><span class="overview-tag-glyph" aria-hidden="true">§</span> ${lblSummary}</span>
+          </div>
+          <p class="category-overview-card__text">${cat.summary}</p>
         </div>
-        <p class="modal-lens-text">${item.lensReading}</p>
-      </div>
 
-      <div class="modal-ref-card">
-        <span class="modal-ref-label"><span class="modal-ref-glyph" aria-hidden="true">§</span> ${lblRef}:</span>
-        <p class="modal-ref-text">${item.reference}</p>
+        <div class="category-overview-mechanisms">
+          <div class="category-overview-card">
+            <div class="category-overview-card__header">
+              <span class="overview-card-tag"><span class="overview-tag-glyph" aria-hidden="true">§</span> ${lblPowerMech}</span>
+            </div>
+            <p class="category-overview-card__text">${cat.powerMechanism}</p>
+          </div>
+          <div class="category-overview-card">
+            <div class="category-overview-card__header">
+              <span class="overview-card-tag"><span class="overview-tag-glyph" aria-hidden="true">▸</span> ${lblCoercion}</span>
+            </div>
+            <p class="category-overview-card__text">${cat.coercionForm}</p>
+          </div>
+        </div>
+
+        <div class="category-overview-card category-overview-card--tradeoffs">
+          <div class="category-overview-card__header">
+            <span class="overview-card-tag"><span class="overview-tag-glyph" aria-hidden="true">¶</span> ${lblTradeoffs}</span>
+          </div>
+          <p class="tradeoffs-intro-text">${lblTradeoffsCopy}</p>
+          <div class="tradeoffs-box">
+            <p class="category-overview-card__text"><strong>${isEnglish() ? 'Trade-off analysis:' : 'Análisis del compromiso:'}</strong> ${cat.tradeoffs}</p>
+          </div>
+        </div>
+
+        <div class="category-overview-card category-overview-card--lens">
+          <div class="category-overview-card__header">
+            <span class="overview-card-tag"><span class="overview-tag-glyph" aria-hidden="true">◈</span> ${lblLensReading}</span>
+            <span class="overview-lens-badge" style="color: ${activeLensColor}; font-weight: 600;">${activeLensName}</span>
+          </div>
+          <p class="category-overview-card__text">${categoryLensAnalysis}</p>
+        </div>
+
+        <div class="category-overview-card category-overview-card--caveat">
+          <div class="category-overview-card__header">
+            <span class="overview-card-tag"><span class="overview-tag-glyph" aria-hidden="true">◈</span> ${lblCaveat}</span>
+          </div>
+          <p class="category-overview-card__text">${cat.caveat}</p>
+        </div>
       </div>
     `;
   }
 
-  // Update Prev / Next buttons to navigate within all architectures
-  const currentIdx = archs.findIndex(a => a.id === item.id);
-  const prevIdx = (currentIdx - 1 + archs.length) % archs.length;
-  const nextIdx = (currentIdx + 1) % archs.length;
+  // Traditions Panel (Tab 2)
+  const viewTraditions = qs('#modalViewTraditions');
+  if (viewTraditions) {
+    const lblAuthority = isEnglish() ? 'Authority form' : 'Forma de autoridad';
+    const lblMechanism = isEnglish() ? 'Restriction mechanism' : 'Mecanismo de restricción';
+    const lblJustification = isEnglish() ? 'Claimed justification' : 'Justificación alegada';
+    const lblGainers = isEnglish() ? 'Who gains decision power' : 'Quién gana capacidad de decisión';
+    const lblCost = isEnglish() ? 'Who bears the costs' : 'Quién soporta los costes';
+    const lblCounter = isEnglish() ? 'Counterweights & limits' : 'Contrapesos y límites institucionales';
+    const lblLens = isEnglish() ? 'Theoretical reading on liberty' : 'Lectura desde los marcos de la libertad';
+    const lblRef = isEnglish() ? 'Academic references' : 'Referencias académicas';
+    const activeLensName = LENS_DATA[state.currentLens]?.name || (isEnglish() ? 'Negative Liberty' : 'Libertad Negativa');
+    const activeLensColor = LENS_DATA[state.currentLens]?.color || 'var(--clr-accent)';
+
+    viewTraditions.innerHTML = traditions.map(item => {
+      const isHighlighted = traditionId === item.id;
+      return `
+        <article class="tradition-detail-card ${isHighlighted ? 'is-highlighted' : ''}" id="traditionCard-${item.id}" tabindex="0">
+          <div class="tradition-detail-card__header">
+            <div class="tradition-detail-card__title-row">
+              <h4 class="tradition-detail-card__title">${item.name}</h4>
+              <span class="tradition-detail-card__period">${item.period}</span>
+            </div>
+            <p class="tradition-detail-card__context">${item.context}</p>
+          </div>
+          <div class="tradition-detail-card__grid">
+            <div class="modal-field-card">
+              <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">§</span> ${lblAuthority}</span>
+              <p class="modal-field-text">${item.authority}</p>
+            </div>
+            <div class="modal-field-card">
+              <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">▸</span> ${lblMechanism}</span>
+              <p class="modal-field-text">${item.mechanism}</p>
+            </div>
+            <div class="modal-field-card">
+              <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">¶</span> ${lblJustification}</span>
+              <p class="modal-field-text">${item.justification}</p>
+            </div>
+            <div class="modal-field-card">
+              <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">↗</span> ${lblGainers}</span>
+              <p class="modal-field-text">${item.gainers}</p>
+            </div>
+            <div class="modal-field-card">
+              <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">⤸</span> ${lblCost}</span>
+              <p class="modal-field-text">${item.costBearers}</p>
+            </div>
+            <div class="modal-field-card">
+              <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">⌁</span> ${lblCounter}</span>
+              <p class="modal-field-text">${item.counterweights}</p>
+            </div>
+          </div>
+          <div class="modal-lens-card">
+            <div class="modal-lens-card__header">
+              <span class="modal-lens-tag"><span class="modal-lens-glyph" aria-hidden="true">◈</span> ${lblLens}</span>
+              <span class="modal-lens-badge" style="color: ${activeLensColor}; font-weight: 600;">${activeLensName}</span>
+            </div>
+            <p class="modal-lens-text">${item.lensReading}</p>
+          </div>
+          <div class="modal-ref-card">
+            <span class="modal-ref-label"><span class="modal-ref-glyph" aria-hidden="true">§</span> ${lblRef}:</span>
+            <p class="modal-ref-text">${item.reference}</p>
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    if (traditionId) {
+      setTimeout(() => {
+        const highlightedEl = qs(`#traditionCard-${traditionId}`, viewTraditions);
+        if (highlightedEl) {
+          highlightedEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          highlightedEl.focus();
+        }
+      }, 50);
+    }
+  }
+
+  switchGenealogiaModalTab(tab);
+
+  const catKeys = ['monismo_hegemonico', 'pluralismo_hegemonico', 'monismo_emergente', 'pluralismo_emergente'];
+  const currentCatIdx = catKeys.indexOf(cat.id);
+  const prevCatIdx = (currentCatIdx - 1 + catKeys.length) % catKeys.length;
+  const nextCatIdx = (currentCatIdx + 1) % catKeys.length;
 
   if (prevBtn) {
     prevBtn.onclick = () => {
-      state.activeGenealogiaArchitecture = archs[prevIdx].id;
-      renderGenealogiaModalContent(archs[prevIdx].id);
+      openGenealogiaCategoryModal(catKeys[prevCatIdx], null, state.activeGenealogiaModalTab);
     };
-    prevBtn.title = archs[prevIdx].name;
   }
   if (nextBtn) {
     nextBtn.onclick = () => {
-      state.activeGenealogiaArchitecture = archs[nextIdx].id;
-      renderGenealogiaModalContent(archs[nextIdx].id);
+      openGenealogiaCategoryModal(catKeys[nextCatIdx], null, state.activeGenealogiaModalTab);
     };
-    nextBtn.title = archs[nextIdx].name;
   }
+}
+
+// Backward compatibility aliases
+function openGenealogiaModal(id) {
+  const archs = getGenealogiaArchitectures();
+  const arch = archs.find(a => a.id === id);
+  if (arch) {
+    const categories = getGenealogiaCategories();
+    const cat = categories.find(c => c.id === arch.quadrantId || c.alias === arch.quadrantId || (c.traditions && c.traditions.includes(arch.id)));
+    const catId = cat ? cat.id : 'monismo_hegemonico';
+    openGenealogiaCategoryModal(catId, arch.id, 'traditions');
+    return;
+  }
+  openGenealogiaCategoryModal(id, null, 'overview');
+}
+
+function closeGenealogiaModal() {
+  closeGenealogiaCategoryModal();
+}
+
+function renderGenealogiaMatrix() {
+  renderGenealogiaExplorer();
+}
+
+function syncActiveGenealogiaChip(id) {
+  qsa('.sample-tradition-pill').forEach(pill => {
+    const isActive = pill.dataset.tradition === id;
+    pill.classList.toggle('is-active', isActive);
+  });
+}
+
+function renderGenealogiaModalContent(id) {
+  openGenealogiaModal(id);
 }
 
 function renderGenealogia() {
-  renderGenealogiaMatrix();
-  if (state.activeGenealogiaArchitecture) {
-    renderGenealogiaModalContent(state.activeGenealogiaArchitecture);
+  renderGenealogiaExplorer();
+  if (state.activeGenealogiaCategory) {
+    renderGenealogiaCategoryModalContent(state.activeGenealogiaCategory, state.activeGenealogiaArchitecture, state.activeGenealogiaModalTab);
   }
 }
-
-let genealogiaKeydownHandler = null;
 
 function initGenealogia() {
   const backdrop = qs('#genealogiaModalBackdrop');
   const closeBtn = qs('#modalCloseBtn');
   const actionCloseBtn = qs('#modalCloseActionBtn');
+  const tabBtnOverview = qs('#modalTabBtnOverview');
+  const tabBtnTraditions = qs('#modalTabBtnTraditions');
 
-  // Backdrop click to close
   backdrop?.addEventListener('click', e => {
     if (e.target === backdrop) {
-      closeGenealogiaModal();
+      closeGenealogiaCategoryModal();
     }
   });
 
-  closeBtn?.addEventListener('click', closeGenealogiaModal);
-  actionCloseBtn?.addEventListener('click', closeGenealogiaModal);
+  closeBtn?.addEventListener('click', closeGenealogiaCategoryModal);
+  actionCloseBtn?.addEventListener('click', closeGenealogiaCategoryModal);
 
-  // Keyboard navigation for modal (idempotent listener registration)
+  tabBtnOverview?.addEventListener('click', () => switchGenealogiaModalTab('overview'));
+  tabBtnTraditions?.addEventListener('click', () => switchGenealogiaModalTab('traditions'));
+
   if (window.__genealogiaKeydownHandler) {
     document.removeEventListener('keydown', window.__genealogiaKeydownHandler);
   }
 
   window.__genealogiaKeydownHandler = e => {
-    const backdrop = qs('#genealogiaModalBackdrop');
-    if (!backdrop || !backdrop.classList.contains('is-open')) return;
+    const backdropEl = qs('#genealogiaModalBackdrop');
+    if (!backdropEl || !backdropEl.classList.contains('is-open')) return;
 
     if (e.key === 'Escape') {
       e.preventDefault();
-      closeGenealogiaModal();
+      closeGenealogiaCategoryModal();
     } else if (e.key === 'ArrowLeft') {
       const prevBtn = qs('#modalPrevBtn');
-      if (prevBtn) {
-        prevBtn.click();
-      }
+      if (prevBtn) prevBtn.click();
     } else if (e.key === 'ArrowRight') {
       const nextBtn = qs('#modalNextBtn');
-      if (nextBtn) {
-        nextBtn.click();
-      }
+      if (nextBtn) nextBtn.click();
     }
   };
 
