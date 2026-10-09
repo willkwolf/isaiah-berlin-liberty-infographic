@@ -584,69 +584,133 @@
         <h2 id="genealogia-title" class="section__title">Genealogía del poder<br/><em>cómo organizamos la libertad</em></h2>
         <p class="section__subtitle" id="genealogia-subtitle">Del orden único a la coexistencia de órdenes: una historia de restricciones, autonomías y compromisos.</p>
 
-        <div class="genealogia-lead">
-          <p id="genealogiaLeadText">
-            No toda restricción de la libertad responde al mismo principio. Algunas instituciones concentran la autoridad en nombre de una verdad, una fe, una nación o un proyecto histórico. Otras distribuyen el poder entre jurisdicciones, derechos, comunidades e individuos. Ninguna arquitectura elimina todos los conflictos: cada una decide quién puede restringir qué, con qué justificación y a qué coste.
-          </p>
-        </div>
-
-        <!-- 1. Línea de tiempo interactiva -->
-        <div class="genealogia-block" aria-labelledby="genealogiaTimelineHeading">
-          <h3 class="genealogia-subheading" id="genealogiaTimelineHeading">1. Configuraciones institucionales en disputa</h3>
-          <p class="genealogia-block-desc" id="genealogiaTimelineDesc">
-            Las instituciones no siguen una evolución unilineal ni teleológica hacia un fin predeterminado. Coexisten, pugnan y se transforman según quién acumule legitimidad y fuerza.
-          </p>
-          <div class="genealogia-timeline-nav" id="genealogiaTimelineNav" role="tablist" aria-label="Seleccionar configuración institucional histórica"></div>
-          <div class="genealogia-card" id="genealogiaTimelineCard" aria-live="polite"></div>
-        </div>
-
-        <!-- 2. Matriz comparativa bidimensional -->
-        <div class="genealogia-block" aria-labelledby="genealogiaMatrixHeading">
-          <h3 class="genealogia-subheading" id="genealogiaMatrixHeading">2. Matriz: Concentración de autoridad y posición histórica</h3>
-          <p class="genealogia-block-desc" id="genealogiaMatrixDesc">
-            Dos dimensiones analíticas diferenciadas: (A) concentración de autoridad y pretensión monista frente a distribución y coexistencia de órdenes; (B) posición histórica relativa (hegemonía, subordinación, emergencia o declive), la cual depende del contexto territorial y temporal, no de la doctrina.
-          </p>
-          <div class="genealogia-matrix-filters" role="group" aria-label="Filtrar configuraciones por dimensión">
-            <button class="matrix-filter-btn active" data-filter="all" aria-pressed="true" id="matrixFilterAll">Todas las configuraciones</button>
-            <button class="matrix-filter-btn" data-filter="concentrated" aria-pressed="false" id="matrixFilterConc">Orden concentrado (Monista)</button>
-            <button class="matrix-filter-btn" data-filter="distributed" aria-pressed="false" id="matrixFilterDist">Coexistencia (Pluralista)</button>
-          </div>
-          <div class="genealogia-matrix-grid" id="genealogiaMatrixGrid" aria-live="polite"></div>
-        </div>
-
-        <!-- 3. Laboratorio de restricciones -->
-        <div class="genealogia-block" aria-labelledby="genealogiaLabHeading">
-          <h3 class="genealogia-subheading" id="genealogiaLabHeading">3. Laboratorio de restricciones: Mecanismos y costes</h3>
-          <p class="genealogia-block-desc" id="genealogiaLabDesc">
-            Cada caso distingue cuatro niveles: legitimación ideológica, distribución de autoridad, mecanismo concreto de restricción y consecuencias efectivas.
-          </p>
-          <div class="genealogia-lab-nav" id="genealogiaLabNav" role="tablist" aria-label="Casos de restricción institucional"></div>
-          <div class="genealogia-card genealogia-card--lab" id="genealogiaLabCard" aria-live="polite"></div>
-        </div>
-
-        <!-- 4. Cierre conceptual Berliniano -->
-        <div class="genealogia-closing">
-          <div class="genealogia-closing__inner">
-            <h3 class="genealogia-closing__title" id="genealogiaClosingTitle">El compromiso ineludible: Reconciliar valores en conflicto</h3>
-            <p class="genealogia-closing__text" id="genealogiaClosingText">
-              Isaiah Berlin insistió en que las decisiones políticas enfrentan valores legítimos que chocan irreductiblemente. El pluralismo no es relativismo: reconocer que existen múltiples bienes genuinos no implica que cualquier institución sea legítima. Una arquitectura pluralista también puede excluir o fragmentar, mientras que una norma común colectiva puede limitar una conducta para proteger las libertades y capacidades de terceros.
-            </p>
-            <div class="genealogia-closing__question-box">
-              <p class="genealogia-closing__eyebrow" id="genealogiaClosingEyebrow">Pregunta rectora de la genealogía</p>
-              <blockquote class="genealogia-closing__quote" id="genealogiaClosingQuote">
-                «¿Qué libertad se restringe, para proteger cuál, quién decide y cómo puede impugnarse esa decisión?»
-              </blockquote>
-            </div>
-          </div>
-        </div>
-
         <div class="lens-interpretation" aria-live="polite">
           <span class="lens-interpretation__icon" aria-hidden="true">◈</span>
           <span class="lens-interpretation__label">Bajo este marco:</span>
           <span class="lens-interpretation__text" id="genealogiaLensText"></span>
         </div>
+
+        <div class="genealogia-lead">
+          <p id="genealogiaLeadText">
+            No toda restricción de la libertad responde al mismo principio. Algunas instituciones concentran la autoridad en nombre de una verdad, una fe o un proyecto unívoco (Monismo). Otras distribuyen el poder entre jurisdicciones y derechos autónomos (Pluralismo). <strong>Haz clic o toca cualquier arquitectura en la matriz</strong> para desplegar su anatomía, mecanismo de restricción y referencias académicas.
+          </p>
+        </div>
+
+        <!-- MATRIZ CARTESIANA INTERACTIVA -->
+        <div class="genealogia-matrix-wrapper" id="genealogiaMatrixWrapper">
+          <div class="genealogia-matrix-header">
+            <h3 class="genealogia-matrix-title" id="matrixDiagramTitle">ARQUITECTURAS DE PODER: MONISMO vs. PLURALISMO</h3>
+            <p class="genealogia-matrix-subtitle" id="matrixDiagramSubtitle">Hegemonía histórica y marginalidad emergente, del pre-Estado al Estado moderno</p>
+            <p class="genealogia-matrix-axis-note" id="matrixDiagramAxisNote">El eje horizontal no representa izquierda-derecha; expresa hegemonía histórica relativa frente a emergencia, subordinación o declive</p>
+          </div>
+
+          <div class="genealogia-cartesian-diagram" id="genealogiaCartesianDiagram">
+            <!-- Eje Superior -->
+            <div class="cartesian-axis-badge cartesian-axis-badge--top">
+              <span class="cartesian-axis-label" id="axisLabelMonismo">▲ MONISMO</span>
+            </div>
+
+            <!-- Eje Lateral Izquierdo -->
+            <div class="cartesian-axis-badge cartesian-axis-badge--left">
+              <span class="cartesian-axis-label" id="axisLabelHegemonia">◀ HEGEMONÍA HISTÓRICA CONSOLIDADA</span>
+            </div>
+
+            <!-- Eje Lateral Derecho -->
+            <div class="cartesian-axis-badge cartesian-axis-badge--right">
+              <span class="cartesian-axis-label" id="axisLabelMarginalidad">MARGINALIDAD / EMERGENCIA ▶</span>
+            </div>
+
+            <!-- Eje Inferior -->
+            <div class="cartesian-axis-badge cartesian-axis-badge--bottom">
+              <span class="cartesian-axis-label" id="axisLabelPluralismo">▼ PLURALISMO</span>
+            </div>
+
+            <!-- Cuadrícula 2x2 de Cuadrantes -->
+            <div class="genealogia-quadrants-grid" id="genealogiaQuadrantsGrid">
+              <!-- Cuadrante 1: DOMINIO UNIFORME -->
+              <div class="genealogia-quadrant genealogia-quadrant--q1" id="quadrantQ1" data-quadrant="monismo_hegemonico">
+                <div class="quadrant-header">
+                  <span class="quadrant-icon" aria-hidden="true">👑 🏛️</span>
+                  <h4 class="quadrant-title" id="q1Title">DOMINIO UNIFORME</h4>
+                  <span class="quadrant-sub" id="q1Sub">(Monismo hegemónico)</span>
+                </div>
+                <div class="quadrant-items-list" id="q1ItemsList" role="list" aria-label="Arquitecturas de Dominio Uniforme"></div>
+              </div>
+
+              <!-- Cuadrante 2: AUTORIDAD CENTRALIZADA -->
+              <div class="genealogia-quadrant genealogia-quadrant--q2" id="quadrantQ2" data-quadrant="monismo_marginal">
+                <div class="quadrant-header">
+                  <span class="quadrant-icon" aria-hidden="true">🥾 🗼</span>
+                  <h4 class="quadrant-title" id="q2Title">AUTORIDAD CENTRALIZADA</h4>
+                  <span class="quadrant-sub" id="q2Sub">(Monismo marginal o declinante)</span>
+                </div>
+                <div class="quadrant-items-list" id="q2ItemsList" role="list" aria-label="Arquitecturas de Autoridad Centralizada"></div>
+              </div>
+
+              <!-- Cuadrante 3: HEGEMONÍA PLURALISTA -->
+              <div class="genealogia-quadrant genealogia-quadrant--q3" id="quadrantQ3" data-quadrant="pluralismo_consolidado">
+                <div class="quadrant-header">
+                  <span class="quadrant-icon" aria-hidden="true">⚖️ 🗳️</span>
+                  <h4 class="quadrant-title" id="q3Title">HEGEMONÍA PLURALISTA</h4>
+                  <span class="quadrant-sub" id="q3Sub">(Pluralismo consolidado)</span>
+                </div>
+                <div class="quadrant-items-list" id="q3ItemsList" role="list" aria-label="Arquitecturas de Hegemonía Pluralista"></div>
+              </div>
+
+              <!-- Cuadrante 4: PLURALISMO EMERGENTE -->
+              <div class="genealogia-quadrant genealogia-quadrant--q4" id="quadrantQ4" data-quadrant="pluralismo_emergente">
+                <div class="quadrant-header">
+                  <span class="quadrant-icon" aria-hidden="true">🌐 🍃</span>
+                  <h4 class="quadrant-title" id="q4Title">PLURALISMO EMERGENTE</h4>
+                  <span class="quadrant-sub" id="q4Sub">(Diversidad radical)</span>
+                </div>
+                <div class="quadrant-items-list" id="q4ItemsList" role="list" aria-label="Arquitecturas de Pluralismo Emergente"></div>
+              </div>
+            </div>
+          </div>
+
+          <p class="genealogia-methodology-note" id="genealogiaMethodologyNote">
+            *NOTA METODOLÓGICA: Clasificación heurística: las posiciones son relativas y dependen del periodo, la región y la configuración institucional. Las categorías pueden combinarse y transformarse históricamente.
+          </p>
+        </div>
+
+        <div class="genealogia-closing">
+          <h3 class="genealogia-closing__title" id="genealogiaClosingTitle">La metamorfosis histórica del poder</h3>
+          <p class="genealogia-closing__text" id="genealogiaClosingText">
+            Cada arquitectura política construye un relato de legitimación para naturalizar sus restricciones. Al examinar la historia, la libertad nunca es una propiedad abstracta: es una configuración precaria sobre quién tiene el poder de restringir, quién debe obedecer y qué contrapesos impiden la dominación absoluta de los más débiles.
+          </p>
+          <div class="genealogia-closing__question-box">
+            <p class="genealogia-closing__eyebrow" id="genealogiaClosingEyebrow">Pregunta rectora de la genealogía</p>
+            <blockquote class="genealogia-closing__quote" id="genealogiaClosingQuote">
+              «¿Qué libertad se restringe, para proteger cuál, quién decide y cómo puede impugnarse esa decisión?»
+            </blockquote>
+          </div>
+        </div>
       </div>
     </section>
+
+    <!-- MODAL DIALOG ACCESIBLE PARA DETALLE DE ARQUITECTURAS -->
+    <div class="genealogia-modal-backdrop" id="genealogiaModalBackdrop" aria-hidden="true">
+      <div class="genealogia-modal" id="genealogiaModal" role="dialog" aria-modal="true" aria-labelledby="modalArchTitle" aria-describedby="modalArchContext" tabindex="-1">
+        <div class="genealogia-modal__header">
+          <div class="genealogia-modal__meta">
+            <span class="genealogia-modal__badge" id="modalArchBadge"></span>
+            <span class="genealogia-modal__period" id="modalArchPeriod"></span>
+          </div>
+          <button type="button" class="genealogia-modal__close-btn" id="modalCloseBtn" aria-label="Cerrar ventana emergente">✕</button>
+        </div>
+        <h3 class="genealogia-modal__title" id="modalArchTitle"></h3>
+        <p class="genealogia-modal__context" id="modalArchContext"></p>
+        <div class="genealogia-modal__body" id="modalArchBody"></div>
+        <div class="genealogia-modal__footer">
+          <div class="genealogia-modal__nav">
+            <button type="button" class="modal-nav-btn" id="modalPrevBtn" aria-label="Configuración anterior">← Anterior</button>
+            <button type="button" class="modal-nav-btn" id="modalNextBtn" aria-label="Configuración siguiente">Siguiente →</button>
+          </div>
+          <button type="button" class="modal-close-action-btn" id="modalCloseActionBtn">Cerrar (Esc)</button>
+        </div>
+      </div>
+    </div>
 
     <!-- XI — CIERRE -->
     <section id="cierre" class="section section--cierre" aria-labelledby="cierre-title">
