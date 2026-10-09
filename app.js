@@ -2841,19 +2841,28 @@ function renderGenealogiaMatrix() {
     if (!listEl) return;
     const items = archs.filter(a => a.quadrantId === qKey);
 
-    listEl.innerHTML = items.map(item => `
-      <div class="quadrant-item-wrapper">
-        <button class="arch-chip"
-          type="button"
-          data-id="${item.id}"
-          aria-haspopup="dialog"
-          aria-label="${item.name}: ${item.period}">
-          <span class="arch-chip__bullet" aria-hidden="true">•</span>
-          <span class="arch-chip__name">${item.name}</span>
-          <span class="arch-chip__action" aria-hidden="true">↗</span>
-        </button>
-      </div>
-    `).join('');
+    listEl.innerHTML = items.map(item => {
+      const isSelected = state.activeGenealogiaArchitecture === item.id;
+      return `
+        <div class="quadrant-item-wrapper">
+          <button class="arch-chip arch-chip--${item.quadrantId} ${isSelected ? 'is-active' : ''}"
+            type="button"
+            data-id="${item.id}"
+            aria-haspopup="dialog"
+            aria-selected="${isSelected}"
+            aria-label="${item.name}: ${item.period}">
+            <div class="arch-chip__main">
+              <span class="arch-chip__indicator" aria-hidden="true"></span>
+              <span class="arch-chip__name">${item.name}</span>
+            </div>
+            <div class="arch-chip__meta">
+              <span class="arch-chip__period-badge">${item.period}</span>
+              <span class="arch-chip__action" aria-hidden="true">↗</span>
+            </div>
+          </button>
+        </div>
+      `;
+    }).join('');
   });
 
   // Attach event listeners to all arch chips
@@ -2870,10 +2879,19 @@ function renderGenealogiaMatrix() {
   });
 }
 
+function syncActiveGenealogiaChip(id) {
+  qsa('.arch-chip').forEach(chip => {
+    const isActive = chip.dataset.id === id;
+    chip.classList.toggle('is-active', isActive);
+    chip.setAttribute('aria-selected', String(isActive));
+  });
+}
+
 function openGenealogiaModal(id) {
   state.activeGenealogiaArchitecture = id;
   state.lastFocusedElement = document.activeElement;
 
+  syncActiveGenealogiaChip(id);
   renderGenealogiaModalContent(id);
 
   const backdrop = qs('#genealogiaModalBackdrop');
@@ -2894,6 +2912,7 @@ function closeGenealogiaModal() {
   }
   document.body.classList.remove('modal-open');
   state.activeGenealogiaArchitecture = null;
+  syncActiveGenealogiaChip(null);
 
   if (state.lastFocusedElement && typeof state.lastFocusedElement.focus === 'function') {
     state.lastFocusedElement.focus();
@@ -2904,6 +2923,8 @@ function renderGenealogiaModalContent(id) {
   const archs = getGenealogiaArchitectures();
   const item = archs.find(a => a.id === id) || archs[0];
   if (!item) return;
+
+  syncActiveGenealogiaChip(item.id);
 
   const badgeEl = qs('#modalArchBadge');
   const titleEl = qs('#modalArchTitle');
@@ -2937,41 +2958,41 @@ function renderGenealogiaModalContent(id) {
     bodyEl.innerHTML = `
       <div class="modal-fields-grid">
         <div class="modal-field-card">
-          <span class="modal-field-label">🏛️ ${lblAuthority}</span>
+          <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">§</span> ${lblAuthority}</span>
           <p class="modal-field-text">${item.authority}</p>
         </div>
         <div class="modal-field-card">
-          <span class="modal-field-label">🔒 ${lblMechanism}</span>
+          <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">▸</span> ${lblMechanism}</span>
           <p class="modal-field-text">${item.mechanism}</p>
         </div>
         <div class="modal-field-card">
-          <span class="modal-field-label">📜 ${lblJustification}</span>
+          <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">¶</span> ${lblJustification}</span>
           <p class="modal-field-text">${item.justification}</p>
         </div>
         <div class="modal-field-card">
-          <span class="modal-field-label">📈 ${lblGainers}</span>
+          <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">↗</span> ${lblGainers}</span>
           <p class="modal-field-text">${item.gainers}</p>
         </div>
         <div class="modal-field-card">
-          <span class="modal-field-label">⚖️ ${lblCost}</span>
+          <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">⤸</span> ${lblCost}</span>
           <p class="modal-field-text">${item.costBearers}</p>
         </div>
         <div class="modal-field-card">
-          <span class="modal-field-label">🛡️ ${lblCounter}</span>
+          <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">⌁</span> ${lblCounter}</span>
           <p class="modal-field-text">${item.counterweights}</p>
         </div>
       </div>
 
       <div class="modal-lens-card">
         <div class="modal-lens-card__header">
-          <span class="modal-lens-tag">◈ ${lblLens}</span>
+          <span class="modal-lens-tag"><span class="modal-lens-glyph" aria-hidden="true">◈</span> ${lblLens}</span>
           <span class="modal-lens-badge" style="color: ${LENS_DATA[state.currentLens]?.color}; font-weight: 600;">${activeLensName}</span>
         </div>
         <p class="modal-lens-text">${item.lensReading}</p>
       </div>
 
       <div class="modal-ref-card">
-        <span class="modal-ref-label">📖 ${lblRef}:</span>
+        <span class="modal-ref-label"><span class="modal-ref-glyph" aria-hidden="true">§</span> ${lblRef}:</span>
         <p class="modal-ref-text">${item.reference}</p>
       </div>
     `;
@@ -3005,6 +3026,8 @@ function renderGenealogia() {
   }
 }
 
+let genealogiaKeydownHandler = null;
+
 function initGenealogia() {
   const backdrop = qs('#genealogiaModalBackdrop');
   const closeBtn = qs('#modalCloseBtn');
@@ -3020,8 +3043,12 @@ function initGenealogia() {
   closeBtn?.addEventListener('click', closeGenealogiaModal);
   actionCloseBtn?.addEventListener('click', closeGenealogiaModal);
 
-  // Keyboard navigation for modal
-  document.addEventListener('keydown', e => {
+  // Keyboard navigation for modal (idempotent listener registration)
+  if (window.__genealogiaKeydownHandler) {
+    document.removeEventListener('keydown', window.__genealogiaKeydownHandler);
+  }
+
+  window.__genealogiaKeydownHandler = e => {
     const backdrop = qs('#genealogiaModalBackdrop');
     if (!backdrop || !backdrop.classList.contains('is-open')) return;
 
@@ -3030,16 +3057,18 @@ function initGenealogia() {
       closeGenealogiaModal();
     } else if (e.key === 'ArrowLeft') {
       const prevBtn = qs('#modalPrevBtn');
-      if (prevBtn && document.activeElement !== prevBtn && document.activeElement !== qs('#modalNextBtn')) {
+      if (prevBtn) {
         prevBtn.click();
       }
     } else if (e.key === 'ArrowRight') {
       const nextBtn = qs('#modalNextBtn');
-      if (nextBtn && document.activeElement !== nextBtn && document.activeElement !== qs('#modalPrevBtn')) {
+      if (nextBtn) {
         nextBtn.click();
       }
     }
-  });
+  };
+
+  document.addEventListener('keydown', window.__genealogiaKeydownHandler);
 
   renderGenealogia();
 }
