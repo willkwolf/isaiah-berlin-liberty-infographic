@@ -26,6 +26,7 @@ const LENS_DATA = {
       economia:  'Hayek y Friedman son los defensores más coherentes de este marco: la no-interferencia del Estado maximiza la libertad negativa. El mercado libre es la extensión institucional de este principio.',
       sen:       'Sen confunde incapacidad con falta de libertad. Su marco, aunque humanamente atractivo, puede justificar intervenciones estatales que destruyen más libertad (negativa) de la que crean.',
       colombia:  'Colombia tiene libertad formal razonablemente garantizada (Freedom in the World: 69/100), pero las restricciones más graves provienen del conflicto armado y del narcotráfico — agentes que coartan directamente. El IDH es un indicador irrelevante para medir libertad negativa.',
+      genealogia: 'Desde este marco, la genealogía del poder es la historia del esfuerzo por arrancar al poder político cotas inviolables de no-interferencia. Ninguna justificación sagrada, imperial o colectivista excusa la coerción arbitraria. El constitucionalismo y la dispersión del poder son valiosos no porque redistribuyan riqueza, sino porque limitan al soberano.',
     }
   },
   positiva: {
@@ -41,6 +42,7 @@ const LENS_DATA = {
       economia:  'El mercado libre sin correcciones reproduce y amplifica las desigualdades de punto de partida. La libertad positiva requiere instituciones que redistribuyan capacidades, no solo oportunidades formales.',
       sen:       'Sen es el sucesor intelectual más riguroso de la libertad positiva. Su enfoque de capacidades operacionaliza lo que la libertad positiva de Berlin dejaba abstracto.',
       colombia:  'El IDH de Colombia (0.754) revela que la libertad formal coexiste con privaciones reales masivas. El Coeficiente de Gini de 0.54 indica que la libertad positiva está distribuida profundamente de manera desigual. La Economic Freedom no captura esto.',
+      genealogia: 'Este recorrido demuestra que la libertad no es un estado natural de no-interferencia, sino una conquista institucional. La educación pública, los derechos laborales y el Estado social no disminuyen la libertad: la crean al emancipar a los ciudadanos de la servidumbre feudal o la dependencia económica privada.',
     }
   },
   capacidades: {
@@ -56,6 +58,7 @@ const LENS_DATA = {
       economia:  'El mercado puede ser eficiente sin ser justo en términos de capacidades. El PIB per cápita puede crecer mientras las capacidades básicas de millones se erosionan. La eficiencia de Hayek no es suficiente.',
       sen:       'Este es el marco propio. La libertad real no es ausencia de cadenas: es capacidad de funcionar. La salud, la educación, la participación política, la integridad corporal son capacidades básicas sin las cuales la libertad es nominal.',
       colombia:  'El IPM de Colombia (≈ 18.6%) revela privaciones multidimensionales que el Freedom Index ignora completamente. La capacidad real varía dramáticamente entre Bogotá y la Amazonia, entre estratos 1 y 6. El mismo país, mundos distintos.',
+      genealogia: 'Las instituciones deben juzgarse por qué capacidades sustantivas habilitan o truncan en la práctica cotidiana. Un orden imperial destruye agencia por extracción violenta; un mercado desregulado puede destruirla por insolvencia y desnutrición. La legitimación formal importa menos que la vida real de las personas.',
     }
   },
   libertario: {
@@ -71,6 +74,7 @@ const LENS_DATA = {
       economia:  'Este es el marco propio. La Economic Freedom of the World de Colombia (65.6/100, puesto 94) indica espacio para reducir regulación, gasto público y barreras al comercio. La libertad económica es condición de la prosperidad.',
       sen:       'El enfoque de capacidades de Sen justifica intervenciones estatales masivas con evidencia empírica siempre disputable. El riesgo: construir aparatos burocráticos que generan dependencia en lugar de autonomía real.',
       colombia:  'El principal problema de Colombia, desde este marco, es la debilidad institucional que impide hacer cumplir contratos y proteger derechos de propiedad, no la falta de redistribución. La Economic Freedom (65.6) muestra burocracia excesiva y corrupción como obstáculos reales a la libertad económica.',
+      genealogia: 'La lección histórica es meridiana: el poder concentrado engendra tiranía independientemente de sus buenas intenciones declaradas. Solo la división estricta del monopolio estatal, el imperio de la ley y el respeto irrestricto a los derechos de propiedad descentralizados permiten coordinar pacíficamente sociedades complejas.',
     }
   }
 };
@@ -311,6 +315,322 @@ const LIMITS_LAB_CASES = [
 ];
 
 // ═══════════════════════════════════════════════
+// GENEALOGÍA DEL PODER — MOCK DATA (Sección X)
+// ═══════════════════════════════════════════════
+
+const GENEALOGIA_TIMELINE = [
+  {
+    id: 'imperios',
+    num: '01',
+    name: 'Órdenes imperiales y tributarios',
+    period: 'Antigüedad a Imperios Modernos (Roma, Persia, Han, Otomanos)',
+    context: 'Grandes espacios multiétnicos cohesionados por dinastías palaciegas y extracción metropolitana.',
+    authority: 'Monarquía dinástica centralizada, burocracia palaciega y aristocracia militar.',
+    mechanism: 'Tributo fiscal obligatorio, leva militar forzosa, monopolio punitivo y subordinación provincial.',
+    justification: 'Paz universal (Pax Romana/Augusta), orden cósmico sagrado y protección frente a la barbarie exterior.',
+    gainers: 'La corte metropolitana, los recaudadores de rentas imperiales y la nobleza armada central.',
+    costBearers: 'Poblaciones campesinas tributarias, provincias periféricas conquistadas y esclavos o siervos.',
+    counterweights: 'Insurrecciones provinciales, fragmentación por distancia geográfica y límites logísticos de coacción.',
+    reference: 'Tilly, C. (1990). Coercion, Capital, and European States; Burbank & Cooper (2010). Empires in World History.'
+  },
+  {
+    id: 'religiosos',
+    num: '02',
+    name: 'Tradiciones religiosas y legitimidad sacra',
+    period: 'Edades Media, Califatos y Monarquías Sacras',
+    context: 'Órdenes políticos donde la verdad revelada y el dogma constituyen la fuente suprema de validez legal.',
+    authority: 'Jerarquías eclesiásticas, ulemas, papado o reyes investidos de derecho divino.',
+    mechanism: 'Derecho canónico, interdicción de herejías, censura dogmática, inquisición y excomunión cívica.',
+    justification: 'Salvación colectiva del alma, preservación de la ortodoxia y concordancia con la ley divina trascendente.',
+    gainers: 'Casta sacerdotal, teólogos oficiales y gobernantes legitimados como defensores de la fe.',
+    costBearers: 'Disidentes doctrinales, minorías religiosas estigmatizadas, científicos heréticos y mujeres bajo códigos patriarcales.',
+    counterweights: 'Cismas religiosos, concilios reformistas, herejías populares y resistencia comunitaria.',
+    reference: 'Berman, H. J. (1983). Law and Revolution: The Formation of the Western Legal Tradition.'
+  },
+  {
+    id: 'feudales',
+    num: '03',
+    name: 'Órdenes feudales y jurisdicciones superpuestas',
+    period: 'Siglos IX a XV (Europa occidental y fragmentaciones medievales)',
+    context: 'Estructura descentralizada sin soberano único, articulada por lealtades vasalláticas y fueros estamentales.',
+    authority: 'Señores feudales, nobleza armada, obispados territoriales y monarcas feudales con poder precario.',
+    mechanism: 'Servidumbre de la gleba, corveas laborales forzosas, monopolio señorial de molinos/peajes y justicia privada.',
+    justification: 'Protección militar mutua ante invasiones, orden estamental natural y costumbre inmemorial.',
+    gainers: 'Aristocracia señorial y caballería militar con control territorial exclusivo.',
+    costBearers: 'Campesinado servil atado a la tierra, sin libertad de movimiento ni apelación judicial imparcial.',
+    counterweights: 'Fueros de villas libres, apelación papal, rivalidades interseñoriales y cartas de libertades locales.',
+    reference: 'Bloch, M. (1961). Feudal Society; Strayer, J. (1970). On the Medieval Origins of the Modern State.'
+  },
+  {
+    id: 'ciudades',
+    num: '04',
+    name: 'Ciudades y repúblicas cívicas',
+    period: 'Siglos XII a XVII (Florencia, Venecia, Liga Hanseática)',
+    context: 'Enclaves urbanos de autogobierno comercial y artesanal que conquistaron cartas de franquicia frente al feudo.',
+    authority: 'Consejos comunales, repúblicas patricias, maestranzas gremiales y magistraturas rotativas.',
+    mechanism: 'Estatutos gremiales excluyentes, ciudadanía reservada a propietarios censitarios y monopolio mercantil.',
+    justification: '«El aire de la ciudad hace libre» (Stadtluft macht frei), bien común republicano y defensa del autogobierno.',
+    gainers: 'Patriciado comercial, maestros gremiales y oligarquías bancarias urbanas.',
+    costBearers: 'Jornaleros sin oficio registrado (popolo minuto), artesanos subalternos y siervos migrantes.',
+    counterweights: 'Rotación obligatoria de magistraturas, revueltas populares urbanas (ciompi) y asambleas cívicas.',
+    reference: 'Pocock, J. G. A. (1975). The Machiavellian Moment; Skinner, Q. (1978). Foundations of Modern Political Thought.'
+  },
+  {
+    id: 'soberania',
+    num: '05',
+    name: 'Soberanía estatal y uniformación jurídica',
+    period: 'Siglos XVII a XIX (Paz de Westfalia, Estados absolutistas)',
+    context: 'Construcción del monopolio territorial de la violencia legítima y superación de la anarquía feudal y religiosa.',
+    authority: 'Corona absolutista o gobierno central unificado respaldado por ejército regular y burocracia fiscal.',
+    mechanism: 'Supresión de fueros y privilegios particulares, conscripción militar obligatoria y codificación uniforme de leyes.',
+    justification: 'Superación de guerras civiles religiosas (Hobbes: salir del estado de naturaleza) y seguridad pública indivisible.',
+    gainers: 'Aparato burocrático central, oficiales de Estado y burguesía necesitada de un mercado interno unificado.',
+    costBearers: 'Comunidades autónomas regionales, identidades lingüísticas periféricas y campesinado reclutado.',
+    counterweights: 'Parlamentos estamentales, rebeliones antifiscales y límites de endeudamiento soberano.',
+    reference: 'Hobbes, T. (1651). Leviathan; Bodin, J. (1576). Les Six Livres de la République.'
+  },
+  {
+    id: 'constitucionalismo',
+    num: '06',
+    name: 'Constitucionalismo, derechos y división de poderes',
+    period: 'Siglos XVIII a XX (Ilustración, Revolución Americana y Francesa)',
+    context: 'Imposición de límites normativos rígidos al gobernante mediante cartas de derechos y equilibrio institucional.',
+    authority: 'Soberanía popular representativa, poder ejecutivo sometido a la ley y tribunales constitucionales independientes.',
+    mechanism: 'Control judicial de constitucionalidad, principio de estricta legalidad, habeas corpus y rigidez procedimental.',
+    justification: 'Protección de los derechos inalienables del individuo frente a cualquier tiranía (Locke, Montesquieu).',
+    gainers: 'Ciudadanía con garantías formales, minorías amparadas por derechos civiles y sectores ilustrados.',
+    costBearers: 'Gobernantes ejecutivos que pierden discrecionalidad; tensiones en lentitud de respuesta ante emergencias.',
+    counterweights: 'Cortes supremas, elecciones periódicas competitivas, prensa independiente y pesos y contrapesos.',
+    reference: 'Locke, J. (1689). Second Treatise of Government; Montesquieu (1748). De l’esprit des lois.'
+  },
+  {
+    id: 'revolucionarios',
+    num: '07',
+    name: 'Proyectos revolucionarios y partidos-Estado',
+    period: 'Siglo XX (Totalitarismos, Comunismos y Fascismos)',
+    context: 'Vanguardias políticas radicales que unifican el Estado y la sociedad para ejecutar una transformación histórica total.',
+    authority: 'Partido único de vanguardia, comité central o líder supremo investido de la dirección histórica de las masas.',
+    mechanism: 'Planificación económica imperativa, policía política, censura absoluta, colectivización forzosa y purga penal del disenso.',
+    justification: 'Construcción del hombre nuevo, emancipación proletaria final o rescate vital y pureza de la nación.',
+    gainers: 'Nomenclatura partidista, cuadros burocráticos y sectores sociales promovidos como masa leal.',
+    costBearers: 'Disidentes políticos, intelectuales independientes, clases desposeídas y población sometida a terror de Estado.',
+    counterweights: 'Inexistentes en el plano institucional formal; solo faccionalismo burocrático interno y resistencia encubierta.',
+    reference: 'Arendt, H. (1951). The Origins of Totalitarianism; Berlin, I. (1969). Four Essays on Liberty.'
+  },
+  {
+    id: 'pluralismo_dem',
+    num: '08',
+    name: 'Pluralismo democrático, federalismo y autonomía',
+    period: 'Segunda posguerra al Siglo XXI',
+    context: 'Democracias complejas que reconocen la diversidad cultural, territorial e ideológica como legítima y necesaria.',
+    authority: 'Gobernanza multinivel descentralizada: federación, regiones autónomas, parlamentos y sociedad civil.',
+    mechanism: 'Pactos de concertación, leyes de autonomía territorial, cuotas de representación y garantías de minorías.',
+    justification: 'Coexistencia pacífica entre concepciones inconmensurables del bien; rechazo de todo monopolio moral del Estado.',
+    gainers: 'Minorías étnicas y culturales, regiones periféricas autogobernadas y asociaciones cívicas intermedias.',
+    costBearers: 'Rapidez decisional; riesgo de fragmentación territorial y veto mutuo paralizante.',
+    counterweights: 'Tribunales constitucionales federales, alternancia democrática, referéndums y control de legalidad.',
+    reference: 'Dahl, R. (1989). Democracy and Its Critics; Kymlicka, W. (1995). Multicultural Citizenship.'
+  },
+  {
+    id: 'contemporaneos',
+    num: '09',
+    name: 'Concentración económica, vigilancia y gobernanza multinivel',
+    period: 'Siglo XXI (Capitalismo Digital y Globalización)',
+    context: 'Emergencia de poderes privados algorítmicos transnacionales que coexisten y rivalizan con la soberanía estatal.',
+    authority: 'Autoridad híbrida público-privada: plataformas tecnológicas globales, fondos de inversión y agencias de seguridad.',
+    mechanism: 'Monopolio de datos, interfaces de perfilamiento conductual, barreras de capital y vigilancia biométrica.',
+    justification: 'Eficiencia de mercado sin fricciones, innovación tecnológica acelerada y seguridad ciudadana inteligente.',
+    gainers: 'Plataformas tecnológicas dominantes, conglomerados financieros y tecnocracias de seguridad.',
+    costBearers: 'Usuarios despojados de privacidad, trabajadores de plataforma precarizados y soberanías estatales débiles.',
+    counterweights: 'Regulaciones de privacidad (RGPD), investigaciones antimonopolio, software abierto y activismo cívico digital.',
+    reference: 'Zuboff, S. (2019). The Age of Surveillance Capitalism; Pasquale, F. (2015). The Black Box Society.'
+  }
+];
+
+const GENEALOGIA_MATRIX = [
+  {
+    id: 'imperios',
+    name: 'Órdenes imperiales',
+    authorityType: 'concentrated',
+    authorityLabel: 'Concentración / Monista',
+    historicalStatus: 'hegemony',
+    statusLabel: 'Hegemonía histórica (Antigüedad - S. XIX)',
+    nuance: 'Monismo dinástico: la pretensión de paz universal no implicaba centralización administrativa total por límites logísticos.'
+  },
+  {
+    id: 'religiosos',
+    name: 'Legitimidad sacra',
+    authorityType: 'concentrated',
+    authorityLabel: 'Concentración / Monista',
+    historicalStatus: 'decline',
+    statusLabel: 'Declive en Occidente / Vigente en teocracias',
+    nuance: 'Monismo espiritual: la verdad revelada suprime el pluralismo moral. La secularización moderna desplazó su primacía jurídica.'
+  },
+  {
+    id: 'feudales',
+    name: 'Órdenes feudales',
+    authorityType: 'distributed',
+    authorityLabel: 'Distribución / Fragmentada',
+    historicalStatus: 'decline',
+    statusLabel: 'Superada históricamente (S. IX - XV)',
+    nuance: 'Pluralismo jurisdiccional no es libertad democrática: la dispersión del poder protegió fueros señoriales sometiendo al campesinado.'
+  },
+  {
+    id: 'ciudades',
+    name: 'Repúblicas cívicas',
+    authorityType: 'distributed',
+    authorityLabel: 'Distribución / Corporativa',
+    historicalStatus: 'subordination',
+    statusLabel: 'Subordinada / Emergente en redes de ciudades',
+    nuance: 'Autonomía comunal con monopolios gremiales internos: libertad cívica participativa restringida a ciudadanos propietarios.'
+  },
+  {
+    id: 'soberania',
+    name: 'Soberanía estatal',
+    authorityType: 'concentrated',
+    authorityLabel: 'Concentración / Uniformadora',
+    historicalStatus: 'hegemony',
+    statusLabel: 'Hegemonía moderna (S. XVII - actualidad)',
+    nuance: 'Monopolio legal de la violencia: centraliza la coacción legítima pero crea la base de seguridad para derechos universales.'
+  },
+  {
+    id: 'constitucionalismo',
+    name: 'Constitucionalismo',
+    authorityType: 'distributed',
+    authorityLabel: 'Distribución / División de Poderes',
+    historicalStatus: 'hegemony',
+    statusLabel: 'Hegemonía normativa contemporánea',
+    nuance: 'Separación funcional del poder: frena la voluntad monista del gobernante subordinándolo al imperio de la ley y derechos civiles.'
+  },
+  {
+    id: 'revolucionarios',
+    name: 'Partidos-Estado',
+    authorityType: 'concentrated',
+    authorityLabel: 'Concentración / Monista Total',
+    historicalStatus: 'decline',
+    statusLabel: 'Declive pos-Guerra Fría / Rebrotes autocráticos',
+    nuance: 'Monismo totalizador: unificación coactiva de fines bajo el dogma del partido; destrucción de todo contrapeso independiente.'
+  },
+  {
+    id: 'pluralismo_dem',
+    name: 'Pluralismo democrático',
+    authorityType: 'distributed',
+    authorityLabel: 'Distribución / Coexistencia Multinivel',
+    historicalStatus: 'emergence',
+    statusLabel: 'En disputa / Tensión contemporánea',
+    nuance: 'Coexistencia de órdenes: reconoce el conflicto irreductible de valores; no elimina la autoridad sino que la somete a concertación.'
+  },
+  {
+    id: 'contemporaneos',
+    name: 'Poder de plataformas',
+    authorityType: 'concentrated',
+    authorityLabel: 'Concentración / Privada y Algorítmica',
+    historicalStatus: 'emergence',
+    statusLabel: 'Emergencia acelerada (S. XXI)',
+    nuance: 'Monopolio estructural sin ejército formal: restricción por intermediación obligatoria de mercado, datos y términos de servicio.'
+  }
+];
+
+const GENEALOGIA_LAB_CASES = [
+  {
+    id: 'impuestos_educacion',
+    title: 'Impuestos para educación pública',
+    category: 'Capacidades vs Patrimonio',
+    restrictedLiberty: 'Libertad negativa de disposición patrimonial y renta privada de los contribuyentes gravados.',
+    restrictingActor: 'El poder legislativo y el fisco estatal mediante ley democrática vinculante.',
+    level1_legitimation: 'Igualdad de oportunidades de punto de partida y universalización de capacidades básicas de autodeterminación (Rawls, Sen).',
+    level2_authority: 'Aparato estatal central o departamental administrando fondos redistributivos bajo control parlamentario.',
+    level3_mechanism: 'Coacción tributaria formal: retención obligatoria bajo apercibimiento de sanción penal o embargo administrativo.',
+    level4_consequences: 'Amplía sustantivamente la libertad de agencia y movilidad de millones de jóvenes vulnerables; reduce el excedente de capital privado acumulado.',
+    protectedVsSacrificed: {
+      protected: 'Libertad positiva y capacidades formativas de sectores desfavorecidos.',
+      sacrificed: 'Libertad negativa y propiedad líquida de los contribuyentes de mayores ingresos.'
+    },
+    reversibility: 'Alta: reversible mediante elecciones legislativas y auditable por tribunales de cuentas y presupuestos abiertos.'
+  },
+  {
+    id: 'censura_unidad',
+    title: 'Censura por seguridad nacional',
+    category: 'Seguridad vs Expresión',
+    restrictedLiberty: 'Libertad negativa de expresión, prensa y disenso político público.',
+    restrictingActor: 'Poder ejecutivo, ministerios de defensa o comités estatales de telecomunicaciones.',
+    level1_legitimation: 'Preservación de la seguridad nacional, defensa frente al enemigo exterior y cohesión patriótica frente a desinformación.',
+    level2_authority: 'Concentración hegemónica en agencias del Estado con mínima o nula fiscalización judicial independiente.',
+    level3_mechanism: 'Clausura de medios, tipificación penal de propaganda subversiva, bloqueo digital y vigilancia masiva.',
+    level4_consequences: 'Supresión del debate público crítico; blindaje de la élite gobernante ante denuncias; autocensura ciudadana generalizada.',
+    protectedVsSacrificed: {
+      protected: 'Estabilidad del régimen gobernante y orden público formal.',
+      sacrificed: 'Libertad de expresión, fiscalización ciudadana y pluralismo político.'
+    },
+    reversibility: 'Baja: tiende a enquistarse en el aparato penal y rara vez se revierte sin crisis o colapso del régimen.'
+  },
+  {
+    id: 'limites_ejecutivo',
+    title: 'Límites constitucionales al ejecutivo',
+    category: 'Legalidad vs Discrecionalidad',
+    restrictedLiberty: 'Libertad de acción unilateral, discrecionalidad y celeridad resolutiva del presidente o gobernante.',
+    restrictingActor: 'Corte Constitucional, tribunal supremo y parlamento mediante pesos y contrapesos.',
+    level1_legitimation: 'Principio de legalidad y prevención de la autocracia: «el poder debe frenar al poder para que no haya tiranía» (Montesquieu).',
+    level2_authority: 'Autoridad distribuida y fragmentada entre ramas independientes dotadas de vetos mutuos.',
+    level3_mechanism: 'Control previo y posterior de decretos de emergencia, juicios políticos (impeachment) e inaplicabilidad por inconstitucionalidad.',
+    level4_consequences: 'Impide abusos autocráticos y protege garantías de minorías; genera lentitud burocrática y fricción en momentos de crisis apremiante.',
+    protectedVsSacrificed: {
+      protected: 'Derechos civiles de la ciudadanía y estabilidad del Estado de derecho.',
+      sacrificed: 'Velocidad ejecutiva y capacidad de mando vertical sin trabas.'
+    },
+    reversibility: 'Alta: sentencias motivadas y procedimientos transparentes con escrutinio público permanente.'
+  },
+  {
+    id: 'autonomia_territorial',
+    title: 'Autonomía territorial y fueros indígenas',
+    category: 'Autogobierno vs Homogeneidad',
+    restrictedLiberty: 'Uniformidad jurídica homogénea del Estado nacional sobre la totalidad de su territorio.',
+    restrictingActor: 'Autoridades tradicionales comunitarias reconocidas por la Constitución.',
+    level1_legitimation: 'Derecho colectivo a la libre determinación y preservación de cosmovisiones culturales originarias (Convenio 169 OIT).',
+    level2_authority: 'Jurisdicción especial comunitaria coexistiendo con la justicia ordinaria del Estado (pluralismo jurídico formal).',
+    level3_mechanism: 'Aplicación de derecho consuetudinario local y control de acceso territorial propio dentro del resguardo.',
+    level4_consequences: 'Fortalece la cohesión cultural y supervivencia del pueblo; puede suscitar conflictos si normas comunitarias colisionan con derechos individuales homogéneos.',
+    protectedVsSacrificed: {
+      protected: 'Autodeterminación cultural colectiva y diversidad étnica.',
+      sacrificed: 'Pretensión del Estado de aplicar un único código jurídico uniforme a todos los ciudadanos.'
+    },
+    reversibility: 'Media: mediación intercultural mediante acción de tutela y jurisprudencia dialógica de la Corte Constitucional.'
+  },
+  {
+    id: 'regulacion_monopolios',
+    title: 'Regulación de monopolios y desinversión',
+    category: 'Competencia vs Poder Corporativo',
+    restrictedLiberty: 'Libertad contractual irrestricta y acumulación de cuota de mercado de grandes conglomerados.',
+    restrictingActor: 'Agencias estatales antimonopolio y tribunales de defensa de la competencia.',
+    level1_legitimation: 'Defensa del bienestar del consumidor y preservación de mercados abiertos frente a la extracción monopolística privada (Sherman Act).',
+    level2_authority: 'Agencia técnica reguladora sujeta a debido proceso y revisión por cortes civiles independientes.',
+    level3_mechanism: 'Multas coercitivas severas, prohibición de fusiones horizontales y órdenes forzosas de división empresarial.',
+    level4_consequences: 'Impide precios abusivos y permite la entrada de innovadores; genera litigios corporativos prolongados y resistencia del gran capital.',
+    protectedVsSacrificed: {
+      protected: 'Libertad de elección de los consumidores y libertad de emprender de competidores pequeños.',
+      sacrificed: 'Libertad de fijación unilateral de precios y expansión societaria del monopolista.'
+    },
+    reversibility: 'Media: sujeta a recursos contenciosos y sujeta a evidencia técnica económica contrastable.'
+  },
+  {
+    id: 'normas_comunitarias',
+    title: 'Normas comunitarias vs individuo',
+    category: 'Cohesión Social vs Autonomía Personal',
+    restrictedLiberty: 'Autonomía individual de elección de vida, expresión afectiva, culto o disenso dentro de la comunidad.',
+    restrictingActor: 'La comunidad local, consejo de mayores, asamblea vecinal o presión familiar de conformidad.',
+    level1_legitimation: 'Preservación de la moral tradicional compartida, supervivencia identitaria y lealtad comunitaria indispensable.',
+    level2_authority: 'Autoridad social difusa no formalizada o líderes tradicionales que custodian la costumbre del grupo.',
+    level3_mechanism: 'Ostracismo, desaprobación moral, expulsión comunitaria y presión económica o relacional informal.',
+    level4_consequences: 'Brinda altísima protección y pertenencia a quienes se amoldan a la norma; asfixia y desamparo a los individuos disidentes.',
+    protectedVsSacrificed: {
+      protected: 'Cohesión comunitaria y estabilidad de la tradición cultural.',
+      sacrificed: 'Libertad negativa de elección personal y privacidad del individuo disidente.'
+    },
+    reversibility: 'Baja internamente: requiere garantías jurídicas externas de derecho a la salida (exit rights) o protección de tutela.'
+  }
+];
+
+// ═══════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════
 
@@ -326,6 +646,9 @@ const state = {
   conflictValue: 50,
   lensGuideSeen: new Set(),
   activeLensGuide: null,
+  activeGenealogiaTimeline: 'imperios',
+  activeGenealogiaFilter: 'all',
+  activeGenealogiaLab: 'impuestos_educacion',
   lensGuideTimer: null,
   onboardingVisible: false,
   colorMode: 'dark',
@@ -687,6 +1010,7 @@ function setLens(lens) {
     limitesLensText:   'limites',
     economiaLensText:  'economia',
     senLensText:       'sen',
+    genealogiaLensText:'genealogia',
   };
   Object.entries(map).forEach(([elId, key]) => {
     const el = qs(`#${elId}`);
@@ -788,6 +1112,7 @@ function setLanguage(lang, { persist = true } = {}) {
   renderLimitsLab();
   updateColombiaDashboard();
   renderSystemNarrative();
+  renderGenealogia();
   updateConflictSlider(state.conflictValue);
   setLens(state.currentLens);
   if (state.onboardingVisible) renderOnboarding();
@@ -2359,6 +2684,251 @@ function initFadeIn() {
 }
 
 // ═══════════════════════════════════════════════
+// SECTION X — GENEALOGÍA DEL PODER
+// ═══════════════════════════════════════════════
+
+function getGenealogiaTimeline() {
+  const english = getEnglishLocale();
+  return isEnglish() && english?.genealogia?.timeline ? english.genealogia.timeline : GENEALOGIA_TIMELINE;
+}
+
+function getGenealogiaMatrix() {
+  const english = getEnglishLocale();
+  return isEnglish() && english?.genealogia?.matrix ? english.genealogia.matrix : GENEALOGIA_MATRIX;
+}
+
+function getGenealogiaLabCases() {
+  const english = getEnglishLocale();
+  return isEnglish() && english?.genealogia?.labCases ? english.genealogia.labCases : GENEALOGIA_LAB_CASES;
+}
+
+function renderGenealogiaTimeline() {
+  const timeline = getGenealogiaTimeline();
+  const nav = qs('#genealogiaTimelineNav');
+  const card = qs('#genealogiaTimelineCard');
+  if (!nav || !card) return;
+
+  const activeId = state.activeGenealogiaTimeline || 'imperios';
+  const activeItem = timeline.find(t => t.id === activeId) || timeline[0];
+
+  nav.innerHTML = timeline.map(item => {
+    const isActive = item.id === activeItem.id;
+    return `
+      <button class="genealogia-tab-btn ${isActive ? 'active' : ''}"
+        type="button"
+        role="tab"
+        id="timelineTab-${item.id}"
+        aria-controls="genealogiaTimelineCard"
+        aria-selected="${String(isActive)}"
+        data-id="${item.id}">
+        <span class="genealogia-tab-btn__num">${item.num}</span>
+        <span class="genealogia-tab-btn__name">${item.name}</span>
+      </button>
+    `;
+  }).join('');
+
+  qsa('.genealogia-tab-btn', nav).forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.activeGenealogiaTimeline = btn.dataset.id;
+      renderGenealogiaTimeline();
+    });
+    btn.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        state.activeGenealogiaTimeline = btn.dataset.id;
+        renderGenealogiaTimeline();
+      }
+    });
+  });
+
+  const lblAuthority = isEnglish() ? 'Authority form' : 'Forma de autoridad';
+  const lblMechanism = isEnglish() ? 'Restriction mechanism' : 'Mecanismo de restricción';
+  const lblJustification = isEnglish() ? 'Claimed justification' : 'Justificación alegada';
+  const lblGainers = isEnglish() ? 'Who gains decision power' : 'Quién gana capacidad de decisión';
+  const lblCost = isEnglish() ? 'Who bears the costs' : 'Quién soporta los costes';
+  const lblCounter = isEnglish() ? 'Counterweights & limits' : 'Contrapesos y límites';
+  const lblRef = isEnglish() ? 'Academic references:' : 'Referencias académicas:';
+
+  card.innerHTML = `
+    <div class="genealogia-card__header">
+      <span class="genealogia-card__badge">${activeItem.num} · ${activeItem.period}</span>
+      <h4 class="genealogia-card__title">${activeItem.name}</h4>
+      <p class="genealogia-card__context">${activeItem.context}</p>
+    </div>
+    <div class="genealogia-card__grid">
+      <div class="genealogia-card__field">
+        <span class="genealogia-field__label">${lblAuthority}</span>
+        <p class="genealogia-field__text">${activeItem.authority}</p>
+      </div>
+      <div class="genealogia-card__field">
+        <span class="genealogia-field__label">${lblMechanism}</span>
+        <p class="genealogia-field__text">${activeItem.mechanism}</p>
+      </div>
+      <div class="genealogia-card__field">
+        <span class="genealogia-field__label">${lblJustification}</span>
+        <p class="genealogia-field__text">${activeItem.justification}</p>
+      </div>
+      <div class="genealogia-card__field">
+        <span class="genealogia-field__label">${lblGainers}</span>
+        <p class="genealogia-field__text">${activeItem.gainers}</p>
+      </div>
+      <div class="genealogia-card__field">
+        <span class="genealogia-field__label">${lblCost}</span>
+        <p class="genealogia-field__text">${activeItem.costBearers}</p>
+      </div>
+      <div class="genealogia-card__field">
+        <span class="genealogia-field__label">${lblCounter}</span>
+        <p class="genealogia-field__text">${activeItem.counterweights}</p>
+      </div>
+    </div>
+    <div class="genealogia-card__footer">
+      <p class="genealogia-field__ref"><em>${lblRef}</em> ${activeItem.reference}</p>
+    </div>
+  `;
+}
+
+function renderGenealogiaMatrix() {
+  const matrix = getGenealogiaMatrix();
+  const grid = qs('#genealogiaMatrixGrid');
+  if (!grid) return;
+
+  const currentFilter = state.activeGenealogiaFilter || 'all';
+
+  qsa('.matrix-filter-btn').forEach(btn => {
+    const isActive = btn.dataset.filter === currentFilter;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-pressed', String(isActive));
+  });
+
+  const filtered = matrix.filter(item => {
+    if (currentFilter === 'all') return true;
+    return item.authorityType === currentFilter;
+  });
+
+  grid.innerHTML = filtered.map(item => `
+    <div class="matrix-card matrix-card--${item.authorityType}">
+      <div class="matrix-card__top">
+        <h4 class="matrix-card__title">${item.name}</h4>
+        <span class="matrix-card__status">${item.statusLabel}</span>
+      </div>
+      <div class="matrix-card__dims">
+        <span class="matrix-dim-badge matrix-dim-badge--auth">${item.authorityLabel}</span>
+      </div>
+      <p class="matrix-card__nuance">${item.nuance}</p>
+    </div>
+  `).join('');
+}
+
+function renderGenealogiaLab() {
+  const cases = getGenealogiaLabCases();
+  const nav = qs('#genealogiaLabNav');
+  const card = qs('#genealogiaLabCard');
+  if (!nav || !card) return;
+
+  const activeId = state.activeGenealogiaLab || 'impuestos_educacion';
+  const activeCase = cases.find(c => c.id === activeId) || cases[0];
+
+  nav.innerHTML = cases.map(c => {
+    const isActive = c.id === activeCase.id;
+    return `
+      <button class="genealogia-lab-btn ${isActive ? 'active' : ''}"
+        type="button"
+        role="tab"
+        id="labTab-${c.id}"
+        aria-controls="genealogiaLabCard"
+        aria-selected="${String(isActive)}"
+        data-id="${c.id}">
+        <span class="genealogia-lab-btn__cat">${c.category}</span>
+        <span class="genealogia-lab-btn__name">${c.title}</span>
+      </button>
+    `;
+  }).join('');
+
+  qsa('.genealogia-lab-btn', nav).forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.activeGenealogiaLab = btn.dataset.id;
+      renderGenealogiaLab();
+    });
+    btn.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        state.activeGenealogiaLab = btn.dataset.id;
+        renderGenealogiaLab();
+      }
+    });
+  });
+
+  const lblRestricted = isEnglish() ? 'Restricted liberty:' : 'Libertad restringida:';
+  const lblActor = isEnglish() ? 'Restricting actor:' : 'Actor que restringe:';
+  const lblL1 = isEnglish() ? '1. Ideological legitimation' : '1. Legitimación ideológica';
+  const lblL2 = isEnglish() ? '2. Institutional distribution' : '2. Distribución institucional';
+  const lblL3 = isEnglish() ? '3. Restriction mechanism' : '3. Mecanismo concreto';
+  const lblL4 = isEnglish() ? '4. Effective consequences' : '4. Consecuencias efectivas';
+  const lblProtected = isEnglish() ? 'Rights / capabilities protected:' : 'Derechos / capacidades protegidas:';
+  const lblSacrificed = isEnglish() ? 'Rights / liberties sacrificed:' : 'Derechos / libertades sacrificadas:';
+  const lblRev = isEnglish() ? 'Reversibility & accountability:' : 'Reversibilidad y rendición de cuentas:';
+
+  card.innerHTML = `
+    <div class="lab-card__header">
+      <span class="lab-card__category">${activeCase.category}</span>
+      <h4 class="lab-card__title">${activeCase.title}</h4>
+      <div class="lab-card__meta-row">
+        <div><strong>${lblRestricted}</strong> ${activeCase.restrictedLiberty}</div>
+        <div><strong>${lblActor}</strong> ${activeCase.restrictingActor}</div>
+      </div>
+    </div>
+    <div class="lab-levels-grid">
+      <div class="lab-level-card">
+        <span class="lab-level-tag">${lblL1}</span>
+        <p>${activeCase.level1_legitimation}</p>
+      </div>
+      <div class="lab-level-card">
+        <span class="lab-level-tag">${lblL2}</span>
+        <p>${activeCase.level2_authority}</p>
+      </div>
+      <div class="lab-level-card">
+        <span class="lab-level-tag">${lblL3}</span>
+        <p>${activeCase.level3_mechanism}</p>
+      </div>
+      <div class="lab-level-card">
+        <span class="lab-level-tag">${lblL4}</span>
+        <p>${activeCase.level4_consequences}</p>
+      </div>
+    </div>
+    <div class="lab-balance-row">
+      <div class="lab-balance-box lab-balance-box--protected">
+        <strong>${lblProtected}</strong>
+        <p>${activeCase.protectedVsSacrificed.protected}</p>
+      </div>
+      <div class="lab-balance-box lab-balance-box--sacrificed">
+        <strong>${lblSacrificed}</strong>
+        <p>${activeCase.protectedVsSacrificed.sacrificed}</p>
+      </div>
+    </div>
+    <div class="lab-reversibility-box">
+      <strong>${lblRev}</strong> ${activeCase.reversibility}
+    </div>
+  `;
+}
+
+function renderGenealogia() {
+  renderGenealogiaTimeline();
+  renderGenealogiaMatrix();
+  renderGenealogiaLab();
+}
+
+function initGenealogia() {
+  qsa('.matrix-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.activeGenealogiaFilter = btn.dataset.filter;
+      renderGenealogiaMatrix();
+    });
+  });
+
+  renderGenealogia();
+}
+
+// ═══════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════
 
@@ -2388,6 +2958,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSystemToggle();
   initColombiaCoachBanner();
   initLensGuidance();
+  initGenealogia();
   initOnboarding();
   initFadeIn();
 

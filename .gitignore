@@ -8,3 +8,8 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Local documentation & agent control (private)
+openwiki/
+.kiro/
+

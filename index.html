@@ -77,7 +77,8 @@
     <a href="#sen" class="top-nav__link" title="VII: Sen">VII</a>
     <a href="#colombia" class="top-nav__link" title="VIII: Colombia">VIII</a>
     <a href="#comparacion" class="top-nav__link" title="IX: Comparación">IX</a>
-    <a href="#cierre" class="top-nav__link" title="X: Cierre">X</a>
+    <a href="#genealogia" class="top-nav__link" title="X: Genealogía">X</a>
+    <a href="#cierre" class="top-nav__link" title="XI: Cierre">XI</a>
   </nav>
 
   <main id="main">
@@ -576,10 +577,81 @@
       </div>
     </section>
 
-    <!-- X — CIERRE -->
+    <!-- X — GENEALOGÍA DEL PODER -->
+    <section id="genealogia" class="section section--dark" data-lens-context="genealogia" aria-labelledby="genealogia-title">
+      <div class="section__inner">
+        <div class="section__num" aria-hidden="true">X</div>
+        <h2 id="genealogia-title" class="section__title">Genealogía del poder<br/><em>cómo organizamos la libertad</em></h2>
+        <p class="section__subtitle" id="genealogia-subtitle">Del orden único a la coexistencia de órdenes: una historia de restricciones, autonomías y compromisos.</p>
+
+        <div class="genealogia-lead">
+          <p id="genealogiaLeadText">
+            No toda restricción de la libertad responde al mismo principio. Algunas instituciones concentran la autoridad en nombre de una verdad, una fe, una nación o un proyecto histórico. Otras distribuyen el poder entre jurisdicciones, derechos, comunidades e individuos. Ninguna arquitectura elimina todos los conflictos: cada una decide quién puede restringir qué, con qué justificación y a qué coste.
+          </p>
+        </div>
+
+        <!-- 1. Línea de tiempo interactiva -->
+        <div class="genealogia-block" aria-labelledby="genealogiaTimelineHeading">
+          <h3 class="genealogia-subheading" id="genealogiaTimelineHeading">1. Configuraciones institucionales en disputa</h3>
+          <p class="genealogia-block-desc" id="genealogiaTimelineDesc">
+            Las instituciones no siguen una evolución unilineal ni teleológica hacia un fin predeterminado. Coexisten, pugnan y se transforman según quién acumule legitimidad y fuerza.
+          </p>
+          <div class="genealogia-timeline-nav" id="genealogiaTimelineNav" role="tablist" aria-label="Seleccionar configuración institucional histórica"></div>
+          <div class="genealogia-card" id="genealogiaTimelineCard" aria-live="polite"></div>
+        </div>
+
+        <!-- 2. Matriz comparativa bidimensional -->
+        <div class="genealogia-block" aria-labelledby="genealogiaMatrixHeading">
+          <h3 class="genealogia-subheading" id="genealogiaMatrixHeading">2. Matriz: Concentración de autoridad y posición histórica</h3>
+          <p class="genealogia-block-desc" id="genealogiaMatrixDesc">
+            Dos dimensiones analíticas diferenciadas: (A) concentración de autoridad y pretensión monista frente a distribución y coexistencia de órdenes; (B) posición histórica relativa (hegemonía, subordinación, emergencia o declive), la cual depende del contexto territorial y temporal, no de la doctrina.
+          </p>
+          <div class="genealogia-matrix-filters" role="group" aria-label="Filtrar configuraciones por dimensión">
+            <button class="matrix-filter-btn active" data-filter="all" aria-pressed="true" id="matrixFilterAll">Todas las configuraciones</button>
+            <button class="matrix-filter-btn" data-filter="concentrated" aria-pressed="false" id="matrixFilterConc">Orden concentrado (Monista)</button>
+            <button class="matrix-filter-btn" data-filter="distributed" aria-pressed="false" id="matrixFilterDist">Coexistencia (Pluralista)</button>
+          </div>
+          <div class="genealogia-matrix-grid" id="genealogiaMatrixGrid" aria-live="polite"></div>
+        </div>
+
+        <!-- 3. Laboratorio de restricciones -->
+        <div class="genealogia-block" aria-labelledby="genealogiaLabHeading">
+          <h3 class="genealogia-subheading" id="genealogiaLabHeading">3. Laboratorio de restricciones: Mecanismos y costes</h3>
+          <p class="genealogia-block-desc" id="genealogiaLabDesc">
+            Cada caso distingue cuatro niveles: legitimación ideológica, distribución de autoridad, mecanismo concreto de restricción y consecuencias efectivas.
+          </p>
+          <div class="genealogia-lab-nav" id="genealogiaLabNav" role="tablist" aria-label="Casos de restricción institucional"></div>
+          <div class="genealogia-card genealogia-card--lab" id="genealogiaLabCard" aria-live="polite"></div>
+        </div>
+
+        <!-- 4. Cierre conceptual Berliniano -->
+        <div class="genealogia-closing">
+          <div class="genealogia-closing__inner">
+            <h3 class="genealogia-closing__title" id="genealogiaClosingTitle">El compromiso ineludible: Reconciliar valores en conflicto</h3>
+            <p class="genealogia-closing__text" id="genealogiaClosingText">
+              Isaiah Berlin insistió en que las decisiones políticas enfrentan valores legítimos que chocan irreductiblemente. El pluralismo no es relativismo: reconocer que existen múltiples bienes genuinos no implica que cualquier institución sea legítima. Una arquitectura pluralista también puede excluir o fragmentar, mientras que una norma común colectiva puede limitar una conducta para proteger las libertades y capacidades de terceros.
+            </p>
+            <div class="genealogia-closing__question-box">
+              <p class="genealogia-closing__eyebrow" id="genealogiaClosingEyebrow">Pregunta rectora de la genealogía</p>
+              <blockquote class="genealogia-closing__quote" id="genealogiaClosingQuote">
+                «¿Qué libertad se restringe, para proteger cuál, quién decide y cómo puede impugnarse esa decisión?»
+              </blockquote>
+            </div>
+          </div>
+        </div>
+
+        <div class="lens-interpretation" aria-live="polite">
+          <span class="lens-interpretation__icon" aria-hidden="true">◈</span>
+          <span class="lens-interpretation__label">Bajo este marco:</span>
+          <span class="lens-interpretation__text" id="genealogiaLensText"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- XI — CIERRE -->
     <section id="cierre" class="section section--cierre" aria-labelledby="cierre-title">
       <div class="section__inner section__inner--cierre">
-        <div class="section__num" aria-hidden="true">X</div>
+        <div class="section__num" aria-hidden="true">XI</div>
         <div class="cierre-content">
           <p class="cierre-epigraph">«De la madera torcida de la humanidad no se ha tallado nunca nada completamente recto.»</p>
           <p class="cierre-attribution">— Immanuel Kant, <em>Idea para una historia universal</em> (1784)</p>

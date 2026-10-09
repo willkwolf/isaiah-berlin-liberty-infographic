@@ -61,7 +61,24 @@ window.I18N_CONTENT.locales.en.staticContent.push(
   { selector: '.top-nav__link[href="#sen"]', type: 'attr', attr: 'title', value: 'VII: Sen' },
   { selector: '.top-nav__link[href="#colombia"]', type: 'attr', attr: 'title', value: 'VIII: Colombia' },
   { selector: '.top-nav__link[href="#comparacion"]', type: 'attr', attr: 'title', value: 'IX: Comparison' },
-  { selector: '.top-nav__link[href="#cierre"]', type: 'attr', attr: 'title', value: 'X: Closing' },
+  { selector: '.top-nav__link[href="#genealogia"]', type: 'attr', attr: 'title', value: 'X: Genealogy' },
+  { selector: '.top-nav__link[href="#cierre"]', type: 'attr', attr: 'title', value: 'XI: Closing' },
+  { selector: '#genealogia-title', type: 'html', value: 'Genealogy of Power<br/><em>how we organize liberty</em>' },
+  { selector: '#genealogia-subtitle', type: 'text', value: 'From single order to coexistence of orders: a history of restrictions, autonomies, and compromises.' },
+  { selector: '#genealogiaLeadText', type: 'text', value: 'Not all restrictions on liberty stem from the same principle. Some institutions concentrate authority in the name of a truth, a faith, a nation, or a historical project. Others distribute power among jurisdictions, rights, communities, and individuals. No architecture eliminates all conflicts: each one decides who may restrict what, with what justification, and at what cost.' },
+  { selector: '#genealogiaTimelineHeading', type: 'text', value: '1. Institutional configurations in contest' },
+  { selector: '#genealogiaTimelineDesc', type: 'text', value: 'Institutions do not follow a unilinear or teleological path toward a predetermined end. They coexist, collide, and transform according to who accumulates legitimacy and force.' },
+  { selector: '#genealogiaMatrixHeading', type: 'text', value: '2. Matrix: Authority concentration and historical position' },
+  { selector: '#genealogiaMatrixDesc', type: 'text', value: 'Two distinct analytical dimensions: (A) concentration of authority and monist claim vs. distribution and coexistence of orders; (B) relative historical position (hegemony, subordination, emergence, or decline), which depends on territorial and temporal context, not on doctrine.' },
+  { selector: '#matrixFilterAll', type: 'text', value: 'All configurations' },
+  { selector: '#matrixFilterConc', type: 'text', value: 'Concentrated order (Monist)' },
+  { selector: '#matrixFilterDist', type: 'text', value: 'Coexistence (Pluralist)' },
+  { selector: '#genealogiaLabHeading', type: 'text', value: '3. Laboratory of restrictions: Mechanisms and costs' },
+  { selector: '#genealogiaLabDesc', type: 'text', value: 'Each case distinguishes four levels: ideological legitimation, institutional distribution of authority, concrete mechanism of restriction, and effective consequences.' },
+  { selector: '#genealogiaClosingTitle', type: 'text', value: 'The inescapable compromise: Reconciling conflicting values' },
+  { selector: '#genealogiaClosingText', type: 'text', value: 'Isaiah Berlin insisted that political decisions confront legitimate values that clash irreducibly. Pluralism is not relativism: acknowledging that multiple genuine goods exist does not imply that every institution is legitimate. A pluralist architecture can also exclude or fragment, while a common collective rule may limit a particular conduct precisely to protect the liberties and capabilities of others.' },
+  { selector: '#genealogiaClosingEyebrow', type: 'text', value: 'Guiding question of the genealogy' },
+  { selector: '#genealogiaClosingQuote', type: 'text', value: '“What liberty is restricted, to protect which, who decides, and how can that decision be challenged?”' },
   { selector: '#problema .hero-content__pre', type: 'text', value: 'Starting point' },
   { selector: '#problema-title', type: 'html', value: 'Anatomy<br/><em>of liberty</em>' },
   { selector: '#problema .hero-content__thesis', type: 'html', value: 'Politics is not the management of consensus. It is the administration of <strong>irreducible disagreement</strong>.' },
@@ -268,7 +285,8 @@ Object.assign(window.I18N_CONTENT.locales.en.lenses, {
       limites: 'The distinction between incapacity and coercion is precise: if I cannot afford something, I am not the victim of direct state coercion. Expanding coercion to every material restriction dilutes the concept until it becomes useless.',
       economia: 'Hayek and Friedman are the most coherent defenders of this framework: state non-interference maximizes negative liberty. The free market is the institutional extension of this principle.',
       sen: 'Sen confuses incapacity with lack of freedom. His framework, however humane, may justify state interventions that destroy more negative liberty than they create.',
-      colombia: 'From a negative-liberty reading, Colombia\'s central problems are coercive actors, insecurity, and institutional weakness rather than the absence of material provision.'
+      colombia: 'From a negative-liberty reading, Colombia\'s central problems are coercive actors, insecurity, and institutional weakness rather than the absence of material provision.',
+      genealogia: 'From this framework, the genealogy of power is the history of wresting inviolable spaces of non-interference from political authority. No sacred, imperial, or collectivist justification excuses arbitrary coercion. Constitutionalism and the dispersal of power are valuable not because they redistribute wealth, but because they limit the sovereign.'
     }
   },
   positiva: {
@@ -281,7 +299,8 @@ Object.assign(window.I18N_CONTENT.locales.en.lenses, {
       limites: 'The physical/coercive distinction misses something important: if an institutional order systematically produces incapacity for specific groups, that fact is politically relevant regardless of intention.',
       economia: 'An uncorrected market reproduces and amplifies unequal starting points. Positive liberty requires institutions that redistribute capacities, not merely formal opportunities.',
       sen: 'Sen is the most rigorous successor to positive liberty. His capabilities approach operationalizes what Berlin left more abstract.',
-      colombia: 'From a positive-liberty reading, formal rights coexist with severe inequalities in the real capacity to choose, move, learn, and plan one\'s life.'
+      colombia: 'From a positive-liberty reading, formal rights coexist with severe inequalities in the real capacity to choose, move, learn, and plan one\'s life.',
+      genealogia: 'This historical trajectory demonstrates that liberty is not a natural state of non-interference, but an institutional conquest. Public education, labor rights, and the welfare state do not diminish liberty: they create it by emancipating citizens from feudal servitude or private economic dependence.'
     }
   },
   capacidades: {
@@ -294,7 +313,8 @@ Object.assign(window.I18N_CONTENT.locales.en.lenses, {
       limites: 'The distinction between physical limits and coercion matters less than the question: can this person function fully? If an institutional system reproduces incapacity, the debate over blame is secondary.',
       economia: 'Markets can be efficient without being just in terms of capabilities. GDP may rise while basic human functioning erodes. Hayekian efficiency is not enough.',
       sen: 'This is the framework\'s own language. Real freedom is not the absence of chains. It is the capability to function in ways one has reason to value.',
-      colombia: 'From a capabilities reading, national averages conceal deep territorial and social asymmetries. Freedom must be read through functioning, not through formal permissions alone.'
+      colombia: 'From a capabilities reading, national averages conceal deep territorial and social asymmetries. Freedom must be read through functioning, not through formal permissions alone.',
+      genealogia: 'Institutions must be judged by which substantive capabilities they enable or crush in everyday life. An imperial order destroys agency through violent extraction; an unregulated market may destroy it through insolvency and deprivation. Formal legitimation matters less than the actual lives people are able to lead.'
     }
   },
   libertario: {
@@ -307,7 +327,8 @@ Object.assign(window.I18N_CONTENT.locales.en.lenses, {
       limites: 'The distinction between coercion and incapacity is exactly right. Poverty is not coercion. It is a lack of resources that markets, under the right rules, can generate.',
       economia: 'This is the framework\'s native ground. Economic freedom is treated as the condition for prosperity, coordination, and individual choice.',
       sen: 'Sen\'s capabilities approach justifies large-scale intervention through empirical claims that remain contestable. The risk is bureaucracy that replaces autonomy with dependence.',
-      colombia: 'From an economic-libertarian reading, the key obstacles are overregulation, corruption, weak rule enforcement, and barriers that distort exchange and property rights.'
+      colombia: 'From an economic-libertarian reading, the key obstacles are overregulation, corruption, weak rule enforcement, and barriers that distort exchange and property rights.',
+      genealogia: 'The historical lesson is unequivocal: concentrated power breeds tyranny regardless of its declared benevolent intentions. Only the strict division of state monopoly, the rule of law, and the uncompromising defense of decentralized property rights allow complex societies to coordinate peacefully.'
     }
   }
 });
@@ -531,6 +552,318 @@ window.I18N_CONTENT.locales.en.limitsLab = {
           desc: 'It is a deficiency in the provision of public goods by the municipality, but it does not qualify as coercion of the individual if there is no law forbidding entry.'
         }
       }
+    }
+  ]
+};
+
+window.I18N_CONTENT.locales.en.genealogia = {
+  timeline: [
+    {
+      id: 'imperios',
+      num: '01',
+      name: 'Imperial and Tributary Orders',
+      period: 'Antiquity to Modern Empires (Rome, Persia, Han, Ottoman)',
+      context: 'Vast multi-ethnic territories held together by dynastic courts and metropolitan resource extraction.',
+      authority: 'Centralized dynastic monarchy, palace bureaucracy, and armed landed aristocracy.',
+      mechanism: 'Compulsory taxation, forced military levy, punitive monopoly, and provincial subordination.',
+      justification: 'Universal peace (Pax Romana/Augusta), sacred cosmic order, and defense against external barbarian chaos.',
+      gainers: 'Metropolitan court, imperial rent collectors, and central military nobility.',
+      costBearers: 'Tributary peasant populations, conquered peripheral provinces, and enslaved or bonded laborers.',
+      counterweights: 'Provincial rebellions, geographic fragmentation by distance, and logistical limits of coercion.',
+      reference: 'Tilly, C. (1990). Coercion, Capital, and European States; Burbank & Cooper (2010). Empires in World History.'
+    },
+    {
+      id: 'religiosos',
+      num: '02',
+      name: 'Religious Traditions and Sacred Legitimacy',
+      period: 'Middle Ages, Caliphates, and Sacred Monarchies',
+      context: 'Political orders where revealed truth and theological dogma constitute the supreme source of legal validity.',
+      authority: 'Ecclesiastical hierarchies, ulama, papacy, or kings consecrated by divine right.',
+      mechanism: 'Canon law, ban on heresies, dogmatic censorship, inquisition, and civic excommunication.',
+      justification: 'Collective salvation of souls, preservation of orthodoxy, and alignment with transcendent divine law.',
+      gainers: 'Priestly caste, official theologians, and rulers legitimized as defenders of the faith.',
+      costBearers: 'Doctrinal dissidents, stigmatized religious minorities, heretical scholars, and women subject to patriarchal codes.',
+      counterweights: 'Religious schisms, reformist councils, popular heresies, and local communal resistance.',
+      reference: 'Berman, H. J. (1983). Law and Revolution: The Formation of the Western Legal Tradition.'
+    },
+    {
+      id: 'feudales',
+      num: '03',
+      name: 'Feudal Orders and Overlapping Jurisdictions',
+      period: '9th to 15th Centuries (Western Europe and medieval fragmentations)',
+      context: 'Decentralized structure without a single sovereign, articulated through vassalage pledges and chartered privileges.',
+      authority: 'Feudal lords, armed nobility, territorial bishoprics, and precarious feudal monarchs.',
+      mechanism: 'Serfdom of the glebe, compulsory labor corvées, lordly monopoly over mills/tolls, and private justice.',
+      justification: 'Mutual military protection against raids, natural estate hierarchy, and immemorial custom.',
+      gainers: 'Seigneurial aristocracy and armed chivalry with exclusive territorial control.',
+      costBearers: 'Servile peasantry bound to the soil, lacking freedom of movement and impartial judicial recourse.',
+      counterweights: 'Charters of free towns, papal appeal, inter-lordly rivalries, and local liberties charters.',
+      reference: 'Bloch, M. (1961). Feudal Society; Strayer, J. (1970). On the Medieval Origins of the Modern State.'
+    },
+    {
+      id: 'ciudades',
+      num: '04',
+      name: 'Cities and Civic Republics',
+      period: '12th to 17th Centuries (Florence, Venice, Hanseatic League)',
+      context: 'Urban enclaves of merchant and artisan self-governance that acquired charters of franchise against feudal lords.',
+      authority: 'Communal councils, patrician republics, guild guildhalls, and rotating magistracies.',
+      mechanism: 'Exclusionary guild statutes, citizenship restricted to propertied freemen, and commercial monopolies.',
+      justification: '“City air makes you free” (Stadtluft macht frei), republican common good, and defense of civic self-rule.',
+      gainers: 'Merchant patriciate, master craftsmen, and urban banking oligarchies.',
+      costBearers: 'Day laborers without recognized trade (popolo minuto), subaltern artisans, and migrant serfs.',
+      counterweights: 'Compulsory term rotation of magistracies, urban popular uprisings (Ciompi), and civic assemblies.',
+      reference: 'Pocock, J. G. A. (1975). The Machiavellian Moment; Skinner, Q. (1978). Foundations of Modern Political Thought.'
+    },
+    {
+      id: 'soberania',
+      num: '05',
+      name: 'State Sovereignty and Legal Uniformity',
+      period: '17th to 19th Centuries (Peace of Westphalia, Absolutist States)',
+      context: 'Consolidation of the territorial monopoly on legitimate violence, overcoming feudal and religious anarchy.',
+      authority: 'Absolutist crown or unified central government backed by regular standing armies and fiscal bureaucracy.',
+      mechanism: 'Suppression of regional charters and private estates, mandatory military conscription, and uniform codification of law.',
+      justification: 'Overcoming confessional civil wars (Hobbes: exiting the state of nature) and indivisible public security.',
+      gainers: 'Central bureaucratic apparatus, state officials, and emergent bourgeoisie requiring unified internal markets.',
+      costBearers: 'Autonomous regional communities, peripheral linguistic identities, and conscripted peasant youth.',
+      counterweights: 'Representative parliaments, anti-tax rebellions, and sovereign borrowing constraints.',
+      reference: 'Hobbes, T. (1651). Leviathan; Bodin, J. (1576). Les Six Livres de la République.'
+    },
+    {
+      id: 'constitucionalismo',
+      num: '06',
+      name: 'Constitutionalism, Rights, and Separation of Powers',
+      period: '18th to 20th Centuries (Enlightenment, American and French Revolutions)',
+      context: 'Imposition of strict normative limits on rulers through bills of rights and institutional checks and balances.',
+      authority: 'Representative popular sovereignty, executive power bound by law, and independent constitutional courts.',
+      mechanism: 'Judicial review of constitutionality, strict rule of law, habeas corpus, and procedural amendment rigidity.',
+      justification: 'Protection of inalienable individual rights against any form of tyranny (Locke, Montesquieu).',
+      gainers: 'Citizens endowed with procedural guarantees, minorities shielded by civil liberties, and educated publics.',
+      costBearers: 'Executive rulers stripped of arbitrary discretion; procedural friction and delay during public crises.',
+      counterweights: 'Supreme courts, periodic competitive elections, independent press, and institutional checks and balances.',
+      reference: 'Locke, J. (1689). Second Treatise of Government; Montesquieu (1748). De l’esprit des lois.'
+    },
+    {
+      id: 'revolucionarios',
+      num: '07',
+      name: 'Revolutionary Projects and Party-States',
+      period: '20th Century (Totalitarianisms, Communisms, and Fascisms)',
+      context: 'Radical political vanguards fusing state and society to execute total historical and social transformation.',
+      authority: 'Single vanguard party, central committee, or supreme leader vested with historical direction of the masses.',
+      mechanism: 'Command economic planning, political secret police, total censorship, forced collectivization, and penal purges of dissent.',
+      justification: 'Creation of the New Man, final proletarian emancipation, or vital rescue and racial/national purity.',
+      gainers: 'Party nomenklatura, bureaucratic cadres, and social strata elevated as loyal masses.',
+      costBearers: 'Political dissidents, independent intellectuals, dispossessed classes, and populations subjected to state terror.',
+      counterweights: 'Virtually absent on the formal institutional level; internal bureaucratic factionalism and covert resistance.',
+      reference: 'Arendt, H. (1951). The Origins of Totalitarianism; Berlin, I. (1969). Four Essays on Liberty.'
+    },
+    {
+      id: 'pluralismo_dem',
+      num: '08',
+      name: 'Democratic Pluralism, Federalism, and Autonomy',
+      period: 'Post-WWII to 21st Century',
+      context: 'Complex democracies acknowledging cultural, territorial, and ideological diversity as legitimate and necessary.',
+      authority: 'Decentralized multi-level governance: federation, autonomous regions, parliaments, and civil society.',
+      mechanism: 'Social concertation pacts, devolution statutes, proportional representation, and minority guarantees.',
+      justification: 'Peaceful coexistence among incommensurable conceptions of the good; rejection of moral monopoly by the state.',
+      gainers: 'Ethnic and cultural minorities, self-governing peripheral regions, and intermediate civil associations.',
+      costBearers: 'Decisional speed; risks of territorial fragmentation, veto points, and institutional gridlock.',
+      counterweights: 'Federal constitutional courts, democratic turnover, referendums, and judicial review.',
+      reference: 'Dahl, R. (1989). Democracy and Its Critics; Kymlicka, W. (1995). Multicultural Citizenship.'
+    },
+    {
+      id: 'contemporaneos',
+      num: '09',
+      name: 'Economic Concentration, Surveillance, and Multi-Level Governance',
+      period: '21st Century (Digital Capitalism and Globalization)',
+      context: 'Emergence of transnational algorithmic private powers coexisting and competing with state sovereignty.',
+      authority: 'Hybrid public-private authority: global tech platforms, asset managers, and national security agencies.',
+      mechanism: 'Data monopolies, behavioral modification interfaces, capital barriers to entry, and biometric surveillance.',
+      justification: 'Frictionless market efficiency, accelerated technological innovation, and smart predictive security.',
+      gainers: 'Dominant platform monopolies, financial conglomerates, and security technocracies.',
+      costBearers: 'Users stripped of informational privacy, precarious gig workers, and weak territorial states.',
+      counterweights: 'Privacy regulations (GDPR), antitrust litigation, open-source architectures, and digital civic activism.',
+      reference: 'Zuboff, S. (2019). The Age of Surveillance Capitalism; Pasquale, F. (2015). The Black Box Society.'
+    }
+  ],
+  matrix: [
+    {
+      id: 'imperios',
+      name: 'Imperial Orders',
+      authorityType: 'concentrated',
+      authorityLabel: 'Concentration / Monist',
+      historicalStatus: 'hegemony',
+      statusLabel: 'Historical hegemony (Antiquity - 19th c.)',
+      nuance: 'Dynastic monism: universal peace claim did not imply total administrative centralization due to logistical friction.'
+    },
+    {
+      id: 'religiosos',
+      name: 'Sacred Legitimacy',
+      authorityType: 'concentrated',
+      authorityLabel: 'Concentration / Monist',
+      historicalStatus: 'decline',
+      statusLabel: 'Decline in the West / Active in theocracies',
+      nuance: 'Spiritual monism: revealed dogma suppresses moral pluralism. Modern secularization displaced its legal supremacy.'
+    },
+    {
+      id: 'feudales',
+      name: 'Feudal Orders',
+      authorityType: 'distributed',
+      authorityLabel: 'Distribution / Fragmented',
+      historicalStatus: 'decline',
+      statusLabel: 'Historically superseded (9th - 15th c.)',
+      nuance: 'Jurisdictional pluralism is not democratic liberty: fragmented power protected lordly privileges while binding peasants to the soil.'
+    },
+    {
+      id: 'ciudades',
+      name: 'Civic Republics',
+      authorityType: 'distributed',
+      authorityLabel: 'Distribution / Corporate',
+      historicalStatus: 'subordination',
+      statusLabel: 'Subordinated / Emerging in city networks',
+      nuance: 'Communal autonomy with internal guild monopolies: participatory civic liberty strictly limited to propertied freemen.'
+    },
+    {
+      id: 'soberania',
+      name: 'State Sovereignty',
+      authorityType: 'concentrated',
+      authorityLabel: 'Concentration / Standardizing',
+      historicalStatus: 'hegemony',
+      statusLabel: 'Modern hegemony (17th c. - present)',
+      nuance: 'Legal monopoly of violence: centralizes legitimate coercion but provides the baseline security required for universal rights.'
+    },
+    {
+      id: 'constitucionalismo',
+      name: 'Constitutionalism',
+      authorityType: 'distributed',
+      authorityLabel: 'Distribution / Separation of Powers',
+      historicalStatus: 'hegemony',
+      statusLabel: 'Contemporary normative hegemony',
+      nuance: 'Functional separation of power: checks monist will by subordinating the ruler to the rule of law and civil liberties.'
+    },
+    {
+      id: 'revolucionarios',
+      name: 'Party-States',
+      authorityType: 'concentrated',
+      authorityLabel: 'Concentration / Total Monist',
+      historicalStatus: 'decline',
+      statusLabel: 'Post-Cold War decline / Autocratic resurgences',
+      nuance: 'Totalizing monism: coercive alignment of ends under party dogma; eradication of independent institutional counterweights.'
+    },
+    {
+      id: 'pluralismo_dem',
+      name: 'Democratic Pluralism',
+      authorityType: 'distributed',
+      authorityLabel: 'Distribution / Multi-Level Coexistence',
+      historicalStatus: 'emergence',
+      statusLabel: 'Contested / Contemporary friction',
+      nuance: 'Coexistence of orders: acknowledges irreducible value conflict; channels authority through negotiated constitutional concertation.'
+    },
+    {
+      id: 'contemporaneos',
+      name: 'Platform Power',
+      authorityType: 'concentrated',
+      authorityLabel: 'Concentration / Private & Algorithmic',
+      historicalStatus: 'emergence',
+      statusLabel: 'Accelerated emergence (21st c.)',
+      nuance: 'Structural monopoly without standing armies: restriction through mandatory market intermediation, data, and terms of service.'
+    }
+  ],
+  labCases: [
+    {
+      id: 'impuestos_educacion',
+      title: 'Taxes for public education',
+      category: 'Capabilities vs Property',
+      restrictedLiberty: 'Negative liberty of private asset disposal and disposable income of taxed contributors.',
+      restrictingActor: 'Legislative branch and state tax administration through binding democratic law.',
+      level1_legitimation: 'Equal starting opportunities and universalization of basic self-determination capabilities (Rawls, Sen).',
+      level2_authority: 'Central or regional state apparatus managing redistributive funds under parliamentary oversight.',
+      level3_mechanism: 'Formal tax coercion: mandatory withholding under penalty of penal sanction or administrative seizure.',
+      level4_consequences: 'Substantially expands agency and mobility capabilities for vulnerable youth; reduces private capital surplus.',
+      protectedVsSacrificed: {
+        protected: 'Positive liberty and developmental capabilities of disadvantaged students.',
+        sacrificed: 'Negative liberty and liquid property of higher-income taxpayers.'
+      },
+      reversibility: 'High: reversible through legislative elections and audited by public accounting courts and open budgets.'
+    },
+    {
+      id: 'censura_unidad',
+      title: 'National security censorship',
+      category: 'Security vs Free Expression',
+      restrictedLiberty: 'Negative liberty of speech, press, and public political dissent.',
+      restrictingActor: 'Executive branch, defense ministries, or state telecommunications boards.',
+      level1_legitimation: 'National defense, protection against foreign hostile operations, and patriotic cohesion against disinformation.',
+      level2_authority: 'Hegemonic concentration in state security agencies with minimal independent judicial review.',
+      level3_mechanism: 'Outlet shutdowns, criminalization of subversive speech, digital IP blacklisting, and bulk surveillance.',
+      level4_consequences: 'Suppression of critical scrutiny; entrenchment of ruling elite against accountability; pervasive self-censorship.',
+      protectedVsSacrificed: {
+        protected: 'Incumbent regime stability and formal public order.',
+        sacrificed: 'Freedom of expression, civic accountability, and political pluralism.'
+      },
+      reversibility: 'Low: tends to entrench in penal codes and emergency bodies, rarely repealed without deep political crises.'
+    },
+    {
+      id: 'limites_ejecutivo',
+      title: 'Constitutional checks on executive power',
+      category: 'Legality vs Discretion',
+      restrictedLiberty: 'Unilateral discretion, prerogative speed, and unconstrained action of the chief executive.',
+      restrictingActor: 'Constitutional court, supreme judiciary, and parliament through institutional checks and balances.',
+      level1_legitimation: 'Rule of law and prevention of autocracy: “power must check power so that there is no tyranny” (Montesquieu).',
+      level2_authority: 'Distributed authority fragmented across independent branches armed with mutual veto points.',
+      level3_mechanism: 'Constitutional judicial review of emergency decrees, legislative inquiry/impeachment, and injunctions.',
+      level4_consequences: 'Prevents autocratic abuse and protects minority rights; produces procedural friction and slower emergency response.',
+      protectedVsSacrificed: {
+        protected: 'Civil rights of citizens and stability of the constitutional rule of law.',
+        sacrificed: 'Executive unilateral speed and unencumbered vertical command.'
+      },
+      reversibility: 'High: reasoned transparent judicial rulings subject to public legal argument and appeal.'
+    },
+    {
+      id: 'autonomia_territorial',
+      title: 'Territorial autonomy and indigenous jurisdictions',
+      category: 'Self-Rule vs Legal Homogeneity',
+      restrictedLiberty: 'Uniform legal hegemony of the central state across every square kilometer of territory.',
+      restrictingActor: 'Traditional community authorities recognized by the Constitution.',
+      level1_legitimation: 'Collective right to self-determination and preservation of ancestral cultural worldviews (ILO Convention 169).',
+      level2_authority: 'Special community jurisdiction coexisting with ordinary state courts (formal legal pluralism).',
+      level3_mechanism: 'Application of local customary law and community territorial access controls within ancestral reserves.',
+      level4_consequences: 'Strengthens cultural survival and communal cohesion; can trigger jurisdictional friction when community norms clash with individual constitutional rights.',
+      protectedVsSacrificed: {
+        protected: 'Collective cultural self-determination and ethnic diversity.',
+        sacrificed: 'The nation-state\'s claim to enforce a single uniform legal code over all individuals.'
+      },
+      reversibility: 'Medium: intercultural dialogic jurisprudence and constitutional tutela/injunction mechanisms.'
+    },
+    {
+      id: 'regulacion_monopolios',
+      title: 'Antitrust regulation and divestment orders',
+      category: 'Fair Competition vs Corporate Dominance',
+      restrictedLiberty: 'Unrestricted freedom of contract and market-share accumulation by corporate monopolies.',
+      restrictingActor: 'Antitrust regulatory agencies and civil competition courts.',
+      level1_legitimation: 'Protection of consumer welfare and preservation of open markets against private monopoly extraction (Sherman Act).',
+      level2_authority: 'Specialized regulatory agency subject to statutory due process and independent judicial review.',
+      level3_mechanism: 'Prohibitive fines, injunctions blocking horizontal mergers, and court-ordered corporate breakups.',
+      level4_consequences: 'Restrains predatory pricing and protects entry for innovators; triggers prolonged corporate litigation and capital resistance.',
+      protectedVsSacrificed: {
+        protected: 'Consumer freedom of choice and entrepreneurial freedom of small competitors.',
+        sacrificed: 'The monopolist\'s liberty to set unilateral pricing and expand corporate holdings at will.'
+      },
+      reversibility: 'Medium: subject to appellate judicial review and verifiable economic market data.'
+    },
+    {
+      id: 'normas_comunitarias',
+      title: 'Communal conformity norms vs individual dissent',
+      category: 'Social Cohesion vs Personal Autonomy',
+      restrictedLiberty: 'Individual autonomy regarding lifestyle, intimate choices, religious departure, or public dissent within the group.',
+      restrictingActor: 'Local community, council of elders, neighborhood assembly, or informal family pressure.',
+      level1_legitimation: 'Preservation of shared moral tradition, identity survival, and vital communal solidarity.',
+      level2_authority: 'Diffuse informal social authority or traditional custodians of customary practice.',
+      level3_mechanism: 'Social ostracism, moral shaming, communal expulsion, and informal relational or economic penalties.',
+      level4_consequences: 'Provides strong belonging and safety for conformists; imposes acute isolation and vulnerability on dissenting individuals.',
+      protectedVsSacrificed: {
+        protected: 'Communal cohesion and continuity of cultural heritage.',
+        sacrificed: 'Negative liberty of personal lifestyle choice and privacy of the dissenting individual.'
+      },
+      reversibility: 'Low internally: requires external legal guarantees of exit rights and constitutional rights protections.'
     }
   ]
 };
