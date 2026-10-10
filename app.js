@@ -3167,129 +3167,102 @@ function renderGenealogiaCategoryModalContent(categoryId, traditionId = null, ta
   // Traditions Panel (Tab 2)
   const viewTraditions = qs('#modalViewTraditions');
   if (viewTraditions) {
-    const lblAuthority = isEnglish() ? 'Authority form' : 'Forma de autoridad';
+    const lblAuthority = isEnglish() ? 'Form of authority' : 'Forma de autoridad';
     const lblMechanism = isEnglish() ? 'Restriction mechanism' : 'Mecanismo de restricción';
     const lblJustification = isEnglish() ? 'Claimed justification' : 'Justificación alegada';
     const lblGainers = isEnglish() ? 'Who gains decision power' : 'Quién gana capacidad de decisión';
     const lblCost = isEnglish() ? 'Who bears the costs' : 'Quién soporta los costes';
     const lblCounter = isEnglish() ? 'Counterweights & limits' : 'Contrapesos y límites institucionales';
-    const lblLens = isEnglish() ? 'Theoretical reading on liberty' : 'Lectura desde los marcos de la libertad';
-    const lblRef = isEnglish() ? 'Academic references' : 'Referencias académicas';
-    const lblQuickNav = isEnglish() ? 'Jump to tradition' : 'Explorar tradición';
-    const activeLensName = LENS_DATA[state.currentLens]?.name || (isEnglish() ? 'Negative Liberty' : 'Libertad Negativa');
-    const activeLensColor = LENS_DATA[state.currentLens]?.color || 'var(--clr-accent)';
+    const lblLens = isEnglish() ? 'Reading on Liberty (Berlin)' : 'Lectura desde la libertad (Berlin)';
+    const lblRef = isEnglish() ? 'Academic references' : 'Fuentes y referencias académicas';
 
     const effectiveTraditionId = traditionId || (traditions.length > 0 ? traditions[0].id : null);
-
-    const quickNavHtml = `
-      <div class="tradition-quick-nav" role="toolbar" aria-label="${isEnglish() ? 'Traditions quick selector' : 'Selector rápido de tradiciones'}">
-        <div class="tradition-quick-nav__header">
-          <span class="tradition-quick-nav__title"><span class="spec-glyph" aria-hidden="true">◈</span> ${lblQuickNav}:</span>
-          <span class="tradition-quick-nav__count">${traditions.length} ${isEnglish() ? 'documented' : 'documentadas'}</span>
-        </div>
-        <div class="tradition-quick-nav__pills" id="traditionQuickNavPills">
-          ${traditions.map((item, idx) => {
-            const isPillActive = (effectiveTraditionId === item.id);
-            return `
-              <button type="button" class="tradition-quick-nav__pill ${isPillActive ? 'is-active' : ''}" data-target-tradition="${item.id}" aria-pressed="${isPillActive}" aria-label="${item.name}">
-                <span class="quick-nav-num">${idx + 1}.</span> ${item.name}
-              </button>
-            `;
-          }).join('')}
-        </div>
-      </div>
-    `;
 
     const cardsHtml = traditions.map((item, idx) => {
       const isHighlighted = (effectiveTraditionId === item.id);
       return `
         <article class="tradition-detail-card ${isHighlighted ? 'is-highlighted' : ''}" id="traditionCard-${item.id}" tabindex="0" data-tradition-id="${item.id}">
-          <div class="tradition-detail-card__header">
-            <div class="tradition-detail-card__title-row">
-              <div class="tradition-detail-card__heading">
-                <span class="tradition-index-badge">${idx + 1} / ${traditions.length}</span>
-                <h4 class="tradition-detail-card__title">${item.name}</h4>
-              </div>
-              <span class="tradition-detail-card__period">${item.period}</span>
-            </div>
-            <p class="tradition-detail-card__context">${item.context}</p>
+          <div class="tradition-editorial-header">
+            <span class="tradition-editorial-counter">${idx + 1} / ${traditions.length}</span>
+            <h4 class="tradition-editorial-title">${item.name}</h4>
+            <div class="tradition-editorial-period">${item.period}</div>
+            <p class="tradition-editorial-context">${item.context}</p>
           </div>
 
           <div class="tradition-spec-grid">
-            <div class="tradition-spec-row modal-field-card">
-              <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">§</span> ${lblAuthority}</span>
-              <p class="modal-field-text">${item.authority}</p>
-            </div>
-            <div class="tradition-spec-row modal-field-card">
-              <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">▸</span> ${lblMechanism}</span>
-              <p class="modal-field-text">${item.mechanism}</p>
-            </div>
-            <div class="tradition-spec-row modal-field-card">
-              <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">¶</span> ${lblJustification}</span>
-              <p class="modal-field-text">${item.justification}</p>
-            </div>
-            <div class="tradition-spec-row tradition-spec-row--split">
-              <div class="tradition-spec-cell modal-field-card">
-                <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">↗</span> ${lblGainers}</span>
-                <p class="modal-field-text">${item.gainers}</p>
-              </div>
-              <div class="tradition-spec-cell modal-field-card">
-                <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">⤸</span> ${lblCost}</span>
-                <p class="modal-field-text">${item.costBearers}</p>
+            <div class="tradition-editorial-field">
+              <span class="field-glyph" aria-hidden="true">§</span>
+              <div class="field-content">
+                <span class="field-label">${lblAuthority}</span>
+                <p class="field-body">${item.authority}</p>
               </div>
             </div>
-            <div class="tradition-spec-row modal-field-card">
-              <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">⌁</span> ${lblCounter}</span>
-              <p class="modal-field-text">${item.counterweights}</p>
+
+            <div class="tradition-editorial-field">
+              <span class="field-glyph" aria-hidden="true">▸</span>
+              <div class="field-content">
+                <span class="field-label">${lblMechanism}</span>
+                <p class="field-body">${item.mechanism}</p>
+              </div>
+            </div>
+
+            <div class="tradition-editorial-field">
+              <span class="field-glyph" aria-hidden="true">¶</span>
+              <div class="field-content">
+                <span class="field-label">${lblJustification}</span>
+                <p class="field-body">${item.justification}</p>
+              </div>
+            </div>
+
+            <div class="tradition-editorial-field">
+              <span class="field-glyph" aria-hidden="true">↗</span>
+              <div class="field-content">
+                <span class="field-label">${lblGainers}</span>
+                <p class="field-body">${item.gainers}</p>
+              </div>
+            </div>
+
+            <div class="tradition-editorial-field">
+              <span class="field-glyph" aria-hidden="true">⤸</span>
+              <div class="field-content">
+                <span class="field-label">${lblCost}</span>
+                <p class="field-body">${item.costBearers}</p>
+              </div>
+            </div>
+
+            <div class="tradition-editorial-field">
+              <span class="field-glyph" aria-hidden="true">⌁</span>
+              <div class="field-content">
+                <span class="field-label">${lblCounter}</span>
+                <p class="field-body">${item.counterweights}</p>
+              </div>
             </div>
           </div>
 
-          <div class="modal-lens-card">
-            <div class="modal-lens-card__header">
-              <span class="modal-lens-tag"><span class="modal-lens-glyph" aria-hidden="true">◈</span> ${lblLens}</span>
-              <span class="modal-lens-badge" style="color: ${activeLensColor}; font-weight: 600;">${activeLensName}</span>
+          ${item.lensReading ? `
+            <div class="tradition-editorial-field tradition-editorial-field--lens">
+              <span class="field-glyph" aria-hidden="true">◈</span>
+              <div class="field-content">
+                <span class="field-label">${lblLens}</span>
+                <p class="field-body">${item.lensReading}</p>
+              </div>
             </div>
-            <p class="modal-lens-text">${item.lensReading}</p>
-          </div>
-          <div class="modal-ref-card">
-            <span class="modal-ref-label"><span class="modal-ref-glyph" aria-hidden="true">§</span> ${lblRef}:</span>
-            <p class="modal-ref-text">${item.reference}</p>
-          </div>
+          ` : ''}
+
+          ${item.reference ? `
+            <div class="tradition-editorial-field tradition-editorial-field--sources">
+              <span class="field-glyph" aria-hidden="true">§</span>
+              <div class="field-content">
+                <span class="field-label">${lblRef}</span>
+                <p class="field-body field-body--ref">${item.reference}</p>
+              </div>
+            </div>
+          ` : ''}
         </article>
       `;
     }).join('');
 
-    viewTraditions.innerHTML = quickNavHtml + `<div class="traditions-dossier-list">${cardsHtml}</div>`;
-
-    // Interactive quick-nav click handlers
-    const navPills = qsa('.tradition-quick-nav__pill', viewTraditions);
-    navPills.forEach(pill => {
-      pill.addEventListener('click', () => {
-        const targetId = pill.dataset.targetTradition;
-        if (!targetId) return;
-
-        navPills.forEach(p => {
-          const isCurrent = p === pill;
-          p.classList.toggle('is-active', isCurrent);
-          p.setAttribute('aria-pressed', String(isCurrent));
-        });
-
-        const cards = qsa('.tradition-detail-card', viewTraditions);
-        cards.forEach(card => card.classList.remove('is-highlighted'));
-
-        const targetCard = qs(`#traditionCard-${targetId}`, viewTraditions);
-        if (targetCard) {
-          targetCard.classList.add('is-highlighted');
-          if (typeof targetCard.scrollIntoView === 'function') {
-            targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-          if (typeof targetCard.focus === 'function') {
-            targetCard.focus();
-          }
-          state.activeGenealogiaArchitecture = targetId;
-        }
-      });
-    });
+    viewTraditions.innerHTML = `<div class="traditions-dossier-list">${cardsHtml}</div>`;
 
     if (traditionId) {
       setTimeout(() => {
