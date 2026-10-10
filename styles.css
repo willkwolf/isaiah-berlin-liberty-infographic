@@ -3462,7 +3462,7 @@ body.modal-open {
   flex-direction: column;
   gap: 1rem;
   flex: 1;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0;
 }
 
 .category-card__summary {
@@ -3503,92 +3503,167 @@ body.modal-open {
   color: var(--clr-text-bright);
 }
 
-/* Samples Pills Container */
-.category-card__samples {
+/* Tooltip / Interaction Guide for Chips */
+.category-card__chips-guide {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
+  align-items: center;
+  gap: 0.5rem;
   margin-top: 0.25rem;
+  padding: 0.5rem 0.85rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed var(--clr-border);
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.77rem;
+  color: var(--clr-text-dim);
 }
 
+.chips-guide-icon {
+  color: var(--clr-accent);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.chips-guide-text {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* Samples Pills / Button Grid Container */
+.category-card__samples {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.65rem;
+  width: 100%;
+  margin-top: 0.2rem;
+}
+
+/* Tactile Interactive Buttons for Traditions */
 .sample-tradition-pill {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.65rem;
+  justify-content: space-between;
+  gap: 0.65rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.65rem 0.95rem;
   background: var(--clr-bg-3);
   border: 1px solid var(--clr-border);
-  border-radius: 6px;
-  color: var(--clr-text);
+  border-radius: 8px;
+  color: var(--clr-text-bright);
   font-family: var(--font-sans);
-  font-size: 0.78rem;
-  font-weight: 500;
+  font-size: 0.84rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition);
-  min-height: 32px;
+  text-align: left;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .sample-tradition-pill:hover,
 .sample-tradition-pill.is-active {
   background: var(--clr-surface);
   border-color: var(--clr-accent);
-  color: var(--clr-text-bright);
-  transform: translateY(-1px);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.28);
 }
 
-.sample-tradition-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--clr-accent);
-  flex-shrink: 0;
+.sample-tradition-pill:active {
+  transform: scale(0.97) translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.sample-tradition-pill:focus-visible {
+  outline: 2px solid var(--clr-accent);
+  outline-offset: 2px;
 }
 
 .sample-tradition-name {
   white-space: normal;
   word-break: break-word;
+  line-height: 1.35;
+  flex: 1;
 }
 
-/* Card Footer & Explore Button */
+.sample-tradition-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.22rem 0.5rem;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--clr-accent);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.sample-tradition-pill:hover .sample-tradition-cta {
+  background: var(--clr-accent);
+  border-color: var(--clr-accent);
+  color: #0f172a;
+}
+
+.sample-tradition-cta .cta-arrow {
+  transition: transform 0.15s ease;
+}
+
+.sample-tradition-pill:hover .sample-tradition-cta .cta-arrow {
+  transform: translate(1px, -1px);
+}
+
+/* Light Theme Overrides */
+body.light-theme .sample-tradition-pill,
+[data-theme="light"] .sample-tradition-pill {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #1e293b;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+body.light-theme .sample-tradition-pill:hover,
+[data-theme="light"] .sample-tradition-pill:hover {
+  background: #f8fafc;
+  border-color: var(--clr-accent);
+  color: #0f172a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .sample-tradition-cta,
+[data-theme="light"] .sample-tradition-cta {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #0369a1;
+}
+
+body.light-theme .sample-tradition-pill:hover .sample-tradition-cta,
+[data-theme="light"] .sample-tradition-pill:hover .sample-tradition-cta {
+  background: var(--clr-accent);
+  border-color: var(--clr-accent);
+  color: #ffffff;
+}
+
+body.light-theme .category-card__chips-guide,
+[data-theme="light"] .category-card__chips-guide {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #64748b;
+}
+
+/* Card Footer & Explore Button (Removed from DOM, kept for legacy safety) */
 .category-card__footer {
-  margin-top: auto;
-  padding-top: 0.95rem;
-  border-top: 1px solid var(--clr-border);
+  display: none !important;
 }
 
 .category-explore-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  min-height: 44px;
-  padding: 0.65rem 1rem;
-  background: var(--clr-bg-3);
-  border: 1px solid var(--clr-border);
-  border-radius: 8px;
-  color: var(--clr-text-bright);
-  font-family: var(--font-sans);
-  font-size: 0.86rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition);
-}
-
-.category-explore-btn:hover {
-  background: var(--clr-surface);
-  border-color: var(--clr-accent);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-}
-
-.explore-arrow {
-  font-family: var(--font-mono);
-  font-size: 1rem;
-  color: var(--clr-accent);
-  transition: transform 0.2s ease;
-}
-
-.category-explore-btn:hover .explore-arrow {
-  transform: translateX(4px);
+  display: none !important;
 }
 
 /* Modal Tablist (Segmented Control) */
@@ -4253,6 +4328,11 @@ body.modal-open {
 
   .modal-shortcut-hint {
     display: none;
+  }
+
+  .category-card__samples {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
   }
 
   .genealogia-modal__footer {

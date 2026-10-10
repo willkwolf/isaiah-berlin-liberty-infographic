@@ -2878,7 +2878,6 @@ function renderGenealogiaExplorer() {
       id: 'monismo_hegemonico',
       cardEl: qs('#catCardMonismoHegemonico'),
       samplesEl: qs('#samplesMonismoHegemonico'),
-      btnEl: qs('#btnExploreMonismoHegemonico'),
       titleEl: qs('#titleMonismoHegemonico'),
       subEl: qs('#subMonismoHegemonico'),
       badgeEl: qs('#badgeMonismoHegemonico'),
@@ -2890,7 +2889,6 @@ function renderGenealogiaExplorer() {
       id: 'pluralismo_hegemonico',
       cardEl: qs('#catCardPluralismoHegemonico'),
       samplesEl: qs('#samplesPluralismoHegemonico'),
-      btnEl: qs('#btnExplorePluralismoHegemonico'),
       titleEl: qs('#titlePluralismoHegemonico'),
       subEl: qs('#subPluralismoHegemonico'),
       badgeEl: qs('#badgePluralismoHegemonico'),
@@ -2902,7 +2900,6 @@ function renderGenealogiaExplorer() {
       id: 'monismo_emergente',
       cardEl: qs('#catCardMonismoEmergente'),
       samplesEl: qs('#samplesMonismoEmergente'),
-      btnEl: qs('#btnExploreMonismoEmergente'),
       titleEl: qs('#titleMonismoEmergente'),
       subEl: qs('#subMonismoEmergente'),
       badgeEl: qs('#badgeMonismoEmergente'),
@@ -2914,7 +2911,6 @@ function renderGenealogiaExplorer() {
       id: 'pluralismo_emergente',
       cardEl: qs('#catCardPluralismoEmergente'),
       samplesEl: qs('#samplesPluralismoEmergente'),
-      btnEl: qs('#btnExplorePluralismoEmergente'),
       titleEl: qs('#titlePluralismoEmergente'),
       subEl: qs('#subPluralismoEmergente'),
       badgeEl: qs('#badgePluralismoEmergente'),
@@ -2935,13 +2931,17 @@ function renderGenealogiaExplorer() {
     if (cfg.featMecEl) cfg.featMecEl.textContent = cat.powerMechanism;
     if (cfg.featCompEl) cfg.featCompEl.textContent = cat.tradeoffs;
 
-    // Render sample tradition pills
+    // Render sample tradition buttons with explicit interactive CTA and pressable affordance
     if (cfg.samplesEl) {
       const traditions = getTraditionsForCategory(cat.id);
+      const ctaLabel = isEnglish() ? 'Ver' : 'Ver';
       cfg.samplesEl.innerHTML = traditions.map(t => `
-        <button type="button" class="sample-tradition-pill" data-category="${cat.id}" data-tradition="${t.id}" title="${t.name}: ${t.period}">
-          <span class="sample-tradition-dot" aria-hidden="true"></span>
+        <button type="button" class="sample-tradition-pill" data-category="${cat.id}" data-tradition="${t.id}" title="${t.name}: ${t.period}" aria-label="${isEnglish() ? 'Ver ficha de' : 'Ver ficha de'} ${t.name}">
           <span class="sample-tradition-name">${t.name}</span>
+          <span class="sample-tradition-cta" aria-hidden="true">
+            <span class="cta-text">${ctaLabel}</span>
+            <span class="cta-arrow">↗</span>
+          </span>
         </button>
       `).join('');
 
@@ -2953,15 +2953,7 @@ function renderGenealogiaExplorer() {
       });
     }
 
-    // Wire explore button
-    if (cfg.btnEl) {
-      cfg.btnEl.onclick = e => {
-        e.stopPropagation();
-        openGenealogiaCategoryModal(cat.id, null, 'overview');
-      };
-    }
-
-    // Wire card element interaction
+    // Wire card element interaction for whole-card navigation
     if (cfg.cardEl) {
       cfg.cardEl.onclick = e => {
         if (e.target.closest('button, a')) return;
@@ -2994,29 +2986,51 @@ function openGenealogiaCategoryModal(categoryId, traditionId = null, initialTab 
 
   const backdrop = qs('#genealogiaModalBackdrop');
   const modal = qs('#genealogiaModal');
+  const modalBody = qs('#modalArchBody');
+  const viewTraditions = qs('#modalViewTraditions');
+  const viewOverview = qs('#modalViewOverview');
+
   if (backdrop && modal) {
     backdrop.classList.add('is-open');
     backdrop.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
-    modal.focus();
+
+    // Strict scroll reset to ensure reader always starts at top
+    if (modal) modal.scrollTop = 0;
+    if (modalBody) modalBody.scrollTop = 0;
+    if (viewTraditions) viewTraditions.scrollTop = 0;
+    if (viewOverview) viewOverview.scrollTop = 0;
+
+    modal.focus({ preventScroll: true });
+
+    requestAnimationFrame(() => {
+      if (modal) modal.scrollTop = 0;
+      if (modalBody) modalBody.scrollTop = 0;
+    });
   }
 }
 
 function closeGenealogiaCategoryModal() {
   const backdrop = qs('#genealogiaModalBackdrop');
   const modal = qs('#genealogiaModal');
+  const modalBody = qs('#modalArchBody');
+
   if (backdrop) {
     backdrop.classList.remove('is-open');
     backdrop.setAttribute('aria-hidden', 'true');
   }
   if (modal) {
     modal.classList.remove('is-isolated-chip');
+    modal.scrollTop = 0;
+  }
+  if (modalBody) {
+    modalBody.scrollTop = 0;
   }
   document.body.classList.remove('modal-open');
   state.activeGenealogiaArchitecture = null;
 
   if (state.lastFocusedElement && typeof state.lastFocusedElement.focus === 'function') {
-    state.lastFocusedElement.focus();
+    state.lastFocusedElement.focus({ preventScroll: true });
   }
 }
 
@@ -3277,18 +3291,17 @@ function renderGenealogiaCategoryModalContent(categoryId, traditionId = null, ta
 
     viewTraditions.innerHTML = `<div class="traditions-dossier-list">${cardsHtml}</div>`;
 
+    const modalBody = qs('#modalArchBody');
+    if (modalBody) modalBody.scrollTop = 0;
+
     if (traditionId) {
       setTimeout(() => {
         const highlightedEl = qs(`#traditionCard-${traditionId}`, viewTraditions);
-        if (highlightedEl) {
-          if (typeof highlightedEl.scrollIntoView === 'function') {
-            highlightedEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-          if (typeof highlightedEl.focus === 'function') {
-            highlightedEl.focus();
-          }
+        if (highlightedEl && typeof highlightedEl.focus === 'function') {
+          highlightedEl.focus({ preventScroll: true });
         }
-      }, 50);
+        if (modalBody) modalBody.scrollTop = 0;
+      }, 30);
     }
   }
 
