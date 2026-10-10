@@ -59,7 +59,7 @@ body.lens-libertario { --clr-accent: var(--clr-lib); --clr-accent-dim: var(--clr
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; font-size: 20px; }
+html { scroll-behavior: smooth; font-size: 21px; }
 
 body {
   background: var(--clr-bg);
@@ -2046,7 +2046,7 @@ body {
 }
 
 @media (max-width: 768px) {
-  html { font-size: 16px; }
+  html { font-size: 19px; }
 
   :root { --lens-panel-width: 0px; }
 
@@ -2232,7 +2232,7 @@ body {
 }
 
 @media (max-width: 500px) {
-  html { font-size: 16px; }
+  html { font-size: 18.5px; }
 
   body { padding-bottom: 6.5rem; }
 
@@ -4320,7 +4320,7 @@ body.light-theme .category-card__chips-guide,
 }
 
 @media (max-width: 480px) {
-  html { font-size: 15px; }
+  html { font-size: 18px; }
 
   .section {
     padding-left: 0.85rem;
