@@ -3591,13 +3591,13 @@ body.modal-open {
   transform: translateX(4px);
 }
 
-/* Modal Tablist */
+/* Modal Tablist (Segmented Control) */
 .genealogia-modal__tabs {
   display: flex;
-  gap: 0.5rem;
-  padding: 0.5rem 1.75rem;
-  background: var(--clr-bg-3);
-  border-bottom: 1px solid var(--clr-border);
+  gap: 0.35rem;
+  padding: 0.45rem 1.75rem;
+  background: #0d0e14;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   flex-shrink: 0;
   overflow-x: auto;
 }
@@ -3605,31 +3605,31 @@ body.modal-open {
 .modal-tab-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 1.15rem;
+  gap: 0.45rem;
+  padding: 0.5rem 1.15rem;
   background: transparent;
   border: 1px solid transparent;
   border-radius: 6px;
-  color: var(--clr-text-dim);
+  color: #8893a6;
   font-family: var(--font-sans);
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition);
+  transition: all 0.16s ease;
   white-space: nowrap;
 }
 
 .modal-tab-btn:hover {
-  color: var(--clr-text-bright);
-  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .modal-tab-btn.is-active,
 .modal-tab-btn[aria-selected="true"] {
-  background: var(--clr-bg-1);
-  border-color: var(--clr-border);
-  color: var(--clr-accent);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  background: #1e202e;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
 /* Tab Panels */
@@ -3643,7 +3643,7 @@ body.modal-open {
   display: none !important;
 }
 
-/* Overview Panel Layout */
+/* Overview Panel Layout (Solid High-Contrast Surfaces) */
 .category-overview-grid {
   display: flex;
   flex-direction: column;
@@ -3651,8 +3651,8 @@ body.modal-open {
 }
 
 .category-overview-card {
-  background: var(--clr-bg-2);
-  border: 1px solid var(--clr-border);
+  background: #171822;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   padding: 1.25rem 1.45rem;
   display: flex;
@@ -3692,7 +3692,7 @@ body.modal-open {
 
 .category-overview-card--hero {
   border-left: 4px solid var(--clr-accent);
-  background: rgba(74, 158, 255, 0.04);
+  background: #181c29;
 }
 
 .category-overview-card--hero .category-overview-card__text {
@@ -3708,6 +3708,7 @@ body.modal-open {
 
 .category-overview-card--tradeoffs {
   border-left: 4px solid #f59e0b;
+  background: #1b1917;
 }
 
 .tradeoffs-intro-text {
@@ -3718,14 +3719,15 @@ body.modal-open {
 }
 
 .tradeoffs-box {
-  background: var(--clr-bg-3);
-  border: 1px solid var(--clr-border);
+  background: #23201d;
+  border: 1px solid rgba(245, 158, 11, 0.25);
   border-radius: 6px;
   padding: 0.85rem 1.1rem;
 }
 
 .category-overview-card--lens {
   border-left: 4px solid var(--clr-accent);
+  background: #161a29;
 }
 
 .overview-lens-badge {
@@ -3735,19 +3737,107 @@ body.modal-open {
 
 .category-overview-card--caveat {
   border-left: 4px solid #10b981;
-  background: rgba(16, 185, 129, 0.04);
+  background: #141c19;
 }
 
 /* Traditions List Panel */
+.tradition-quick-nav {
+  background: #151622;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.85rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.tradition-quick-nav__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.tradition-quick-nav__title {
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--clr-accent);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.tradition-quick-nav__count {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--clr-text-dim);
+}
+
+.tradition-quick-nav__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.tradition-quick-nav__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.38rem 0.75rem;
+  border-radius: 6px;
+  background: #1c1d2b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #a3adc0;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.tradition-quick-nav__pill:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+  background: #25273a;
+}
+
+.tradition-quick-nav__pill.is-active,
+.tradition-quick-nav__pill[aria-pressed="true"] {
+  background: var(--clr-accent);
+  border-color: var(--clr-accent);
+  color: #0b0f19;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3);
+}
+
+.quick-nav-num {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  opacity: 0.8;
+}
+
+.traditions-dossier-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
 .tradition-detail-card {
-  background: var(--clr-bg-2);
-  border: 1px solid var(--clr-border);
+  background: #151620;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 10px;
   padding: 1.35rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  transition: border-color var(--transition), box-shadow var(--transition);
+  gap: 1.15rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
 }
 
@@ -3758,11 +3848,11 @@ body.modal-open {
 
 .tradition-detail-card.is-highlighted {
   border-color: var(--clr-accent);
-  box-shadow: 0 0 20px rgba(74, 158, 255, 0.2);
+  box-shadow: 0 0 0 1px var(--clr-accent), 0 8px 24px rgba(74, 158, 255, 0.18);
 }
 
 .tradition-detail-card__header {
-  border-bottom: 1px solid var(--clr-border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding-bottom: 0.85rem;
 }
 
@@ -3773,6 +3863,23 @@ body.modal-open {
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 0.45rem;
+}
+
+.tradition-detail-card__heading {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.tradition-index-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--clr-accent);
+  background: rgba(74, 158, 255, 0.1);
+  border: 1px solid rgba(74, 158, 255, 0.25);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
 }
 
 .tradition-detail-card__title {
@@ -3787,8 +3894,8 @@ body.modal-open {
   font-family: var(--font-mono);
   font-size: 0.74rem;
   color: var(--clr-accent);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--clr-border);
+  background: #1c1d2b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 0.2rem 0.55rem;
   border-radius: 4px;
 }
@@ -3800,13 +3907,48 @@ body.modal-open {
   margin: 0;
 }
 
-.tradition-detail-card__grid {
+/* Specification Grid */
+.tradition-spec-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+}
+
+.tradition-spec-row {
+  background: #1a1c28;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 7px;
+  padding: 0.85rem 1.05rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.tradition-spec-row--split {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 0.85rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.tradition-spec-cell {
+  background: #1a1c28;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 7px;
+  padding: 0.85rem 1.05rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
 /* Backward compatibility classes */
+.tradition-detail-card__grid {
+  display: none;
+}
 .arch-chip {
   display: none;
 }
@@ -3814,13 +3956,11 @@ body.modal-open {
   display: none;
 }
 
-/* ─── MODAL DIALOG (Encapsulated Architecture Detail) ─── */
+/* ─── MODAL DIALOG (Solid High-Contrast Surfaces) ─── */
 .genealogia-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(8, 12, 18, 0.84);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(5, 7, 12, 0.88);
   z-index: 1300;
   display: flex;
   align-items: center;
@@ -3829,7 +3969,7 @@ body.modal-open {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.24s;
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s;
 }
 
 .genealogia-modal-backdrop.is-open {
@@ -3845,12 +3985,12 @@ body.modal-open {
   max-height: 90vh;
   display: flex;
   flex-direction: column;
-  background: var(--clr-bg-1);
-  border: 1px solid var(--clr-border);
+  background: #111218;
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 12px;
-  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.72), 0 0 0 1px rgba(255, 255, 255, 0.06);
-  transform: scale(0.96) translateY(10px);
-  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 24px 64px -8px rgba(0, 0, 0, 0.8), 0 4px 16px rgba(0, 0, 0, 0.4);
+  transform: scale(0.97) translateY(8px);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
   outline: none;
 }
@@ -3861,9 +4001,9 @@ body.modal-open {
 
 /* Modal Header (Integrated Layout with Title & Context) */
 .genealogia-modal__header {
-  padding: 1.5rem 1.75rem 1.25rem;
-  border-bottom: 1px solid var(--clr-border);
-  background: var(--clr-bg-2);
+  padding: 1.4rem 1.75rem 1.15rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #151620;
   flex-shrink: 0;
 }
 
@@ -4006,6 +4146,8 @@ body.modal-open {
   flex-direction: column;
   gap: 1.25rem;
   scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+  background: #111218;
 }
 
 .modal-fields-grid {
@@ -4015,10 +4157,10 @@ body.modal-open {
 }
 
 .modal-field-card {
-  background: var(--clr-bg-2);
-  border: 1px solid var(--clr-border);
+  background: #1a1c28;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 8px;
-  padding: 1.1rem 1.25rem;
+  padding: 0.95rem 1.15rem;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
@@ -4059,11 +4201,11 @@ body.modal-open {
 
 /* Theoretical Lens Reading Card */
 .modal-lens-card {
-  background: rgba(74, 158, 255, 0.06);
-  border: 1px solid var(--clr-border);
+  background: #161b29;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-left: 4px solid var(--clr-accent);
   border-radius: 8px;
-  padding: 1.2rem 1.35rem;
+  padding: 1.15rem 1.3rem;
 }
 
 .modal-lens-card__header {
@@ -4099,8 +4241,8 @@ body.modal-open {
 
 /* Academic Reference Card */
 .modal-ref-card {
-  background: var(--clr-bg-3);
-  border: 1px solid var(--clr-border);
+  background: #181924;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   padding: 0.95rem 1.25rem;
   font-size: 0.85rem;
@@ -4132,8 +4274,8 @@ body.modal-open {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.75rem;
-  border-top: 1px solid var(--clr-border);
-  background: var(--clr-bg-2);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: #151620;
   flex-shrink: 0;
 }
 
@@ -4146,8 +4288,8 @@ body.modal-open {
 .modal-close-action-btn {
   padding: 0.55rem 1.35rem;
   border-radius: 6px;
-  background: var(--clr-bg-3);
-  border: 1px solid var(--clr-border);
+  background: #202232;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--clr-text-bright);
   font-family: var(--font-sans);
   font-size: 0.85rem;
@@ -4219,9 +4361,25 @@ body.modal-open {
 
   .category-overview-mechanisms,
   .tradition-detail-card__grid,
+  .tradition-spec-row--split,
   .modal-fields-grid {
     grid-template-columns: 1fr;
     gap: 0.75rem;
+  }
+
+  .tradition-quick-nav {
+    padding: 0.65rem 0.75rem;
+  }
+
+  .tradition-quick-nav__pills {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.35rem;
+    scrollbar-width: none;
+  }
+
+  .tradition-quick-nav__pill {
+    flex-shrink: 0;
   }
 
   .modal-shortcut-hint {
@@ -4304,8 +4462,14 @@ html.pre-light .genealogia-modal__header,
 html.light-mode .genealogia-modal__header,
 html.pre-light .genealogia-modal__footer,
 html.light-mode .genealogia-modal__footer,
+html.pre-light .genealogia-modal__body,
+html.light-mode .genealogia-modal__body,
 html.pre-light .modal-field-card,
 html.light-mode .modal-field-card,
+html.pre-light .tradition-spec-row,
+html.light-mode .tradition-spec-row,
+html.pre-light .tradition-spec-cell,
+html.light-mode .tradition-spec-cell,
 html.pre-light .modal-close-action-btn,
 html.light-mode .modal-close-action-btn,
 html.pre-light .modal-nav-btn,
@@ -4323,14 +4487,30 @@ html.pre-light .category-card__features,
 html.light-mode .category-card__features,
 html.pre-light .genealogia-modal__tabs,
 html.light-mode .genealogia-modal__tabs,
+html.pre-light .tradition-quick-nav,
+html.light-mode .tradition-quick-nav,
+html.pre-light .tradition-quick-nav__pill,
+html.light-mode .tradition-quick-nav__pill,
 html.pre-light .modal-ref-card,
 html.light-mode .modal-ref-card {
   background: #f8fafc;
 }
 
+html.pre-light .tradition-quick-nav__pill.is-active,
+html.light-mode .tradition-quick-nav__pill.is-active {
+  background: var(--clr-accent);
+  color: #0f172a;
+}
+
+html.pre-light .modal-tab-btn.is-active,
+html.light-mode .modal-tab-btn.is-active {
+  background: #ffffff;
+  color: #0f172a;
+}
+
 html.pre-light .genealogia-modal-backdrop,
 html.light-mode .genealogia-modal-backdrop {
-  background: rgba(15, 23, 42, 0.7);
+  background: rgba(15, 23, 42, 0.75);
 }
 
 /* Genealogy Closing */

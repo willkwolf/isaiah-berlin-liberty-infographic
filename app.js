@@ -3175,46 +3175,75 @@ function renderGenealogiaCategoryModalContent(categoryId, traditionId = null, ta
     const lblCounter = isEnglish() ? 'Counterweights & limits' : 'Contrapesos y límites institucionales';
     const lblLens = isEnglish() ? 'Theoretical reading on liberty' : 'Lectura desde los marcos de la libertad';
     const lblRef = isEnglish() ? 'Academic references' : 'Referencias académicas';
+    const lblQuickNav = isEnglish() ? 'Jump to tradition' : 'Explorar tradición';
     const activeLensName = LENS_DATA[state.currentLens]?.name || (isEnglish() ? 'Negative Liberty' : 'Libertad Negativa');
     const activeLensColor = LENS_DATA[state.currentLens]?.color || 'var(--clr-accent)';
 
-    viewTraditions.innerHTML = traditions.map(item => {
-      const isHighlighted = traditionId === item.id;
+    const effectiveTraditionId = traditionId || (traditions.length > 0 ? traditions[0].id : null);
+
+    const quickNavHtml = `
+      <div class="tradition-quick-nav" role="toolbar" aria-label="${isEnglish() ? 'Traditions quick selector' : 'Selector rápido de tradiciones'}">
+        <div class="tradition-quick-nav__header">
+          <span class="tradition-quick-nav__title"><span class="spec-glyph" aria-hidden="true">◈</span> ${lblQuickNav}:</span>
+          <span class="tradition-quick-nav__count">${traditions.length} ${isEnglish() ? 'documented' : 'documentadas'}</span>
+        </div>
+        <div class="tradition-quick-nav__pills" id="traditionQuickNavPills">
+          ${traditions.map((item, idx) => {
+            const isPillActive = (effectiveTraditionId === item.id);
+            return `
+              <button type="button" class="tradition-quick-nav__pill ${isPillActive ? 'is-active' : ''}" data-target-tradition="${item.id}" aria-pressed="${isPillActive}" aria-label="${item.name}">
+                <span class="quick-nav-num">${idx + 1}.</span> ${item.name}
+              </button>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+
+    const cardsHtml = traditions.map((item, idx) => {
+      const isHighlighted = (effectiveTraditionId === item.id);
       return `
-        <article class="tradition-detail-card ${isHighlighted ? 'is-highlighted' : ''}" id="traditionCard-${item.id}" tabindex="0">
+        <article class="tradition-detail-card ${isHighlighted ? 'is-highlighted' : ''}" id="traditionCard-${item.id}" tabindex="0" data-tradition-id="${item.id}">
           <div class="tradition-detail-card__header">
             <div class="tradition-detail-card__title-row">
-              <h4 class="tradition-detail-card__title">${item.name}</h4>
+              <div class="tradition-detail-card__heading">
+                <span class="tradition-index-badge">${idx + 1} / ${traditions.length}</span>
+                <h4 class="tradition-detail-card__title">${item.name}</h4>
+              </div>
               <span class="tradition-detail-card__period">${item.period}</span>
             </div>
             <p class="tradition-detail-card__context">${item.context}</p>
           </div>
-          <div class="tradition-detail-card__grid">
-            <div class="modal-field-card">
+
+          <div class="tradition-spec-grid">
+            <div class="tradition-spec-row modal-field-card">
               <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">§</span> ${lblAuthority}</span>
               <p class="modal-field-text">${item.authority}</p>
             </div>
-            <div class="modal-field-card">
+            <div class="tradition-spec-row modal-field-card">
               <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">▸</span> ${lblMechanism}</span>
               <p class="modal-field-text">${item.mechanism}</p>
             </div>
-            <div class="modal-field-card">
+            <div class="tradition-spec-row modal-field-card">
               <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">¶</span> ${lblJustification}</span>
               <p class="modal-field-text">${item.justification}</p>
             </div>
-            <div class="modal-field-card">
-              <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">↗</span> ${lblGainers}</span>
-              <p class="modal-field-text">${item.gainers}</p>
+            <div class="tradition-spec-row tradition-spec-row--split">
+              <div class="tradition-spec-cell modal-field-card">
+                <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">↗</span> ${lblGainers}</span>
+                <p class="modal-field-text">${item.gainers}</p>
+              </div>
+              <div class="tradition-spec-cell modal-field-card">
+                <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">⤸</span> ${lblCost}</span>
+                <p class="modal-field-text">${item.costBearers}</p>
+              </div>
             </div>
-            <div class="modal-field-card">
-              <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">⤸</span> ${lblCost}</span>
-              <p class="modal-field-text">${item.costBearers}</p>
-            </div>
-            <div class="modal-field-card">
+            <div class="tradition-spec-row modal-field-card">
               <span class="modal-field-label"><span class="modal-field-glyph" aria-hidden="true">⌁</span> ${lblCounter}</span>
               <p class="modal-field-text">${item.counterweights}</p>
             </div>
           </div>
+
           <div class="modal-lens-card">
             <div class="modal-lens-card__header">
               <span class="modal-lens-tag"><span class="modal-lens-glyph" aria-hidden="true">◈</span> ${lblLens}</span>
@@ -3230,12 +3259,48 @@ function renderGenealogiaCategoryModalContent(categoryId, traditionId = null, ta
       `;
     }).join('');
 
+    viewTraditions.innerHTML = quickNavHtml + `<div class="traditions-dossier-list">${cardsHtml}</div>`;
+
+    // Interactive quick-nav click handlers
+    const navPills = qsa('.tradition-quick-nav__pill', viewTraditions);
+    navPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const targetId = pill.dataset.targetTradition;
+        if (!targetId) return;
+
+        navPills.forEach(p => {
+          const isCurrent = p === pill;
+          p.classList.toggle('is-active', isCurrent);
+          p.setAttribute('aria-pressed', String(isCurrent));
+        });
+
+        const cards = qsa('.tradition-detail-card', viewTraditions);
+        cards.forEach(card => card.classList.remove('is-highlighted'));
+
+        const targetCard = qs(`#traditionCard-${targetId}`, viewTraditions);
+        if (targetCard) {
+          targetCard.classList.add('is-highlighted');
+          if (typeof targetCard.scrollIntoView === 'function') {
+            targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          if (typeof targetCard.focus === 'function') {
+            targetCard.focus();
+          }
+          state.activeGenealogiaArchitecture = targetId;
+        }
+      });
+    });
+
     if (traditionId) {
       setTimeout(() => {
         const highlightedEl = qs(`#traditionCard-${traditionId}`, viewTraditions);
         if (highlightedEl) {
-          highlightedEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          highlightedEl.focus();
+          if (typeof highlightedEl.scrollIntoView === 'function') {
+            highlightedEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          if (typeof highlightedEl.focus === 'function') {
+            highlightedEl.focus();
+          }
         }
       }, 50);
     }
@@ -3330,7 +3395,36 @@ function initGenealogia() {
     if (e.key === 'Escape') {
       e.preventDefault();
       closeGenealogiaCategoryModal();
-    } else if (e.key === 'ArrowLeft') {
+      return;
+    }
+
+    if (e.key === 'Tab') {
+      const modal = qs('#genealogiaModal');
+      if (!modal) return;
+      const focusableSelectors = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+      const focusables = qsa(focusableSelectors, modal).filter(el => {
+        return !el.hasAttribute('hidden') && el.closest('[hidden]') === null && el.style.display !== 'none';
+      });
+      if (focusables.length > 0) {
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first || !modal.contains(document.activeElement)) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last || !modal.contains(document.activeElement)) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+      return;
+    }
+
+    if (e.key === 'ArrowLeft') {
       const prevBtn = qs('#modalPrevBtn');
       if (prevBtn) prevBtn.click();
     } else if (e.key === 'ArrowRight') {
