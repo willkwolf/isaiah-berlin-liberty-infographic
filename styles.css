@@ -3938,6 +3938,46 @@ body.modal-open {
   transform: scale(1) translateY(0);
 }
 
+/* Isolated Single Chip Mode (Focused, Perfectly Centered, Zero Redundant Nav) */
+.genealogia-modal.is-isolated-chip {
+  max-width: 680px;
+  max-height: 86vh;
+}
+
+.genealogia-modal.is-isolated-chip .genealogia-modal__nav,
+.genealogia-modal.is-isolated-chip .genealogia-modal__tabs,
+.genealogia-modal.is-isolated-chip #modalTraditionsCount,
+.genealogia-modal.is-isolated-chip #modalCategoryTitle,
+.genealogia-modal.is-isolated-chip #modalCategoryContext,
+.genealogia-modal.is-isolated-chip #modalViewOverview {
+  display: none !important;
+}
+
+.genealogia-modal.is-isolated-chip .genealogia-modal__header {
+  padding: 1rem 1.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.genealogia-modal.is-isolated-chip .genealogia-modal__header-top {
+  margin-bottom: 0;
+}
+
+.genealogia-modal.is-isolated-chip .genealogia-modal__body {
+  padding: 1.5rem 1.75rem 1.25rem;
+}
+
+.genealogia-modal.is-isolated-chip .tradition-detail-card {
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  background: transparent !important;
+  margin: 0 !important;
+}
+
+.genealogia-modal.is-isolated-chip .traditions-dossier-list {
+  gap: 0;
+}
+
 /* Modal Header */
 .genealogia-modal__header {
   padding: 1.4rem 1.75rem 1.15rem;
@@ -4188,6 +4228,19 @@ body.modal-open {
 
   .tradition-detail-card {
     padding: 1.25rem 1.15rem;
+  }
+
+  .genealogia-modal.is-isolated-chip {
+    max-width: 100%;
+    max-height: 90vh;
+  }
+
+  .genealogia-modal.is-isolated-chip .genealogia-modal__header {
+    padding: 0.85rem 1.15rem;
+  }
+
+  .genealogia-modal.is-isolated-chip .genealogia-modal__body {
+    padding: 1.15rem 1.15rem 1rem;
   }
 
   .tradition-editorial-title {

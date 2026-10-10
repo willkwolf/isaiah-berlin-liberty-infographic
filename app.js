@@ -2938,8 +2938,7 @@ function renderGenealogiaExplorer() {
     // Render sample tradition pills
     if (cfg.samplesEl) {
       const traditions = getTraditionsForCategory(cat.id);
-      const samples = traditions.slice(0, 4);
-      cfg.samplesEl.innerHTML = samples.map(t => `
+      cfg.samplesEl.innerHTML = traditions.map(t => `
         <button type="button" class="sample-tradition-pill" data-category="${cat.id}" data-tradition="${t.id}" title="${t.name}: ${t.period}">
           <span class="sample-tradition-dot" aria-hidden="true"></span>
           <span class="sample-tradition-name">${t.name}</span>
@@ -2987,10 +2986,11 @@ function openGenealogiaCategoryModal(categoryId, traditionId = null, initialTab 
 
   state.activeGenealogiaCategory = targetCat.id;
   state.activeGenealogiaArchitecture = traditionId;
-  state.activeGenealogiaModalTab = initialTab;
+  const effectiveTab = traditionId ? 'traditions' : initialTab;
+  state.activeGenealogiaModalTab = effectiveTab;
   state.lastFocusedElement = document.activeElement;
 
-  renderGenealogiaCategoryModalContent(targetCat.id, traditionId, initialTab);
+  renderGenealogiaCategoryModalContent(targetCat.id, traditionId, effectiveTab);
 
   const backdrop = qs('#genealogiaModalBackdrop');
   const modal = qs('#genealogiaModal');
@@ -3004,9 +3004,13 @@ function openGenealogiaCategoryModal(categoryId, traditionId = null, initialTab 
 
 function closeGenealogiaCategoryModal() {
   const backdrop = qs('#genealogiaModalBackdrop');
+  const modal = qs('#genealogiaModal');
   if (backdrop) {
     backdrop.classList.remove('is-open');
     backdrop.setAttribute('aria-hidden', 'true');
+  }
+  if (modal) {
+    modal.classList.remove('is-isolated-chip');
   }
   document.body.classList.remove('modal-open');
   state.activeGenealogiaArchitecture = null;
@@ -3064,6 +3068,12 @@ function renderGenealogiaCategoryModalContent(categoryId, traditionId = null, ta
   const contextEl = qs('#modalCategoryContext');
   const prevBtn = qs('#modalPrevBtn');
   const nextBtn = qs('#modalNextBtn');
+  const modalEl = qs('#genealogiaModal');
+
+  const isIsolated = Boolean(traditionId);
+  if (modalEl) {
+    modalEl.classList.toggle('is-isolated-chip', isIsolated);
+  }
 
   if (badgeEl) {
     badgeEl.textContent = cat.badge;
@@ -3176,14 +3186,17 @@ function renderGenealogiaCategoryModalContent(categoryId, traditionId = null, ta
     const lblLens = isEnglish() ? 'Reading on Liberty (Berlin)' : 'Lectura desde la libertad (Berlin)';
     const lblRef = isEnglish() ? 'Academic references' : 'Fuentes y referencias académicas';
 
-    const effectiveTraditionId = traditionId || (traditions.length > 0 ? traditions[0].id : null);
+    const targetTradition = traditionId ? traditions.find(t => t.id === traditionId) : null;
+    const traditionsToRender = targetTradition ? [targetTradition] : traditions;
 
-    const cardsHtml = traditions.map((item, idx) => {
-      const isHighlighted = (effectiveTraditionId === item.id);
+    const cardsHtml = traditionsToRender.map((item) => {
+      const realIdx = traditions.findIndex(t => t.id === item.id);
+      const displayIdx = realIdx !== -1 ? realIdx + 1 : 1;
+      const isHighlighted = (traditionId === item.id);
       return `
         <article class="tradition-detail-card ${isHighlighted ? 'is-highlighted' : ''}" id="traditionCard-${item.id}" tabindex="0" data-tradition-id="${item.id}">
           <div class="tradition-editorial-header">
-            <span class="tradition-editorial-counter">${idx + 1} / ${traditions.length}</span>
+            <span class="tradition-editorial-counter">${displayIdx} / ${traditions.length}</span>
             <h4 class="tradition-editorial-title">${item.name}</h4>
             <div class="tradition-editorial-period">${item.period}</div>
             <p class="tradition-editorial-context">${item.context}</p>
