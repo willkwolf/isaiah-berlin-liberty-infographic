@@ -3140,7 +3140,7 @@ function renderGenealogiaCategoryModalContent(categoryId, traditionId = null, ta
       <div class="category-overview-grid">
         <div class="category-overview-card category-overview-card--hero">
           <div class="category-overview-card__header">
-            <span class="overview-card-tag"><span class="overview-tag-glyph" aria-hidden="true">§</span> ${lblSummary}</span>
+            <span class="overview-card-tag">${lblSummary}</span>
           </div>
           <p class="category-overview-card__text">${cat.summary}</p>
         </div>
@@ -3148,13 +3148,13 @@ function renderGenealogiaCategoryModalContent(categoryId, traditionId = null, ta
         <div class="category-overview-mechanisms">
           <div class="category-overview-card">
             <div class="category-overview-card__header">
-              <span class="overview-card-tag"><span class="overview-tag-glyph" aria-hidden="true">§</span> ${lblPowerMech}</span>
+              <span class="overview-card-tag">${lblPowerMech}</span>
             </div>
             <p class="category-overview-card__text">${cat.powerMechanism}</p>
           </div>
           <div class="category-overview-card">
             <div class="category-overview-card__header">
-              <span class="overview-card-tag"><span class="overview-tag-glyph" aria-hidden="true">▸</span> ${lblCoercion}</span>
+              <span class="overview-card-tag">${lblCoercion}</span>
             </div>
             <p class="category-overview-card__text">${cat.coercionForm}</p>
           </div>
@@ -3162,7 +3162,7 @@ function renderGenealogiaCategoryModalContent(categoryId, traditionId = null, ta
 
         <div class="category-overview-card category-overview-card--tradeoffs">
           <div class="category-overview-card__header">
-            <span class="overview-card-tag"><span class="overview-tag-glyph" aria-hidden="true">¶</span> ${lblTradeoffs}</span>
+            <span class="overview-card-tag">${lblTradeoffs}</span>
           </div>
           <p class="tradeoffs-intro-text">${lblTradeoffsCopy}</p>
           <div class="tradeoffs-box">
@@ -3172,7 +3172,7 @@ function renderGenealogiaCategoryModalContent(categoryId, traditionId = null, ta
 
         <div class="category-overview-card category-overview-card--lens">
           <div class="category-overview-card__header">
-            <span class="overview-card-tag"><span class="overview-tag-glyph" aria-hidden="true">◈</span> ${lblLensReading}</span>
+            <span class="overview-card-tag">${lblLensReading}</span>
             <span class="overview-lens-badge" style="color: ${activeLensColor}; font-weight: 600;">${activeLensName}</span>
           </div>
           <p class="category-overview-card__text">${categoryLensAnalysis}</p>
@@ -3180,7 +3180,7 @@ function renderGenealogiaCategoryModalContent(categoryId, traditionId = null, ta
 
         <div class="category-overview-card category-overview-card--caveat">
           <div class="category-overview-card__header">
-            <span class="overview-card-tag"><span class="overview-tag-glyph" aria-hidden="true">◈</span> ${lblCaveat}</span>
+            <span class="overview-card-tag">${lblCaveat}</span>
           </div>
           <p class="category-overview-card__text">${cat.caveat}</p>
         </div>
@@ -3218,71 +3218,47 @@ function renderGenealogiaCategoryModalContent(categoryId, traditionId = null, ta
 
           <div class="tradition-spec-grid">
             <div class="tradition-editorial-field">
-              <span class="field-glyph" aria-hidden="true">§</span>
-              <div class="field-content">
-                <span class="field-label">${lblAuthority}</span>
-                <p class="field-body">${item.authority}</p>
-              </div>
+              <span class="field-label">${lblAuthority}</span>
+              <p class="field-body">${item.authority}</p>
             </div>
 
             <div class="tradition-editorial-field">
-              <span class="field-glyph" aria-hidden="true">▸</span>
-              <div class="field-content">
-                <span class="field-label">${lblMechanism}</span>
-                <p class="field-body">${item.mechanism}</p>
-              </div>
+              <span class="field-label">${lblMechanism}</span>
+              <p class="field-body">${item.mechanism}</p>
             </div>
 
             <div class="tradition-editorial-field">
-              <span class="field-glyph" aria-hidden="true">¶</span>
-              <div class="field-content">
-                <span class="field-label">${lblJustification}</span>
-                <p class="field-body">${item.justification}</p>
-              </div>
+              <span class="field-label">${lblJustification}</span>
+              <p class="field-body">${item.justification}</p>
             </div>
 
             <div class="tradition-editorial-field">
-              <span class="field-glyph" aria-hidden="true">↗</span>
-              <div class="field-content">
-                <span class="field-label">${lblGainers}</span>
-                <p class="field-body">${item.gainers}</p>
-              </div>
+              <span class="field-label">${lblGainers}</span>
+              <p class="field-body">${item.gainers}</p>
             </div>
 
             <div class="tradition-editorial-field">
-              <span class="field-glyph" aria-hidden="true">⤸</span>
-              <div class="field-content">
-                <span class="field-label">${lblCost}</span>
-                <p class="field-body">${item.costBearers}</p>
-              </div>
+              <span class="field-label">${lblCost}</span>
+              <p class="field-body">${item.costBearers}</p>
             </div>
 
             <div class="tradition-editorial-field">
-              <span class="field-glyph" aria-hidden="true">⌁</span>
-              <div class="field-content">
-                <span class="field-label">${lblCounter}</span>
-                <p class="field-body">${item.counterweights}</p>
-              </div>
+              <span class="field-label">${lblCounter}</span>
+              <p class="field-body">${item.counterweights}</p>
             </div>
           </div>
 
           ${item.lensReading ? `
             <div class="tradition-editorial-field tradition-editorial-field--lens">
-              <span class="field-glyph" aria-hidden="true">◈</span>
-              <div class="field-content">
-                <span class="field-label">${lblLens}</span>
-                <p class="field-body">${item.lensReading}</p>
-              </div>
+              <span class="field-label">${lblLens}</span>
+              <p class="field-body">${item.lensReading}</p>
             </div>
           ` : ''}
 
           ${item.reference ? `
             <div class="tradition-editorial-field tradition-editorial-field--sources">
-              <span class="field-glyph" aria-hidden="true">§</span>
-              <div class="field-content">
-                <span class="field-label">${lblRef}</span>
-                <p class="field-body field-body--ref">${item.reference}</p>
-              </div>
+              <span class="field-label">${lblRef}</span>
+              <p class="field-body field-body--ref">${item.reference}</p>
             </div>
           ` : ''}
         </article>

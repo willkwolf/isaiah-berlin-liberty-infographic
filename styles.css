@@ -3755,10 +3755,6 @@ body.light-theme .category-card__chips-guide,
   color: #0f172a;
 }
 
-.overview-tag-glyph {
-  color: #2563eb;
-}
-
 .category-overview-card__text {
   font-size: 0.92rem;
   line-height: 1.65;
@@ -3897,35 +3893,17 @@ body.light-theme .category-card__chips-guide,
 
 .tradition-editorial-field {
   display: flex;
-  align-items: flex-start;
-  gap: 0.85rem;
-}
-
-.field-glyph {
-  font-family: var(--font-mono);
-  font-size: 1.15rem;
-  line-height: 1.2;
-  color: #2563eb;
-  font-weight: 700;
-  min-width: 20px;
-  flex-shrink: 0;
-  padding-top: 1px;
-}
-
-.field-content {
-  display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  flex: 1;
+  gap: 0.25rem;
 }
 
 .field-label {
   font-family: var(--font-sans);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #475569;
+  color: #64748b;
 }
 
 .field-body {
