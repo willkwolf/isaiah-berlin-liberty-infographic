@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="styles.css?v=20260513" />
   <!-- Anti-flicker: apply color mode synchronously before first paint -->
   <script>
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
     (function() {
       try {
         var isManual = localStorage.getItem('site-color-manual') === '1';
@@ -135,6 +138,8 @@
           <button class="berlin-toggle-btn berlin-toggle-btn--both" data-side="ambas" aria-pressed="false">Comparar</button>
         </div>
 
+        <p class="berlin-hint" id="berlinHint" aria-live="polite">Alterna entre conceptos o selecciona Comparar para confrontar sus preguntas y tensiones.</p>
+
         <div class="berlin-split" id="berlinSplit">
           <div class="berlin-card berlin-card--neg" id="berlinNeg">
             <div class="berlin-card__tag">Libertad Negativa</div>
@@ -143,20 +148,26 @@
             <div class="berlin-card__question">
               Pregunta central: <em>¿Cuánto espacio tiene el individuo sin que nadie lo obstaculice?</em>
             </div>
-            <ul class="berlin-card__examples">
-              <li class="berlin-example" tabindex="0">
-                <span class="berlin-example__label">Libre expresión</span>
-                <span class="berlin-example__detail">El Estado no te censura. Pero si no tienes tribuna, ¿importa?</span>
-              </li>
-              <li class="berlin-example" tabindex="0">
-                <span class="berlin-example__label">Libre mercado</span>
-                <span class="berlin-example__detail">Sin regulación estatal. Pero el poder privado también coacciona.</span>
-              </li>
-              <li class="berlin-example" tabindex="0">
-                <span class="berlin-example__label">Libre tránsito</span>
-                <span class="berlin-example__detail">Sin barreras legales. Pero ¿qué pasa si no puedes pagar el billete?</span>
-              </li>
-            </ul>
+            <details class="berlin-card__disclosure" open>
+              <summary class="berlin-card__summary">
+                <span class="berlin-card__summary-text">Dilemas prácticos (3 casos)</span>
+                <span class="berlin-card__summary-icon" aria-hidden="true">▾</span>
+              </summary>
+              <ul class="berlin-card__examples">
+                <li class="berlin-example">
+                  <span class="berlin-example__label">Libre expresión</span>
+                  <span class="berlin-example__detail">El Estado no te censura. Pero si no tienes tribuna, ¿importa?</span>
+                </li>
+                <li class="berlin-example">
+                  <span class="berlin-example__label">Libre mercado</span>
+                  <span class="berlin-example__detail">Sin regulación estatal. Pero el poder privado también coacciona.</span>
+                </li>
+                <li class="berlin-example">
+                  <span class="berlin-example__label">Libre tránsito</span>
+                  <span class="berlin-example__detail">Sin barreras legales. Pero ¿qué pasa si no puedes pagar el billete?</span>
+                </li>
+              </ul>
+            </details>
             <div class="berlin-card__tension">
               <strong>Tensión interna:</strong> Define libertad sin agente, ignora asimetrías de poder fáctico.
             </div>
@@ -169,20 +180,26 @@
             <div class="berlin-card__question">
               Pregunta central: <em>¿Quién gobierna mi vida? ¿Soy yo el autor de mis propias acciones?</em>
             </div>
-            <ul class="berlin-card__examples">
-              <li class="berlin-example" tabindex="0">
-                <span class="berlin-example__label">Educación pública</span>
-                <span class="berlin-example__detail">Da capacidad real de elección. ¿A qué costo en libertad negativa?</span>
-              </li>
-              <li class="berlin-example" tabindex="0">
-                <span class="berlin-example__label">Bienestar social</span>
-                <span class="berlin-example__detail">Expande opciones reales. Requiere coacción fiscal.</span>
-              </li>
-              <li class="berlin-example" tabindex="0">
-                <span class="berlin-example__label">Derechos sociales</span>
-                <span class="berlin-example__detail">Libertad como habilitación, no solo como no-interferencia.</span>
-              </li>
-            </ul>
+            <details class="berlin-card__disclosure" open>
+              <summary class="berlin-card__summary">
+                <span class="berlin-card__summary-text">Dilemas prácticos (3 casos)</span>
+                <span class="berlin-card__summary-icon" aria-hidden="true">▾</span>
+              </summary>
+              <ul class="berlin-card__examples">
+                <li class="berlin-example">
+                  <span class="berlin-example__label">Educación pública</span>
+                  <span class="berlin-example__detail">Da capacidad real de elección. ¿A qué costo en libertad negativa?</span>
+                </li>
+                <li class="berlin-example">
+                  <span class="berlin-example__label">Bienestar social</span>
+                  <span class="berlin-example__detail">Expande opciones reales. Requiere coacción fiscal.</span>
+                </li>
+                <li class="berlin-example">
+                  <span class="berlin-example__label">Derechos sociales</span>
+                  <span class="berlin-example__detail">Libertad como habilitación, no solo como no-interferencia.</span>
+                </li>
+              </ul>
+            </details>
             <div class="berlin-card__tension">
               <strong>Peligro advertido por Berlin:</strong> Puede justificar paternalismo o imponer un «yo superior».
             </div>
@@ -226,6 +243,7 @@
               <span>Equilibrio inestable</span>
               <span>Máx. libertad</span>
             </div>
+            <div class="slider-mobile-hint" aria-hidden="true">Desliza para explorar la pérdida recíproca ⇄</div>
           </div>
 
           <div class="conflict-loss-panel" aria-live="polite">
@@ -274,22 +292,22 @@
             </defs>
             <g id="powerEdges"></g>
 
-            <g class="power-node" data-node="individuo" tabindex="0" role="button" aria-label="Individuo: sujeto político">
+            <g class="power-node" data-node="individuo" tabindex="0" role="button" aria-pressed="false" aria-label="Individuo: sujeto político">
               <circle cx="250" cy="210" r="44"/>
               <text class="power-node__text" x="250" y="206">Individuo</text>
               <text class="power-node__sub" x="250" y="223">sujeto político</text>
             </g>
-            <g class="power-node" data-node="estado" tabindex="0" role="button" aria-label="Estado: monopolio de la fuerza">
+            <g class="power-node" data-node="estado" tabindex="0" role="button" aria-pressed="false" aria-label="Estado: monopolio de la fuerza">
               <circle cx="250" cy="80" r="36"/>
               <text class="power-node__text" x="250" y="76">Estado</text>
               <text class="power-node__sub" x="250" y="92">monopolio fuerza</text>
             </g>
-            <g class="power-node" data-node="mercado" tabindex="0" role="button" aria-label="Mercado: coordinación por precio">
+            <g class="power-node" data-node="mercado" tabindex="0" role="button" aria-pressed="false" aria-label="Mercado: coordinación por precio">
               <circle cx="140" cy="320" r="36"/>
               <text class="power-node__text" x="140" y="316">Mercado</text>
               <text class="power-node__sub" x="140" y="332">precio / contrato</text>
             </g>
-            <g class="power-node" data-node="sociedad" tabindex="0" role="button" aria-label="Sociedad: norma y cultura">
+            <g class="power-node" data-node="sociedad" tabindex="0" role="button" aria-pressed="false" aria-label="Sociedad: norma y cultura">
               <circle cx="360" cy="320" r="36"/>
               <text class="power-node__text" x="360" y="316">Sociedad</text>
               <text class="power-node__sub" x="360" y="332">norma / cultura</text>
@@ -297,7 +315,7 @@
           </svg>
 
           <div class="power-info" id="powerInfo" aria-live="polite">
-            <p class="power-info__hint">Haz clic en un nodo para ver el tipo de restricción que ejerce sobre el individuo.</p>
+            <p class="power-info__hint">Haz clic o toca un nodo para ver el tipo de restricción que ejerce sobre el individuo.</p>
           </div>
         </div>
 
@@ -394,8 +412,12 @@
 
         <div class="econ-dialogue">
           <h3 class="econ-dialogue__title" id="econDialogueTitle">El Mercado Libre en Debate</h3>
+          <div class="dialogue-mobile-tabs" role="tablist" aria-label="Perspectivas del debate de mercado">
+            <button type="button" class="dialogue-tab-btn active" data-perspective="defense" role="tab" aria-selected="true" aria-controls="dialogueColDefense">El Argumento Liberal (3)</button>
+            <button type="button" class="dialogue-tab-btn" data-perspective="critique" role="tab" aria-selected="false" aria-controls="dialogueColCritique">La Crítica Intervencionista (3)</button>
+          </div>
           <div class="dialogue-grid">
-            <div class="dialogue-column dialogue-column--defense">
+            <div class="dialogue-column dialogue-column--defense" id="dialogueColDefense">
               <h4 class="dialogue-column__title" id="econDefenseTitle">El Argumento Liberal</h4>
               <div class="dialogue-card">
                 <span class="dialogue-card__num">01</span>
@@ -410,7 +432,7 @@
                 <p id="econDefense3"><strong>Prosperidad de opciones:</strong> El crecimiento económico derivado de la libre competencia multiplica las opciones reales disponibles para todos a través de la innovación.</p>
               </div>
             </div>
-            <div class="dialogue-column dialogue-column--critique">
+            <div class="dialogue-column dialogue-column--critique" id="dialogueColCritique">
               <h4 class="dialogue-column__title" id="econCritiqueTitle">La Crítica Intervencionista</h4>
               <div class="dialogue-card">
                 <span class="dialogue-card__num">01</span>

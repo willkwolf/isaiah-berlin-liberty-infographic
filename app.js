@@ -6,6 +6,52 @@
 
 'use strict';
 
+// Feature F1: Manual scroll restoration & deterministic top landing
+if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
+  try {
+    history.scrollRestoration = 'manual';
+  } catch (_) {}
+}
+
+function resetScrollToTop() {
+  if (typeof window !== 'undefined' && window.location && !window.location.hash) {
+    if (typeof window.scrollTo === 'function') {
+      try {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      } catch (_) {
+        window.scrollTo(0, 0);
+      }
+    }
+  }
+}
+
+resetScrollToTop();
+
+// Feature F12: Declare mobile tokens and safe-area insets in DOM stylesheet
+function initMobileTokens() {
+  if (typeof document === 'undefined') return;
+  if (!document.getElementById('mobile-safe-area-tokens')) {
+    const style = document.createElement('style');
+    style.id = 'mobile-safe-area-tokens';
+    style.textContent = `
+      @media (max-width: 768px) {
+        :root {
+          --safe-area-inset-top: env(safe-area-inset-top, 0px);
+          --safe-area-inset-right: env(safe-area-inset-right, 0px);
+          --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+          --safe-area-inset-left: env(safe-area-inset-left, 0px);
+        }
+      }
+    `;
+    const target = document.head || document.documentElement;
+    if (target) {
+      target.appendChild(style);
+    }
+  }
+}
+
+initMobileTokens();
+
 const I18N = window.I18N_CONTENT || { defaultLanguage: 'es', supportedLanguages: ['es'], locales: {} };
 
 // ═══════════════════════════════════════════════
@@ -1517,6 +1563,10 @@ function initBerlinToggle() {
   const split = qs('#berlinSplit');
   if (!split) return;
 
+  function isMobileViewport() {
+    return typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+  }
+
   function setSide(side) {
     state.berlinSide = side;
     btns.forEach(b => {
@@ -1528,14 +1578,43 @@ function initBerlinToggle() {
     split.classList.remove('show-one-neg', 'show-one-pos', 'show-both');
     if (side === 'negativa') split.classList.add('show-one-neg');
     else if (side === 'positiva') split.classList.add('show-one-pos');
-    // 'ambas' leaves default grid
+
+    // Progressive disclosure management on mobile
+    const disclosures = qsa('.berlin-card__disclosure', split);
+    if (isMobileViewport()) {
+      if (side === 'ambas') {
+        // In comparison mode on mobile: collapse examples by default so cards shrink to ~640px (< 1 screen)
+        disclosures.forEach(d => d.removeAttribute('open'));
+      } else {
+        // In single lens mode on mobile: keep examples expanded for full immersion
+        disclosures.forEach(d => d.setAttribute('open', ''));
+      }
+    } else {
+      // Desktop: keep examples open
+      disclosures.forEach(d => d.setAttribute('open', ''));
+    }
   }
 
   btns.forEach(btn => {
     btn.addEventListener('click', () => setSide(btn.dataset.side));
   });
 
-  setSide('ambas'); // Start with both visible
+  // Mobile initializes to single concept mode (or active lens), desktop starts with 'ambas'
+  const initialSide = isMobileViewport()
+    ? (state.currentLens === 'positiva' ? 'positiva' : 'negativa')
+    : 'ambas';
+
+  setSide(initialSide);
+
+  // Resize handler to ensure examples are restored when expanding to desktop
+  if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+    window.addEventListener('resize', () => {
+      if (!isMobileViewport()) {
+        const disclosures = qsa('.berlin-card__disclosure', split);
+        disclosures.forEach(d => d.setAttribute('open', ''));
+      }
+    });
+  }
 }
 
 // ═══════════════════════════════════════════════
@@ -1575,6 +1654,8 @@ function updateConflictSlider(val) {
   if (note)   note.textContent = getConflictNote(val);
 
   slider.setAttribute('aria-valuenow', val);
+  const noteText = getConflictNote(val);
+  slider.setAttribute('aria-valuetext', `${val}% — ${noteText}`);
   
   // Dynamic non-linear trajectory chart (Tufte multivariate + integrity)
   drawConflictCurveSvg(val);
@@ -1699,15 +1780,22 @@ function renderPowerInfo() {
   if (!infoPanel) return;
 
   if (!state.activePowerNode) {
-    nodes.forEach(n => n.classList.remove('active'));
+    nodes.forEach(n => {
+      n.classList.remove('active');
+      n.setAttribute('aria-pressed', 'false');
+    });
     infoPanel.innerHTML = isEnglish()
-      ? '<p class="power-info__hint">Tap a node to see the kind of restriction it exerts on the individual.</p>'
-      : '<p class="power-info__hint">Haz clic en un nodo para ver el tipo de restricción que ejerce sobre el individuo.</p>';
+      ? '<p class="power-info__hint">Click or tap a node to see the kind of restriction it exerts on the individual.</p>'
+      : '<p class="power-info__hint">Haz clic o toca un nodo para ver el tipo de restricción que ejerce sobre el individuo.</p>';
     updatePowerDiagramEdges(state.currentLens);
     return;
   }
 
-  nodes.forEach(n => n.classList.toggle('active', n.dataset.node === state.activePowerNode));
+  nodes.forEach(n => {
+    const isActive = n.dataset.node === state.activePowerNode;
+    n.classList.toggle('active', isActive);
+    n.setAttribute('aria-pressed', String(isActive));
+  });
   const data = getPowerNode(state.activePowerNode);
   if (!data) return;
   infoPanel.innerHTML = `
@@ -1990,6 +2078,32 @@ function initMarketToggle() {
   drawMarketSvg('ideal');
 }
 
+function initMarketDebateMobileTabs() {
+  const tabBtns = qsa('.dialogue-mobile-tabs .dialogue-tab-btn');
+  const grid = qs('.dialogue-grid');
+  if (!tabBtns.length || !grid) return;
+
+  function setPerspective(perspective) {
+    tabBtns.forEach(btn => {
+      const active = btn.dataset.perspective === perspective;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-selected', String(active));
+    });
+    grid.classList.remove('show-defense', 'show-critique');
+    grid.classList.add(`show-${perspective}`);
+  }
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      setPerspective(btn.dataset.perspective);
+    });
+  });
+
+  if (window.matchMedia && window.matchMedia('(max-width: 768px)').matches) {
+    setPerspective('defense');
+  }
+}
+
 // ═══════════════════════════════════════════════
 // SECTION VII — SEN CAPACIDADES
 // ═══════════════════════════════════════════════
@@ -2013,6 +2127,7 @@ function renderSenCapabilities() {
     btn.title = cap.desc;
     btn.setAttribute('aria-pressed', String(state.senActiveCaps.has(cap.id)));
     btn.innerHTML = `
+      <span class="sen-cap-btn__status" aria-hidden="true"></span>
       <span class="sen-cap-btn__icon">${cap.icon}</span>
       <span class="sen-cap-btn__name">${cap.name}</span>
       <span class="sen-cap-btn__weight">${isEnglish() ? 'Weight' : 'Peso'}: ${cap.weight}%</span>
@@ -2342,6 +2457,7 @@ function updateColombiaDashboard() {
 
           return `<td ${activeClass} 
                       data-lens="${colKey}" 
+                      data-label="${headers[i+1]}" 
                       role="button" 
                       tabindex="0" 
                       aria-label="${label}">${row.evaluations[colKey]}</td>`;
@@ -2515,9 +2631,13 @@ function initScrollAwareLensPanel() {
   }
 
   let observer = null;
+  const activeIntersectingElements = new Set();
 
   function createObserver() {
-    if (observer) observer.disconnect();
+    if (observer) {
+      observer.disconnect();
+      activeIntersectingElements.clear();
+    }
 
     if (!mq.matches) {
       // Desktop: remove mobile visibility classes, let CSS handle it
@@ -2526,15 +2646,22 @@ function initScrollAwareLensPanel() {
     }
 
     observer = new IntersectionObserver(entries => {
-      const anyIntersecting = entries.some(entry => entry.isIntersecting);
-      if (anyIntersecting) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          activeIntersectingElements.add(entry.target);
+        } else {
+          activeIntersectingElements.delete(entry.target);
+        }
+      });
+
+      if (activeIntersectingElements.size > 0) {
         showLensPanel();
       } else {
         hideLensPanel();
       }
-    }, { threshold: 0.2 });
+    }, { threshold: [0, 0.2] });
 
-    qsa('.lens-interpretation').forEach(el => observer.observe(el));
+    qsa('[data-lens-context], .lens-interpretation').forEach(el => observer.observe(el));
   }
 
   // Initial setup
@@ -2553,6 +2680,9 @@ function initScrollAwareLensPanel() {
 // ═══ FEATURE 2: WHEEL PICKER ═══
 
 const DRUM_ORDER = ['negativa', 'positiva', 'capacidades', 'libertario'];
+
+let isProgrammaticScroll = false;
+let programmaticScrollTimer = null;
 
 /**
  * Pure helper — returns the next drum index given a start index and swipe direction.
@@ -2586,19 +2716,27 @@ function updateDrumSelector(lens) {
   const idx = DRUM_ORDER.indexOf(lens);
   if (idx === -1) return;
 
-  // Mark center item
+  // Mark center item and update ARIA selection
   qsa('.lens-wheel__item', wheel).forEach((item, i) => {
     item.classList.toggle('is-center', i === idx);
+    item.setAttribute('aria-selected', String(i === idx));
   });
 
-  // Scroll the track so the active item is centered — without animation
-  // when called programmatically (e.g. from setLens)
+  // Scroll the track so the active item is centered
   const track = qs('.lens-wheel__track', wheel);
   if (track) {
     const ITEM_H = 44;
-    // Each item is at offset: idx * ITEM_H (track has padding-top: 44px)
-    // To center item idx, scrollTop = idx * ITEM_H
-    track.scrollTo({ top: idx * ITEM_H, behavior: 'smooth' });
+    const prefersReducedMotion = Boolean(
+      window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    );
+    const behavior = prefersReducedMotion ? 'auto' : 'smooth';
+
+    isProgrammaticScroll = true;
+    clearTimeout(programmaticScrollTimer);
+    track.scrollTo({ top: idx * ITEM_H, behavior });
+    programmaticScrollTimer = setTimeout(() => {
+      isProgrammaticScroll = false;
+    }, prefersReducedMotion ? 50 : 250);
   }
 }
 
@@ -2618,6 +2756,12 @@ function initDrumSelector() {
   wheel.className = 'lens-wheel';
   wheel.setAttribute('role', 'listbox');
   wheel.setAttribute('aria-label', 'Marco teórico activo');
+
+  // Drag handle indicator (mobile affordance)
+  const handle = document.createElement('div');
+  handle.className = 'lens-wheel__handle';
+  handle.setAttribute('aria-hidden', 'true');
+  wheel.appendChild(handle);
 
   // Selection highlight band (purely decorative)
   const highlight = document.createElement('div');
@@ -2676,6 +2820,8 @@ function initDrumSelector() {
   let scrollTimer = null;
 
   function onScrollEnd() {
+    if (isProgrammaticScroll) return;
+
     // Determine which item is closest to center
     const scrollTop = track.scrollTop;
     const centeredIdx = Math.round(scrollTop / ITEM_H);
@@ -2694,6 +2840,7 @@ function initDrumSelector() {
   }
 
   track.addEventListener('scroll', () => {
+    if (isProgrammaticScroll) return;
     // Debounce: fire after scroll settles (scroll-snap will snap it)
     clearTimeout(scrollTimer);
     scrollTimer = setTimeout(onScrollEnd, 80);
@@ -2703,7 +2850,12 @@ function initDrumSelector() {
 
   qsa('.lens-wheel__item', track).forEach((item, i) => {
     item.addEventListener('click', () => {
-      track.scrollTo({ top: i * ITEM_H, behavior: 'smooth' });
+      const targetLens = item.dataset.lens || DRUM_ORDER[i];
+      if (targetLens && targetLens !== state.currentLens) {
+        setLens(targetLens);
+      } else {
+        updateDrumSelector(state.currentLens);
+      }
     });
   });
 
@@ -2716,12 +2868,12 @@ function initDrumSelector() {
       e.preventDefault();
       const currentIndex = DRUM_ORDER.indexOf(state.currentLens);
       const nextIndex = getDrumKeyboardNextIndex(currentIndex, 'ArrowDown');
-      track.scrollTo({ top: nextIndex * ITEM_H, behavior: 'smooth' });
+      setLens(DRUM_ORDER[nextIndex]);
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       const currentIndex = DRUM_ORDER.indexOf(state.currentLens);
       const nextIndex = getDrumKeyboardNextIndex(currentIndex, 'ArrowUp');
-      track.scrollTo({ top: nextIndex * ITEM_H, behavior: 'smooth' });
+      setLens(DRUM_ORDER[nextIndex]);
     }
   });
 
@@ -2805,7 +2957,13 @@ function initColorModeToggle() {
 // ═══════════════════════════════════════════════
 
 function initFadeIn() {
-  const sections = qsa('.section');
+  const sections = qsa('.section:not(#problema)');
+  const heroSection = qs('#problema');
+  if (heroSection) {
+    heroSection.style.opacity = '1';
+    heroSection.style.transform = 'none';
+  }
+
   if (!('IntersectionObserver' in window)) {
     sections.forEach(section => {
       section.style.opacity = '1';
@@ -3418,6 +3576,8 @@ function initGenealogia() {
 // ═══════════════════════════════════════════════
 
 document.addEventListener('DOMContentLoaded', () => {
+  resetScrollToTop();
+
   state.currentLanguage = getPreferredLanguage();
 
   // Restore last lens (or 'positiva' on first visit — visual center of the wheel)
@@ -3438,6 +3598,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPowerDiagram();
   initLimitsLab();
   initMarketToggle();
+  initMarketDebateMobileTabs();
   initSenCapacidades();
   updateColombiaDashboard();
   initSystemToggle();
@@ -3454,3 +3615,10 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('Anatomía de la Libertad — iniciada.');
   console.log('Marco actual:', state.currentLens);
 });
+
+if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+  window.addEventListener('pageshow', () => {
+    resetScrollToTop();
+  });
+}
+

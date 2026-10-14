@@ -112,6 +112,9 @@ window.I18N_CONTENT.locales.en.staticContent.push(
   { selector: '#berlinPos .berlin-example:nth-child(3) .berlin-example__label', type: 'text', value: 'Social rights' },
   { selector: '#berlinPos .berlin-example:nth-child(3) .berlin-example__detail', type: 'text', value: 'Freedom as enablement, not only as non-interference.' },
   { selector: '#berlinPos .berlin-card__tension', type: 'html', value: '<strong>Danger warned by Berlin:</strong> It may justify paternalism or impose a “higher self.”' },
+  { selector: '#berlinHint', type: 'text', value: 'Toggle between concepts or select Compare to confront their questions and tensions.' },
+  { selector: '#berlinNeg .berlin-card__summary-text', type: 'text', value: 'Practical dilemmas (3 cases)' },
+  { selector: '#berlinPos .berlin-card__summary-text', type: 'text', value: 'Practical dilemmas (3 cases)' },
   { selector: '.lens-interpretation__label', type: 'text', value: 'Under this framework:' }
 );
 
@@ -126,10 +129,12 @@ window.I18N_CONTENT.locales.en.staticContent.push(
   { selector: '#conflicto .slider-track-labels span:nth-child(1)', type: 'text', value: 'Max equality' },
   { selector: '#conflicto .slider-track-labels span:nth-child(2)', type: 'text', value: 'Unstable balance' },
   { selector: '#conflicto .slider-track-labels span:nth-child(3)', type: 'text', value: 'Max liberty' },
+  { selector: '#conflicto .slider-mobile-hint', type: 'text', value: 'Slide to explore reciprocal loss ⇄' },
   { selector: '#conflicto .loss-row:nth-child(1) .loss-row__label', type: 'text', value: 'Negative liberty restricted' },
   { selector: '#conflicto .loss-row:nth-child(2) .loss-row__label', type: 'text', value: 'Equality sacrificed' },
   { selector: '#poder-title', type: 'html', value: 'Power<br/><em>and obedience</em>' },
   { selector: '#poder .section__subtitle', type: 'html', value: 'Berlin distinguishes: coercion implies an intentional human agent. <em>“Why should I obey?”</em> is the fundamental political question.' },
+  { selector: '#powerInfo .power-info__hint', type: 'text', value: 'Click or tap a node to see the kind of restriction it exerts on the individual.' },
   { selector: '#powerDiagram', type: 'attr', attr: 'aria-label', value: 'Diagram of power relations' },
   { selector: '.power-node[data-node="individuo"]', type: 'attr', attr: 'aria-label', value: 'Individual: political subject' },
   { selector: '.power-node[data-node="estado"]', type: 'attr', attr: 'aria-label', value: 'State: monopoly of force' },
@@ -166,6 +171,8 @@ window.I18N_CONTENT.locales.en.staticContent.push(
   { selector: '#economia .market-btn[data-market="real"]', type: 'text', value: 'Empirical evidence' },
   { selector: '#marketSvg', type: 'attr', attr: 'aria-label', value: 'Comparison of ideal and real market' },
   { selector: '#econDialogueTitle', type: 'text', value: 'The Free Market Debate' },
+  { selector: '.dialogue-mobile-tabs .dialogue-tab-btn[data-perspective="defense"]', type: 'text', value: 'The Liberal Argument (3)' },
+  { selector: '.dialogue-mobile-tabs .dialogue-tab-btn[data-perspective="critique"]', type: 'text', value: 'The Interventionist Critique (3)' },
   { selector: '#econDefenseTitle', type: 'text', value: 'The Liberal Argument' },
   { selector: '#econDefense1', type: 'html', value: '<strong>Shield against serfdom:</strong> The free market disperses economic power, preventing any central entity from controlling the lives and choices of individuals.' },
   { selector: '#econDefense2', type: 'html', value: '<strong>Voluntary coordination:</strong> The price system coordinates the decentralized knowledge of millions of people voluntarily, without central coercion.' },

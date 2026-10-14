@@ -4516,5 +4516,643 @@ html.light-mode .lab-reversibility-box {
   background: #f7f6f2;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   MILESTONE 1: INITIAL VIEWPORT & ENTRY STATE INTEGRITY (R1)
+   Scoped strictly to mobile viewports (<= 768px). Desktop remains 100% intact.
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* F3: Prevent hero-viz cascade override from expanding mobile hero past the fold */
+  .hero-viz {
+    display: none;
+  }
+
+  /* F2: Hero onboarding as non-destructive overlay banner (CLS = 0) */
+  .hero-onboarding {
+    position: fixed;
+    bottom: 1.25rem;
+    left: 1rem;
+    right: 1rem;
+    max-width: calc(100vw - 2rem);
+    margin: 0 auto;
+    z-index: 1000;
+    box-sizing: border-box;
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-accent-mid);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  }
+
+  body.light-mode .hero-onboarding {
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
+  }
+
+  .hero-onboarding__btn {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.25rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MILESTONE 2: SCROLLYTELLING & VERTICAL NARRATIVE CONTINUITY (R2)
+   Scoped strictly to mobile viewports (<= 768px). Desktop remains 100% intact.
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* F6: Touch containment - prevent slider from intercepting vertical scroll gestures */
+  #conflictSlider {
+    touch-action: pan-y;
+  }
+
+  /* F6: Drum track touch containment */
+  .lens-wheel__track {
+    overscroll-behavior-y: contain;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MILESTONE 3: BASE RULES — DESKTOP INVARIANCE GUARDRAIL (R5, F13)
+   New mobile elements are hidden on desktop viewports (> 768px).
+   ═══════════════════════════════════════════════════════════════════════════ */
+.berlin-card__disclosure {
+  display: block;
+}
+
+.berlin-card__summary {
+  display: none !important;
+}
+
+.berlin-hint {
+  display: none;
+}
+
+.dialogue-mobile-tabs {
+  display: none;
+}
+
+.slider-mobile-hint {
+  display: none;
+}
+
+.lens-wheel__handle {
+  display: none;
+}
+
+/* WCAG 1.4.1 non-color state indicator for Sen capabilities */
+.sen-cap-btn__status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.35rem;
+}
+
+.sen-cap-btn__status::before {
+  content: '○';
+  font-size: 0.75rem;
+  color: var(--clr-text-dim);
+  line-height: 1;
+}
+
+.sen-cap-btn.active .sen-cap-btn__status::before {
+  content: '●';
+  color: var(--clr-cap);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MILESTONE 3: COGNITIVE & SEMANTIC UX CLARIFICATION (R3)
+   Scoped strictly to mobile viewports (<= 768px). Desktop remains 100% intact.
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Section II: Mobile Affordance Hint */
+  .berlin-hint {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--clr-text-dim);
+    margin: -1rem 0 1.25rem 0;
+    line-height: 1.45;
+  }
+
+  /* Section II: Progressive Disclosure Summary */
+  .berlin-card__summary {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 0.85rem;
+    margin-bottom: 0.85rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius);
+    color: var(--clr-text-bright);
+    font-family: var(--font-sans);
+    font-size: 0.84rem;
+    font-weight: 500;
+    cursor: pointer;
+    min-height: 44px;
+    list-style: none;
+    user-select: none;
+    transition: background var(--transition), border-color var(--transition);
+  }
+
+  .berlin-card__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .berlin-card__summary:hover,
+  .berlin-card__summary:focus-visible {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--clr-accent-mid);
+    outline: none;
+  }
+
+  body.light-mode .berlin-card__summary {
+    background: rgba(0, 0, 0, 0.03);
+  }
+
+  body.light-mode .berlin-card__summary:hover,
+  body.light-mode .berlin-card__summary:focus-visible {
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  .berlin-card__summary-icon {
+    font-size: 0.75rem;
+    color: var(--clr-accent);
+    transition: transform var(--transition);
+  }
+
+  details.berlin-card__disclosure[open] .berlin-card__summary-icon {
+    transform: rotate(180deg);
+  }
+
+  .berlin-card__disclosure:not([open]) {
+    margin-bottom: 0.25rem;
+  }
+
+  /* Section VI: Market Debate Mobile Tabs */
+  .dialogue-mobile-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .dialogue-tab-btn {
+    flex: 1;
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    color: var(--clr-text-dim);
+    border-radius: var(--radius);
+    font-size: 0.82rem;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    text-align: center;
+    transition: all var(--transition);
+  }
+
+  .dialogue-tab-btn.active[data-perspective="defense"] {
+    background: rgba(61, 190, 138, 0.15);
+    border-color: var(--clr-cap);
+    color: var(--clr-text-bright);
+    font-weight: 500;
+  }
+
+  .dialogue-tab-btn.active[data-perspective="critique"] {
+    background: rgba(224, 85, 85, 0.15);
+    border-color: #e05555;
+    color: var(--clr-text-bright);
+    font-weight: 500;
+  }
+
+  body.light-mode .dialogue-tab-btn.active[data-perspective="defense"] {
+    background: rgba(46, 125, 50, 0.12);
+  }
+
+  body.light-mode .dialogue-tab-btn.active[data-perspective="critique"] {
+    background: rgba(198, 40, 40, 0.12);
+  }
+
+  .dialogue-grid.show-defense .dialogue-column--critique {
+    display: none;
+  }
+
+  .dialogue-grid.show-critique .dialogue-column--defense {
+    display: none;
+  }
+
+  /* Section III: Conflict Slider Mobile Hint */
+  .slider-mobile-hint {
+    display: block;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--clr-text-dim);
+    margin-top: 0.65rem;
+    line-height: 1.4;
+  }
+
+  /* Mobile Drum Wheel Drag Handle */
+  .lens-wheel__handle {
+    display: block;
+    width: 36px;
+    height: 4px;
+    background: var(--clr-border);
+    border-radius: 2px;
+    margin: 6px auto 4px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MILESTONE 4: RESPONSIVE DESIGN SYSTEM & MOBILE TOKENS (R4)
+   Features F9, F10, F11, F12.
+   Scoped strictly to mobile viewports (<= 768px and <= 500px).
+   Desktop (> 768px) remains 100% bit-for-bit invariant.
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ── F12: Mobile Design Tokens & Safe Area Inset Variables ───────────── */
+  :root {
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-right: env(safe-area-inset-right, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-left: env(safe-area-inset-left, 0px);
+
+    --safe-area-top: env(safe-area-inset-top, 0px);
+    --safe-area-right: env(safe-area-inset-right, 0px);
+    --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-left: env(safe-area-inset-left, 0px);
+
+    --mobile-tap-target-min: 44px;
+    --mobile-nav-height: calc(44px + env(safe-area-inset-top, 0px));
+    --mobile-content-gutter: 1rem;
+    --mobile-lens-bottom-offset: max(1rem, calc(0.5rem + env(safe-area-inset-bottom, 0px)));
+
+    --font-scale-mobile-title: clamp(1.5rem, 6.5vw, 2.1rem);
+    --font-scale-mobile-subtitle: 0.92rem;
+    --font-scale-mobile-body: 0.95rem;
+    --mobile-line-height-comfortable: 1.6;
+  }
+
+  /* ── F11 & F12: Viewport Bounds & Safe Area Insets ───────────────────── */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  body {
+    padding-bottom: max(6.5rem, calc(6.5rem + env(safe-area-inset-bottom)));
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .top-nav {
+    padding-top: max(0.5rem, env(safe-area-inset-top));
+    padding-left: max(0.65rem, env(safe-area-inset-left));
+    padding-right: max(0.65rem, env(safe-area-inset-right));
+  }
+
+  .section {
+    scroll-margin-top: max(3.5rem, calc(3.5rem + env(safe-area-inset-top)));
+    padding-left: max(1.15rem, env(safe-area-inset-left));
+    padding-right: max(1.15rem, env(safe-area-inset-right));
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+
+  .section__inner {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .lens-panel {
+    bottom: max(1rem, calc(0.5rem + env(safe-area-inset-bottom)));
+    left: max(1rem, env(safe-area-inset-left));
+    right: max(1rem, env(safe-area-inset-right));
+  }
+
+  .hero-onboarding {
+    bottom: max(1.25rem, calc(0.75rem + env(safe-area-inset-bottom)));
+    left: max(1rem, env(safe-area-inset-left));
+    right: max(1rem, env(safe-area-inset-right));
+  }
+
+  .genealogia-modal-backdrop {
+    padding-top: max(0.75rem, env(safe-area-inset-top));
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    padding-left: max(0.5rem, env(safe-area-inset-left));
+    padding-right: max(0.5rem, env(safe-area-inset-right));
+  }
+
+  /* ── F10: Section VIII Colombia Matrix Responsive Stacked Cards ──────── */
+  .colombia-table-container {
+    overflow-x: visible;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    margin-inline: 0;
+    max-width: 100%;
+  }
+
+  .colombia-table {
+    display: block;
+    width: 100%;
+    border-collapse: separate;
+  }
+
+  .colombia-table thead {
+    display: none;
+  }
+
+  .colombia-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+  }
+
+  .colombia-table tbody tr {
+    display: flex;
+    flex-direction: column;
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-lg);
+    padding: 1.15rem;
+    box-sizing: border-box;
+    width: 100%;
+    gap: 0.75rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  body.light-mode .colombia-table tbody tr {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  .colombia-table td.table-indicator-name {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    width: 100%;
+    padding: 0 0 0.85rem 0;
+    border-bottom: 2px solid var(--clr-border);
+    box-sizing: border-box;
+  }
+
+  .table-indicator-name strong {
+    font-size: 1.15rem;
+  }
+
+  .table-indicator-val {
+    font-size: 0.9rem;
+    margin-top: 4px;
+  }
+
+  .colombia-table td[data-lens] {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 0.85rem;
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.02);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    cursor: pointer;
+    min-height: 44px;
+    transition: all var(--transition);
+  }
+
+  body.light-mode .colombia-table td[data-lens] {
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  .colombia-table td[data-lens]::before {
+    content: attr(data-label);
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--clr-accent);
+    margin-bottom: 0.35rem;
+  }
+
+  .colombia-table td[data-lens].active-column-cell {
+    border-color: var(--clr-accent) !important;
+    background: var(--clr-accent-dim) !important;
+    box-shadow: 0 0 0 1px var(--clr-accent);
+  }
+
+  body.light-mode .colombia-table td[data-lens].active-column-cell {
+    background: var(--clr-accent-dim) !important;
+  }
+
+  /* ── F9: Touch Target Compliance (WCAG 2.5.5 / 2.5.8 >= 44x44px) ───────── */
+  #colombiaCoachBannerClose,
+  .colombia-coach-banner__close {
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    touch-action: manipulation;
+  }
+
+  #economia .market-btn,
+  .market-btn {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1.15rem;
+    box-sizing: border-box;
+    touch-action: manipulation;
+  }
+
+  #comparacion .system-btn,
+  .system-btn {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.25rem;
+    box-sizing: border-box;
+    touch-action: manipulation;
+  }
+
+  #heroOnboardingDismiss,
+  .hero-onboarding__btn {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.25rem;
+    box-sizing: border-box;
+    touch-action: manipulation;
+  }
+
+  .top-nav__link {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    touch-action: manipulation;
+  }
+
+  .berlin-toggle-btn {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    touch-action: manipulation;
+  }
+
+  #conflictSlider,
+  .conflict-slider {
+    min-height: 44px;
+    height: 44px;
+    padding-top: 19px;
+    padding-bottom: 19px;
+    box-sizing: border-box;
+    background-clip: content-box;
+    touch-action: pan-y;
+  }
+
+  #conflictSlider::-webkit-slider-thumb,
+  .conflict-slider::-webkit-slider-thumb {
+    width: 28px;
+    height: 28px;
+  }
+
+  #conflictSlider::-moz-range-thumb,
+  .conflict-slider::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+  }
+
+  .lens-wheel__item {
+    min-height: 44px;
+    height: 44px;
+    transform: none;
+    opacity: 0.45;
+    box-sizing: border-box;
+    touch-action: manipulation;
+  }
+
+  .lens-wheel__item.is-center {
+    transform: none;
+    opacity: 1;
+    font-weight: 600;
+  }
+
+  .genealogia-modal__close-btn,
+  #modalCloseBtn {
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    touch-action: manipulation;
+  }
+
+  .modal-nav-btn,
+  #modalPrevBtn,
+  #modalNextBtn {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.85rem;
+    box-sizing: border-box;
+    touch-action: manipulation;
+  }
+
+  .modal-close-action-btn,
+  #modalCloseActionBtn {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.35rem;
+    box-sizing: border-box;
+    touch-action: manipulation;
+  }
+
+  .language-btn {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    touch-action: manipulation;
+  }
+
+  #colorModeBtn,
+  .color-mode-btn {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    touch-action: manipulation;
+  }
+
+  #lensToggleBtn,
+  .lens-panel__toggle {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    touch-action: manipulation;
+  }
+
+  .ecosystem-callout-btn {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    touch-action: manipulation;
+  }
+}
+
+@media (max-width: 500px) {
+  .section {
+    padding-left: max(0.85rem, env(safe-area-inset-left));
+    padding-right: max(0.85rem, env(safe-area-inset-right));
+  }
+
+  /* F11: Fix 3px internal tab overflow at 320px */
+  .limits-lab__tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.4rem;
+  }
+
+  .lab-tab {
+    padding: 0.5rem 0.35rem;
+    font-size: 0.78rem;
+    min-width: 0;
+  }
+}
 
 
