@@ -44,6 +44,28 @@ Object.assign(window.I18N_CONTENT.locales.en.ui.coach, {
 });
 
 window.I18N_CONTENT.locales.en.staticContent.push(
+  // Republican freedom callout
+  { selector: '#republicanTitle', type: 'text', value: 'Republican Liberty: Non-Domination (Pettit & Skinner)' },
+  { selector: '#republicanDesc', type: 'html', value: 'Beyond Berlin\'s dichotomy, the republican tradition conceives freedom neither as mere absence of actual interference (negative) nor as democratic self-mastery (positive), but as <strong>absence of arbitrary power or domination</strong> (<em>libertas</em> vs. <em>dominus</em>). A slave with a benevolent, non-interfering master is still unfree because they live at the mercy of another\'s arbitrary will.' },
+
+  // Conflict model disclaimer
+  { selector: '#conflictModelDisclaimer', type: 'html', value: '<em>Epistemological notice:</em> This diagram illustrates a <strong>heuristic and qualitative model</strong> of value opportunity costs. It does not represent an empirical econometric function or statistical frequency.' },
+
+  // Sen conversion factors
+  { selector: '#senConversionTitle', type: 'text', value: 'Sen\'s Three Conversion Factors' },
+  { selector: '#senConversionDesc', type: 'text', value: 'Holding goods or resources does not automatically translate into real freedom. Sen shows that converting material means into substantive capabilities is mediated by three critical factors:' },
+  { selector: '#senConvTitle1', type: 'text', value: 'Personal Factors' },
+  { selector: '#senConvDesc1', type: 'text', value: 'Biological and physical conditions (age, gender, disability, metabolism, or health) determining how much nutrition, mobility, or autonomy a person derives from the same material good.' },
+  { selector: '#senConvTitle2', type: 'text', value: 'Environmental Factors' },
+  { selector: '#senConvDesc2', type: 'text', value: 'Geographic and climatic conditions (extreme temperatures, flooding, steep topography, transit isolation, or pollution) that increase costs or restrict the exercise of basic liberties.' },
+  { selector: '#senConvTitle3', type: 'text', value: 'Social Factors' },
+  { selector: '#senConvDesc3', type: 'text', value: 'Cultural norms, gender hierarchies, racial discrimination, public safety, or community networks that allow or penalize the public realization of functionings.' },
+
+  // Colombia subtitle calibration baseline
+  { selector: '#colombiaSubtitle', type: 'text', value: 'The same data. Three indices. Four possible readings. Empirical calibration with 2024–2026 baseline (DANE, UNDP, Freedom House, Fraser Institute). Switch the theoretical lens to observe how the diagnosis radically transforms.' },
+
+  // System dynamics model disclaimer
+  { selector: '#systemModelDisclaimer', type: 'html', value: '<em>Epistemological notice:</em> The monist and pluralist trajectory curves are <strong>conceptual system dynamics representations</strong> for pedagogical purposes. They describe qualitative tendencies of institutional rigidity versus adaptability, not quantitative time series.' },
   { selector: '.lens-panel', type: 'attr', attr: 'aria-label', value: 'Theoretical lens selector' },
   { selector: '#languageSwitchLabel', type: 'text', value: 'Language' },
   { selector: '.lens-panel__hint', type: 'html', value: 'The data stay the same.<br/>The interpretation changes.' },

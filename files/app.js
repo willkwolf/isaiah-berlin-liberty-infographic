@@ -1713,15 +1713,13 @@ function drawConflictCurveSvg(val) {
 
   const axisColor = '#9ca3af';
   const axisStroke = '#4b5563';
-  const fAxis = isMobile ? 12 : 12.5;
-  const fVal = isMobile ? 12 : 12.5;
+  const fAxis = isMobile ? 11.5 : 12.5;
   const fTitle = isMobile ? 11 : 12;
 
-  // Anti-collision & boundary clamping for interactive dot text
-  const anchorEnd = val > 60;
-  const textX = anchorEnd ? px(val) - 8 : px(val) + 8;
-  const textY = Math.max(pad.t + 14, Math.min(pad.t + ph - 8, py(currentY) - 8));
-  const textAnchor = anchorEnd ? 'end' : 'start';
+  // On mobile, render the Y-axis label vertically along the vertical axis line to prevent truncation
+  const yAxisLabelSvg = isMobile
+    ? `<text x="${pad.l - 14}" y="${pad.t + ph / 2}" fill="${axisColor}" font-size="${fAxis}" font-family="IBM Plex Mono" font-weight="600" text-anchor="middle" transform="rotate(-90 ${pad.l - 14} ${pad.t + ph / 2})">${labelY}</text>`
+    : `<text x="${pad.l}" y="${pad.t - 10}" fill="${axisColor}" font-size="${fAxis}" font-family="IBM Plex Mono" font-weight="600" text-anchor="start">${labelY}</text>`;
 
   let svgContent = `
     <!-- Axes -->
@@ -1729,7 +1727,7 @@ function drawConflictCurveSvg(val) {
     <line x1="${pad.l}" y1="${pad.t + ph}" x2="${pad.l + pw}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1.25"/>
 
     <!-- Axis Labels -->
-    <text x="${pad.l}" y="${pad.t - 10}" fill="${axisColor}" font-size="${fAxis}" font-family="IBM Plex Mono" font-weight="600" text-anchor="start">${labelY}</text>
+    ${yAxisLabelSvg}
     <text x="${pad.l + pw}" y="${pad.t + ph + 24}" fill="${axisColor}" font-size="${fAxis}" font-family="IBM Plex Mono" font-weight="600" text-anchor="end">${labelX}</text>
 
     <!-- Trajectory Curve -->
@@ -1739,13 +1737,8 @@ function drawConflictCurveSvg(val) {
     <line x1="${px(val)}" y1="${py(currentY)}" x2="${px(val)}" y2="${pad.t + ph}" stroke="${axisStroke}" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
     <line x1="${pad.l}" y1="${py(currentY)}" x2="${px(val)}" y2="${py(currentY)}" stroke="${axisStroke}" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
 
-    <!-- Current value dot -->
+    <!-- Current value dot (pedagogical qualitative marker, without pseudo-exact coordinates) -->
     <circle cx="${px(val)}" cy="${py(currentY)}" r="4.5" fill="#1e293b" stroke="${activeColor}" stroke-width="2.5"/>
-
-    <!-- Text annotation -->
-    <text x="${textX}" y="${textY}" fill="${activeColor}" font-size="${fVal}" font-family="IBM Plex Mono" font-weight="600" text-anchor="${textAnchor}">
-      ${val}%: ${Math.round(currentY)}% ${isEnglish() ? 'Loss' : 'Pérdida'}
-    </text>
 
     <!-- Curve indicator label (top-right corner, cleanly separated from Y-axis) -->
     <text x="${pad.l + pw}" y="${pad.t - 10}" fill="${activeColor}" font-size="${fTitle}" font-family="IBM Plex Mono" font-weight="600" opacity="0.85" text-anchor="end">${curveLabel}</text>

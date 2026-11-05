@@ -5259,3 +5259,122 @@ html.light-mode .lab-reversibility-box {
 #genealogia .lens-interpretation {
   display: none !important;
 }
+
+/* ==========================================================================
+   EPISTEMOLOGICAL MODEL DISCLAIMERS & THEORETICAL ENHANCEMENTS
+   ========================================================================== */
+
+.viz-model-disclaimer {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: #94a3b8;
+  background: rgba(30, 41, 59, 0.4);
+  border-left: 2px solid #f59e0b;
+  padding: 0.5rem 0.85rem;
+  margin-top: 0.75rem;
+  border-radius: 0 4px 4px 0;
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+}
+
+.viz-model-disclaimer em {
+  font-style: normal;
+  font-weight: 600;
+  color: #f59e0b;
+}
+
+.viz-model-disclaimer strong {
+  color: #f1f5f9;
+}
+
+.berlin-republican-callout {
+  margin: 2rem 0;
+  padding: 1.25rem 1.5rem;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-left: 3px solid #38bdf8;
+  border-radius: 6px;
+}
+
+.republican-badge {
+  display: inline-block;
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  margin-bottom: 0.5rem;
+}
+
+.republican-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f8fafc;
+  margin: 0 0 0.5rem 0;
+}
+
+.republican-desc {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.sen-conversion-box {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 8px;
+}
+
+.sen-conversion-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #10b981;
+  margin: 0 0 0.5rem 0;
+}
+
+.sen-conversion-desc {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #cbd5e1;
+  margin-bottom: 1.25rem;
+}
+
+.sen-conversion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.sen-conv-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 6px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.sen-conv-tag {
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #10b981;
+  margin-bottom: 0.35rem;
+}
+
+.sen-conv-name {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #f8fafc;
+  margin: 0 0 0.5rem 0;
+}
+
+.sen-conv-card p {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #94a3b8;
+  margin: 0;
+}

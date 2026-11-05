@@ -57,4 +57,15 @@ timeline
     Hito M3 : Revelación progresiva en Sección II y VI, clarificación de asequibilidades
     Hito M4 : Targets táctiles >= 44x44px, tabla de Colombia a tarjetas responsivas y cero overflow
     Hito M5 : Verificación al 100% en navegadores reales, blindaje de invarianza de escritorio y entrega
+    Hito M6 : Auditoría de Pares (Peer Review), cierre de brechas epistemológicas y formalización de Backlog
 ```
+
+---
+
+## 5. Backlog Ágil de Producto y Nuevas Características
+
+Para la gestión iterativa de requerimientos futuros que trascienden el alcance inmediato de la infografía (tales como la incorporación del 5.º nodo de coacción algorítmica, el módulo de evaluación metacognitiva de Bloom, el filtro cronológico por épocas históricas y la persistencia PWA a 30 años), se ha establecido el artefacto formal:
+
+👉 **[Ver Backlog Ágil de Producto (BACKLOG.md)](file:///c:/Dev/Libertad%20Conceptos-%20Isaih%20Berlin/BACKLOG.md)**
+
+Dicho backlog se rige bajo estándares internacionales de Business Analysis (BABOK® / Scrum Alliance) estructurando cada iniciativa mediante User Stories, criterios de aceptación Gherkin, dimensionamiento en Story Points y priorización MoSCoW.
