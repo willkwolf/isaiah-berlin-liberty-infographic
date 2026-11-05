@@ -51,10 +51,10 @@ async function runMobileExperienceAudit() {
         console.log('  ✓ Hero view clean and ready.');
       }
 
-      // STEP 2: Mobile Lens Bottom Sheet / Drum Interaction
-      console.log('[Step 2/9] Testing Mobile Lens Panel Floating Action Button & Drum Selector...');
-      await page.evaluate("window.scrollTo({ top: 900, behavior: 'instant' })");
-      await page.wait(350);
+      // STEP 2: Mobile Lens Bottom Sheet / Drum Interaction (in #conflicto where lens is reactive)
+      console.log('[Step 2/9] Testing Mobile Lens Panel Floating Action Button & Drum Selector in #conflicto...');
+      await page.evaluate("document.getElementById('conflicto').scrollIntoView({ behavior: 'instant', block: 'center' })");
+      await page.wait(400);
 
       const lensToggle = await page.find('#lensToggleBtn');
       if (lensToggle && (await lensToggle.isVisible())) {
