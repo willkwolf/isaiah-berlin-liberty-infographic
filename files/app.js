@@ -2636,6 +2636,14 @@ function initScrollAwareLensPanel() {
   const panel = qs('#lensPanel');
   if (!panel) return;
 
+  // Mobile check: Auto-hide dock is strictly for mobile viewports!
+  // On desktop, the classic side-docked chip remains permanently available as originally designed.
+  const mq = window.matchMedia('(max-width: 768px)');
+  if (!mq.matches) {
+    panel.classList.remove('lens-panel--visible');
+    return;
+  }
+
   // Fallback: no IntersectionObserver support
   if (!('IntersectionObserver' in window)) {
     panel.classList.add('lens-panel--visible');
@@ -2733,7 +2741,7 @@ function initSmartTopNavScroll() {
 // ═══ FEATURE 2: WHEEL PICKER ═══
 
 const DRUM_ORDER = ['negativa', 'positiva', 'capacidades', 'libertario'];
-const DRUM_ITEM_WIDTH = 170;
+const DRUM_ITEM_WIDTH = 260;
 const DRUM_ITEM_H = 44;
 
 let isProgrammaticScroll = false;

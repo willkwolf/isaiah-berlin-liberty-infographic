@@ -120,6 +120,62 @@ test.describe('Horizontal Lens Wheel & Zero-Tap UX Suite', () => {
       await expect(page.locator('.lens-wheel__item.is-center')).toHaveAttribute('data-lens', 'capacidades');
       const bodyClassCap = await page.evaluate(() => document.body.className);
       expect(bodyClassCap).toContain('lens-capacidades');
+
+      // 11. NO TRUNCATION / NO ELLIPSIS VERIFICATION:
+      // All lens names must be complete without ellipsis or dots
+      const itemTexts = await page.evaluate(() => {
+        const items = Array.from(document.querySelectorAll('.lens-wheel__item'));
+        return items.map(el => {
+          const nameEl = el.querySelector('.lens-wheel__name');
+          const authorEl = el.querySelector('.lens-wheel__author');
+          const style = window.getComputedStyle(nameEl);
+          return {
+            name: nameEl ? nameEl.textContent.trim() : '',
+            author: authorEl ? authorEl.textContent.trim() : '',
+            textOverflow: style.textOverflow
+          };
+        });
+      });
+
+      for (const it of itemTexts) {
+        expect(it.textOverflow).not.toBe('ellipsis');
+        expect(it.name).not.toContain('...');
+        expect(it.name.length).toBeGreaterThanOrEqual(10); // "Capacidades" = 11, "Libertad Negativa" = 17
+      }
     });
   }
+
+  // 12. DESKTOP FIDELITY INVARIANCE TEST
+  test('[Desktop 1280x800] Desktop lens panel is permanently docked, 220px wide, and wheel is hidden', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto(FILE_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(300);
+
+    const lensPanel = page.locator('#lensPanel');
+    await expect(lensPanel).toBeVisible();
+
+    const panelBox = await lensPanel.boundingBox();
+    expect(panelBox).not.toBeNull();
+    expect(Math.round(panelBox.width)).toBe(220);
+
+    // Desktop chips (.lens-options) are visible
+    const lensOptions = page.locator('.lens-options');
+    await expect(lensOptions).toBeVisible();
+
+    // Mobile wheel is completely hidden on desktop
+    const wheel = page.locator('.lens-wheel');
+    const wheelDisplay = await wheel.evaluate(el => window.getComputedStyle(el).display);
+    expect(wheelDisplay).toBe('none');
+
+    // Test collapse / expand toggle on desktop
+    const toggleBtn = page.locator('#lensToggleBtn');
+    await toggleBtn.click();
+    await page.waitForTimeout(200);
+    await expect(lensPanel).toHaveClass(/collapsed/);
+
+    await toggleBtn.click();
+    await page.waitForTimeout(200);
+    await expect(lensPanel).not.toHaveClass(/collapsed/);
+  });
 });
