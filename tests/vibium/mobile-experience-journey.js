@@ -51,28 +51,35 @@ async function runMobileExperienceAudit() {
         console.log('  ✓ Hero view clean and ready.');
       }
 
-      // STEP 2: Mobile Lens Bottom Sheet / Drum Interaction (in #conflicto where lens is reactive)
-      console.log('[Step 2/9] Testing Mobile Lens Panel Floating Action Button & Drum Selector in #conflicto...');
+      // STEP 2: Evolutionary Horizontal Lens Wheel with Zero-Tap & Edge Diffusion
+      console.log('[Step 2/9] Testing Evolutionary Horizontal Lens Wheel with Zero-Tap & Edge Diffusion in #conflicto...');
       await page.evaluate("document.getElementById('conflicto').scrollIntoView({ behavior: 'instant', block: 'center' })");
       await page.wait(400);
 
-      const lensToggle = await page.find('#lensToggleBtn');
-      if (lensToggle && (await lensToggle.isVisible())) {
-        await lensToggle.click();
+      const lensPanel = await page.find('#lensPanel');
+      if (!lensPanel || !(await lensPanel.isVisible())) {
+        throw new Error('Lens panel is not visible in reactive section #conflicto');
+      }
+      console.log('  ✓ ZERO-TAP SUCCESS: Horizontal lens wheel dock is immediately visible in #conflicto without opening tap.');
+
+      const activeItem = await page.find('.lens-wheel__item.is-center');
+      if (activeItem && (await activeItem.isVisible())) {
+        console.log('  ✓ Focused active lens displayed prominently in dock center.');
+      }
+
+      // Tap adjacent lens option to verify smooth sliding and immediate perspective activation
+      const capOption = await page.find('.lens-wheel__item[data-lens="capacidades"]');
+      if (capOption) {
+        await capOption.click();
         await page.wait(350);
-        console.log('  ✓ Mobile lens panel toggled open via FAB.');
+        console.log('  ✓ Switched active lens to "Capacidades" via horizontal wheel tap/gesture.');
+      }
 
-        const lensButtons = await page.find('.lens-btn');
-        if (lensButtons) {
-          console.log('  ✓ Lens theoretical options visible in mobile bottom sheet.');
-        }
-
-        const toggleAgain = await page.find('#lensToggleBtn');
-        if (toggleAgain) {
-          await toggleAgain.click();
-          await page.wait(250);
-          console.log('  ✓ Mobile lens panel toggled closed.');
-        }
+      const negOption = await page.find('.lens-wheel__item[data-lens="negativa"]');
+      if (negOption) {
+        await negOption.click();
+        await page.wait(350);
+        console.log('  ✓ Switched active lens to "Libertad Negativa" smoothly centered.');
       }
 
       // STEP 3: Section III Conflict Slider & Dynamic Feedback

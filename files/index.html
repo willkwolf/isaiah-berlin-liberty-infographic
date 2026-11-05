@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Una exploración interactiva de los marcos teóricos de la libertad política: Berlin, Sen, Hayek." />
+  <title>Anatomía de la Libertad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=20260513" />
+  <!-- Anti-flicker: apply color mode synchronously before first paint -->
+  <script>
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    (function() {
+      try {
+        var isManual = localStorage.getItem('site-color-manual') === '1';
+        if (isManual) {
+          var saved = localStorage.getItem('site-color-scheme');
+          if (saved === 'light') { document.documentElement.classList.add('pre-light'); return; }
+          if (saved === 'dark') return;
+        }
+      } catch(e) {}
+      // Auto: local hour (07-20 = day/light, else night/dark)
+      var h = new Date().getHours();
+      if (h >= 7 && h < 20) document.documentElement.classList.add('pre-light');
+    })();
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Saltar al contenido principal</a>
+
+  <!-- LENS SELECTOR — Fixed UI Component -->
+  <aside class="lens-panel" id="lensPanel" role="navigation" aria-label="Selector de lente teórica">
+    <div class="lens-panel__header">
+      <span class="lens-panel__label">Marco teórico</span>
+      <button class="lens-panel__toggle" id="lensToggleBtn" aria-label="Colapsar selector" aria-expanded="true" aria-controls="lensPanelBody">◂</button>
+    </div>
+    <div class="lens-panel__body" id="lensPanelBody">
+      <p class="lens-panel__hint">Los datos no cambian.<br/>Cambia la interpretación.</p>
+      <div class="lens-options" role="radiogroup" aria-label="Seleccionar marco teórico">
+        <button class="lens-btn active" data-lens="negativa" role="radio" aria-checked="true">
+          <span class="lens-btn__dot"></span>
+          <span class="lens-btn__name">Libertad Negativa</span>
+          <span class="lens-btn__author">Berlin</span>
+        </button>
+        <button class="lens-btn" data-lens="positiva" role="radio" aria-checked="false">
+          <span class="lens-btn__dot"></span>
+          <span class="lens-btn__name">Libertad Positiva</span>
+          <span class="lens-btn__author">Berlin</span>
+        </button>
+        <button class="lens-btn" data-lens="capacidades" role="radio" aria-checked="false">
+          <span class="lens-btn__dot"></span>
+          <span class="lens-btn__name">Capacidades</span>
+          <span class="lens-btn__author">Sen</span>
+        </button>
+        <button class="lens-btn" data-lens="libertario" role="radio" aria-checked="false">
+          <span class="lens-btn__dot"></span>
+          <span class="lens-btn__name">Económico-Libertario</span>
+          <span class="lens-btn__author">Hayek / Friedman</span>
+        </button>
+      </div>
+    </div>
+    <div class="lens-panel__coach" id="lensCoach" aria-live="polite" hidden>
+      <span class="lens-panel__coach-pulse" aria-hidden="true"></span>
+      <p class="lens-panel__coach-text" id="lensCoachText"></p>
+    </div>
+  </aside>
+
+  <!-- TOP NAV -->
+  <nav class="top-nav" aria-label="Secciones">
+    <a href="#problema" class="top-nav__link" title="I: Problema">I</a>
+    <a href="#berlin" class="top-nav__link" title="II: Berlin">II</a>
+    <a href="#conflicto" class="top-nav__link" title="III: Conflicto">III</a>
+    <a href="#poder" class="top-nav__link" title="IV: Poder">IV</a>
+    <a href="#limites" class="top-nav__link" title="V: Límites">V</a>
+    <a href="#economia" class="top-nav__link" title="VI: Economía">VI</a>
+    <a href="#sen" class="top-nav__link" title="VII: Sen">VII</a>
+    <a href="#colombia" class="top-nav__link" title="VIII: Colombia">VIII</a>
+    <a href="#comparacion" class="top-nav__link" title="IX: Comparación">IX</a>
+    <a href="#genealogia" class="top-nav__link" title="X: Genealogía">X</a>
+    <a href="#cierre" class="top-nav__link" title="XI: Cierre">XI</a>
+  </nav>
+
+  <main id="main">
+
+    <!-- I — PROBLEMA -->
+    <section id="problema" class="section section--hero" aria-labelledby="problema-title">
+      <div class="section__inner">
+        <div class="section__num" aria-hidden="true">I</div>
+        <div class="hero-content">
+          <p class="hero-content__pre">Punto de partida</p>
+          <div class="language-switch hero-language-switch" role="group" aria-label="Idioma del sitio">
+            <span class="language-switch__label" id="languageSwitchLabel">Idioma</span>
+            <div class="language-switch__controls">
+              <button class="language-btn active" data-lang="es" aria-pressed="true">ES</button>
+              <button class="language-btn" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+          </div>
+          <button class="color-mode-btn" id="colorModeBtn" aria-label="Activar modo claro" aria-pressed="false">☀</button>
+          <div class="hero-onboarding" id="heroOnboarding" aria-live="polite" hidden>
+            <span class="hero-onboarding__eyebrow" id="heroOnboardingEyebrow">Primer vistazo</span>
+            <p class="hero-onboarding__title" id="heroOnboardingTitle"></p>
+            <p class="hero-onboarding__body" id="heroOnboardingBody"></p>
+            <button class="hero-onboarding__btn" id="heroOnboardingDismiss" type="button">Entendido</button>
+          </div>
+          <h1 id="problema-title" class="hero-content__title">Anatomía<br/><em>de la libertad</em></h1>
+          <p class="hero-content__thesis">
+            La política no es la gestión de consensos. Es la administración del <strong>desacuerdo irreducible</strong>.
+          </p>
+          <p class="hero-content__secondary">
+            Cuando hay acuerdo sobre medios y fines, tenemos un <strong>problema técnico</strong>.
+            Cuando los valores en tensión son genuinamente incompatibles, tenemos un <strong>problema político</strong>.
+            Esta distinción no es semántica: define qué tipo de solución es posible y qué tipo de autoridad puede imponerla.
+          </p>
+          <a href="#berlin" class="hero-cta">Comenzar exploración ↓</a>
+        </div>
+        <div class="hero-viz" aria-hidden="true">
+          <canvas id="divergenceCanvas" width="420" height="300"></canvas>
+          <p class="viz-caption">Valores que no pueden maximizarse simultáneamente</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- II — BERLIN -->
+    <section id="berlin" class="section" aria-labelledby="berlin-title">
+      <div class="section__inner">
+        <div class="section__num" aria-hidden="true">II</div>
+        <h2 id="berlin-title" class="section__title">Isaiah Berlin<br/><em>y los dos conceptos</em></h2>
+        <p class="section__subtitle">Una distinción que Berlin consideró no meramente académica, sino políticamente urgente.</p>
+
+        <div class="berlin-toggle-bar">
+          <button class="berlin-toggle-btn active" data-side="negativa" aria-pressed="true">Libertad Negativa</button>
+          <span class="berlin-toggle-sep" aria-hidden="true">vs</span>
+          <button class="berlin-toggle-btn" data-side="positiva" aria-pressed="false">Libertad Positiva</button>
+          <button class="berlin-toggle-btn berlin-toggle-btn--both" data-side="ambas" aria-pressed="false">Comparar</button>
+        </div>
+
+        <p class="berlin-hint" id="berlinHint" aria-live="polite">Alterna entre conceptos o selecciona Comparar para confrontar sus preguntas y tensiones.</p>
+
+        <div class="berlin-split" id="berlinSplit">
+          <div class="berlin-card berlin-card--neg" id="berlinNeg">
+            <div class="berlin-card__tag">Libertad Negativa</div>
+            <h3 class="berlin-card__title">«Libre <em>de</em>»</h3>
+            <p class="berlin-card__core">Ausencia de interferencia externa. Eres libre si nadie te impide actuar.</p>
+            <div class="berlin-card__question">
+              Pregunta central: <em>¿Cuánto espacio tiene el individuo sin que nadie lo obstaculice?</em>
+            </div>
+            <details class="berlin-card__disclosure" open>
+              <summary class="berlin-card__summary">
+                <span class="berlin-card__summary-text">Dilemas prácticos (3 casos)</span>
+                <span class="berlin-card__summary-icon" aria-hidden="true">▾</span>
+              </summary>
+              <ul class="berlin-card__examples">
+                <li class="berlin-example">
+                  <span class="berlin-example__label">Libre expresión</span>
+                  <span class="berlin-example__detail">El Estado no te censura. Pero si no tienes tribuna, ¿importa?</span>
+                </li>
+                <li class="berlin-example">
+                  <span class="berlin-example__label">Libre mercado</span>
+                  <span class="berlin-example__detail">Sin regulación estatal. Pero el poder privado también coacciona.</span>
+                </li>
+                <li class="berlin-example">
+                  <span class="berlin-example__label">Libre tránsito</span>
+                  <span class="berlin-example__detail">Sin barreras legales. Pero ¿qué pasa si no puedes pagar el billete?</span>
+                </li>
+              </ul>
+            </details>
+            <div class="berlin-card__tension">
+              <strong>Tensión interna:</strong> Define libertad sin agente, ignora asimetrías de poder fáctico.
+            </div>
+          </div>
+
+          <div class="berlin-card berlin-card--pos" id="berlinPos">
+            <div class="berlin-card__tag">Libertad Positiva</div>
+            <h3 class="berlin-card__title">«Libre <em>para</em>»</h3>
+            <p class="berlin-card__core">Capacidad real de autodeterminación. Ser dueño de tu propia vida y decisiones.</p>
+            <div class="berlin-card__question">
+              Pregunta central: <em>¿Quién gobierna mi vida? ¿Soy yo el autor de mis propias acciones?</em>
+            </div>
+            <details class="berlin-card__disclosure" open>
+              <summary class="berlin-card__summary">
+                <span class="berlin-card__summary-text">Dilemas prácticos (3 casos)</span>
+                <span class="berlin-card__summary-icon" aria-hidden="true">▾</span>
+              </summary>
+              <ul class="berlin-card__examples">
+                <li class="berlin-example">
+                  <span class="berlin-example__label">Educación pública</span>
+                  <span class="berlin-example__detail">Da capacidad real de elección. ¿A qué costo en libertad negativa?</span>
+                </li>
+                <li class="berlin-example">
+                  <span class="berlin-example__label">Bienestar social</span>
+                  <span class="berlin-example__detail">Expande opciones reales. Requiere coacción fiscal.</span>
+                </li>
+                <li class="berlin-example">
+                  <span class="berlin-example__label">Derechos sociales</span>
+                  <span class="berlin-example__detail">Libertad como habilitación, no solo como no-interferencia.</span>
+                </li>
+              </ul>
+            </details>
+            <div class="berlin-card__tension">
+              <strong>Peligro advertido por Berlin:</strong> Puede justificar paternalismo o imponer un «yo superior».
+            </div>
+          </div>
+        </div>
+
+        <div class="lens-interpretation" aria-live="polite">
+          <span class="lens-interpretation__icon" aria-hidden="true">◈</span>
+          <span class="lens-interpretation__label">Bajo este marco:</span>
+          <span class="lens-interpretation__text" id="berlinLensText"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- III — CONFLICTO -->
+    <section id="conflicto" class="section section--dark" data-lens-context="conflicto" aria-labelledby="conflicto-title">
+      <div class="section__inner">
+        <div class="section__num" aria-hidden="true">III</div>
+        <h2 id="conflicto-title" class="section__title">El conflicto<br/><em>no resuelto</em></h2>
+        <p class="section__subtitle">Berlin fue explícito: igualdad y libertad son valores genuinamente incompatibles. No es un problema de implementación. Es un <strong>conflicto trágico</strong>.</p>
+
+        <div class="conflict-container">
+          <div class="conflict-poles">
+            <div class="conflict-pole conflict-pole--left">
+              <span class="conflict-pole__icon" aria-hidden="true">◈</span>
+              <span class="conflict-pole__label">Igualdad</span>
+              <span class="conflict-pole__sub">redistribución activa<br/>bienes garantizados</span>
+            </div>
+            <div class="conflict-pole conflict-pole--right">
+              <span class="conflict-pole__icon" aria-hidden="true">⌁</span>
+              <span class="conflict-pole__label">Libertad</span>
+              <span class="conflict-pole__sub">no-interferencia<br/>autonomía individual</span>
+            </div>
+          </div>
+
+          <div class="slider-wrap">
+            <input type="range" id="conflictSlider" class="conflict-slider" min="0" max="100" value="50"
+                   aria-label="Deslizar entre igualdad y libertad" />
+            <div class="slider-track-labels">
+              <span>Máx. igualdad</span>
+              <span>Equilibrio inestable</span>
+              <span>Máx. libertad</span>
+            </div>
+            <div class="slider-mobile-hint" aria-hidden="true">Desliza para explorar la pérdida recíproca ⇄</div>
+          </div>
+
+          <div class="conflict-loss-panel" aria-live="polite">
+            <div class="conflict-curve-container" style="margin-bottom: 1.25rem;">
+              <svg id="conflictCurveSvg" class="conflict-curve-svg" role="img" aria-label="Curva de conflicto entre libertad e igualdad"></svg>
+            </div>
+            <div class="loss-row">
+              <span class="loss-row__label">Libertad negativa restringida</span>
+              <div class="loss-bar-track"><div class="loss-bar loss-bar--neg" id="lossBarNeg"></div></div>
+              <span class="loss-row__val" id="lossValNeg">50%</span>
+            </div>
+            <div class="loss-row">
+              <span class="loss-row__label">Igualdad sacrificada</span>
+              <div class="loss-bar-track"><div class="loss-bar loss-bar--eq" id="lossBarEq"></div></div>
+              <span class="loss-row__val" id="lossValEq">50%</span>
+            </div>
+            <p class="conflict-note" id="conflictNote"></p>
+          </div>
+        </div>
+
+        <div class="lens-interpretation" aria-live="polite">
+          <span class="lens-interpretation__icon" aria-hidden="true">◈</span>
+          <span class="lens-interpretation__label">Bajo este marco:</span>
+          <span class="lens-interpretation__text" id="conflictLensText"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- IV — PODER -->
+    <section id="poder" class="section" data-lens-context="poder" aria-labelledby="poder-title">
+      <div class="section__inner">
+        <div class="section__num" aria-hidden="true">IV</div>
+        <h2 id="poder-title" class="section__title">Poder<br/><em>y obediencia</em></h2>
+        <p class="section__subtitle">Berlin distingue: la coacción implica agente humano intencional. <em>«¿Por qué debo obedecer?»</em> es la pregunta política fundamental.</p>
+
+        <div class="power-wrap">
+          <svg id="powerDiagram" viewBox="0 0 500 380" class="power-svg" role="group" aria-label="Diagrama de relaciones de poder">
+            <defs>
+              <!-- Arrowheads: refX is offset to sit exactly at the node circle boundaries -->
+              <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+                <polygon points="0 0, 6 3, 0 6" class="arrow-marker"/>
+              </marker>
+              <marker id="arrowhead-double" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                <polygon points="6 0, 0 3, 6 6" class="arrow-marker"/>
+              </marker>
+            </defs>
+            <g id="powerEdges"></g>
+
+            <g class="power-node" data-node="individuo" tabindex="0" role="button" aria-pressed="false" aria-label="Individuo: sujeto político">
+              <circle cx="250" cy="210" r="44"/>
+              <text class="power-node__text" x="250" y="206">Individuo</text>
+              <text class="power-node__sub" x="250" y="223">sujeto político</text>
+            </g>
+            <g class="power-node" data-node="estado" tabindex="0" role="button" aria-pressed="false" aria-label="Estado: monopolio de la fuerza">
+              <circle cx="250" cy="80" r="44" fill="transparent" stroke="none" pointer-events="all"/>
+              <circle cx="250" cy="80" r="36"/>
+              <text class="power-node__text" x="250" y="76">Estado</text>
+              <text class="power-node__sub" x="250" y="92">monopolio fuerza</text>
+            </g>
+            <g class="power-node" data-node="mercado" tabindex="0" role="button" aria-pressed="false" aria-label="Mercado: coordinación por precio">
+              <circle cx="140" cy="320" r="44" fill="transparent" stroke="none" pointer-events="all"/>
+              <circle cx="140" cy="320" r="36"/>
+              <text class="power-node__text" x="140" y="316">Mercado</text>
+              <text class="power-node__sub" x="140" y="332">precio / contrato</text>
+            </g>
+            <g class="power-node" data-node="sociedad" tabindex="0" role="button" aria-pressed="false" aria-label="Sociedad: norma y cultura">
+              <circle cx="360" cy="320" r="44" fill="transparent" stroke="none" pointer-events="all"/>
+              <circle cx="360" cy="320" r="36"/>
+              <text class="power-node__text" x="360" y="316">Sociedad</text>
+              <text class="power-node__sub" x="360" y="332">norma / cultura</text>
+            </g>
+          </svg>
+
+          <div class="power-info" id="powerInfo" aria-live="polite">
+            <p class="power-info__hint">Haz clic o toca un nodo para ver el tipo de restricción que ejerce sobre el individuo.</p>
+          </div>
+        </div>
+
+        <div class="lens-interpretation" aria-live="polite">
+          <span class="lens-interpretation__icon" aria-hidden="true">◈</span>
+          <span class="lens-interpretation__label">Bajo este marco:</span>
+          <span class="lens-interpretation__text" id="poderLensText"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- V — LÍMITES -->
+    <section id="limites" class="section section--dark" aria-labelledby="limites-title">
+      <div class="section__inner">
+        <div class="section__num" aria-hidden="true">V</div>
+        <h2 id="limites-title" class="section__title">Incapacidad<br/><em>versus coerción</em></h2>
+        <p class="section__subtitle">Una distinción que Berlin considera fundamental: no toda restricción es falta de libertad política.</p>
+
+        <!-- LABORATORIO DE FRONTERAS (NEW INTERACTIVE COMPONENT) -->
+        <div class="limits-lab">
+          <div class="limits-lab__header">
+            <span class="limits-lab__tag" id="limitsLabTag">Laboratorio Conceptual</span>
+            <h3 class="limits-lab__title" id="limitsLabTitle">¿Coerción o Incapacidad? Clasifica Escenarios del Mundo Real</h3>
+            <p class="limits-lab__subtitle" id="limitsLabSubtitle">Toca cada ficha de laboratorio para ver cómo reaccionan Berlin, Sen y Hayek ante el mismo dilema.</p>
+          </div>
+
+          <div class="limits-lab__tabs" role="tablist" aria-label="Escenarios del laboratorio" id="limitsLabTabs">
+            <button class="lab-tab active" data-case="pasaje" role="tab" aria-selected="true" aria-controls="labPanel">
+              <span class="lab-tab__icon">▸</span> <span class="lab-tab__name">Pasaje de autobús</span>
+            </button>
+            <button class="lab-tab" data-case="domingo" role="tab" aria-selected="false" aria-controls="labPanel">
+              <span class="lab-tab__icon">▸</span> <span class="lab-tab__name">Cierre dominical</span>
+            </button>
+            <button class="lab-tab" data-case="licencia" role="tab" aria-selected="false" aria-controls="labPanel">
+              <span class="lab-tab__icon">▸</span> <span class="lab-tab__name">Licencia costosa</span>
+            </button>
+            <button class="lab-tab" data-case="rampa" role="tab" aria-selected="false" aria-controls="labPanel">
+              <span class="lab-tab__icon">▸</span> <span class="lab-tab__name">Falta de rampas</span>
+            </button>
+          </div>
+
+          <div class="limits-lab__panel" id="labPanel" role="tabpanel" aria-live="polite">
+            <div class="lab-scenario">
+              <div class="lab-scenario__label" id="labScenarioLabel">Escenario bajo análisis:</div>
+              <p class="lab-scenario__text" id="labScenarioText">Un ciudadano de bajos recursos en Bogotá no puede pagar el pasaje de autobús para ir a trabajar.</p>
+            </div>
+
+            <div class="lab-verdicts" id="labVerdicts">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <div class="limits-complication">
+          <h3 class="limits-complication__title">La grieta que Berlin no cierra del todo</h3>
+          <p>¿Qué pasa si no puedes pagar el transporte? No es un límite físico. Hay un sistema institucional que organiza la escasez. ¿Es eso coacción? <strong>Sen dirá que sí importa</strong>, independientemente de si hay agente intencional. Berlin diría que depende de si hay intervención humana deliberada.</p>
+        </div>
+
+        <div class="lens-interpretation" aria-live="polite">
+          <span class="lens-interpretation__icon" aria-hidden="true">◈</span>
+          <span class="lens-interpretation__label">Bajo este marco:</span>
+          <span class="lens-interpretation__text" id="limitesLensText"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- VI — ECONOMÍA -->
+    <section id="economia" class="section" aria-labelledby="economia-title">
+      <div class="section__inner">
+        <div class="section__num" aria-hidden="true">VI</div>
+        <h2 id="economia-title" class="section__title">Hayek &amp; Friedman<br/><em>libertad como no-interferencia</em></h2>
+        <p class="section__subtitle">Para el liberalismo económico, el mercado libre es el mejor mecanismo de coordinación descentralizada — y la mayor garantía de libertad individual.</p>
+
+        <div class="econ-quotes">
+          <blockquote class="econ-quote">
+            <p>«La competencia es la única forma de organización que no requiere el control de fuerzas sociales por parte de una autoridad central.»</p>
+            <cite>— Friedrich Hayek, <em>Camino de Servidumbre</em> (1944)</cite>
+          </blockquote>
+          <blockquote class="econ-quote">
+            <p>«Solo una sociedad que utiliza el mecanismo del mercado puede combinar libertad económica con eficiencia.»</p>
+            <cite>— Milton Friedman, <em>Capitalismo y Libertad</em> (1962)</cite>
+          </blockquote>
+        </div>
+
+        <div class="market-viz">
+          <h3 class="market-viz__title">Mercado ideal vs. evidencia empírica</h3>
+          <div class="market-toggle-bar">
+            <button class="market-btn active" data-market="ideal" aria-pressed="true">Modelo ideal</button>
+            <button class="market-btn" data-market="real" aria-pressed="false">Evidencia empírica</button>
+          </div>
+          <svg id="marketSvg" viewBox="0 0 520 240" class="market-svg" aria-label="Comparación mercado ideal vs real"></svg>
+          <p class="market-caption" id="marketCaption"></p>
+        </div>
+
+        <div class="econ-dialogue">
+          <h3 class="econ-dialogue__title" id="econDialogueTitle">El Mercado Libre en Debate</h3>
+          <div class="dialogue-mobile-tabs" role="tablist" aria-label="Perspectivas del debate de mercado">
+            <button type="button" class="dialogue-tab-btn active" data-perspective="defense" role="tab" aria-selected="true" aria-controls="dialogueColDefense">El Argumento Liberal (3)</button>
+            <button type="button" class="dialogue-tab-btn" data-perspective="critique" role="tab" aria-selected="false" aria-controls="dialogueColCritique">La Crítica Intervencionista (3)</button>
+          </div>
+          <div class="dialogue-grid">
+            <div class="dialogue-column dialogue-column--defense" id="dialogueColDefense">
+              <h4 class="dialogue-column__title" id="econDefenseTitle">El Argumento Liberal</h4>
+              <div class="dialogue-card">
+                <span class="dialogue-card__num">01</span>
+                <p id="econDefense1"><strong>Escudo contra la servidumbre:</strong> El mercado libre dispersa el poder económico, impidiendo que una sola entidad central controle la vida y elecciones de los individuos.</p>
+              </div>
+              <div class="dialogue-card">
+                <span class="dialogue-card__num">02</span>
+                <p id="econDefense2"><strong>Coordinación voluntaria:</strong> El sistema de precios coordina el conocimiento descentralizado de millones de personas de manera voluntaria, sin coacción central.</p>
+              </div>
+              <div class="dialogue-card">
+                <span class="dialogue-card__num">03</span>
+                <p id="econDefense3"><strong>Prosperidad de opciones:</strong> El crecimiento económico derivado de la libre competencia multiplica las opciones reales disponibles para todos a través de la innovación.</p>
+              </div>
+            </div>
+            <div class="dialogue-column dialogue-column--critique" id="dialogueColCritique">
+              <h4 class="dialogue-column__title" id="econCritiqueTitle">La Crítica Intervencionista</h4>
+              <div class="dialogue-card">
+                <span class="dialogue-card__num">01</span>
+                <p id="econCritique1"><strong>Asimetrías de poder fáctico:</strong> El mercado no opera en el vacío: refleja y amplifica las diferencias drásticas en el poder de negociación inicial y la riqueza heredada.</p>
+              </div>
+              <div class="dialogue-card">
+                <span class="dialogue-card__num">02</span>
+                <p id="econCritique2"><strong>No-interferencia política:</strong> La decisión estatal de no regular el mercado es en sí misma una elección política con ganadores y perdedores definidos, no un hecho neutro.</p>
+              </div>
+              <div class="dialogue-card">
+                <span class="dialogue-card__num">03</span>
+                <p id="econCritique3"><strong>Libertad formal vacía:</strong> La libertad formal de contratar o transar es inútil para quien carece de las condiciones materiales básicas para subsistir (libertad sin capacidad).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lens-interpretation" aria-live="polite">
+          <span class="lens-interpretation__icon" aria-hidden="true">◈</span>
+          <span class="lens-interpretation__label">Bajo este marco:</span>
+          <span class="lens-interpretation__text" id="economiaLensText"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- VII — SEN -->
+    <section id="sen" class="section section--dark" aria-labelledby="sen-title">
+      <div class="section__inner">
+        <div class="section__num" aria-hidden="true">VII</div>
+        <h2 id="sen-title" class="section__title">Amartya Sen<br/><em>libertad como capacidad real</em></h2>
+        <p class="section__subtitle">Sen rechaza medir libertad por ingresos o recursos. La pregunta es: <strong>¿qué puede hacer y ser esta persona?</strong></p>
+
+        <div class="sen-intro-quote">
+          <p>«El desarrollo puede concebirse como un proceso de expansión de las libertades reales de que disfrutan los individuos.»</p>
+          <cite>— Amartya Sen, <em>Development as Freedom</em> (1999)</cite>
+        </div>
+
+        <div class="sen-caps-section">
+          <p class="sen-caps-intro">Activa o desactiva capacidades para ver cómo cambia la libertad efectiva:</p>
+          <div class="sen-caps-grid" id="senCapsGrid" role="group" aria-label="Capacidades de Sen"></div>
+          <div class="sen-profile-dashboard" id="senProfileDashboard" aria-live="polite">
+            <div class="sen-profile-header">
+              <span class="sen-profile-label" id="senProfileLabel">Simulador de Intercambios (Trade-off)</span>
+              <span class="sen-profile-badge" id="senProfileBadge">Sin capacidades básicas</span>
+            </div>
+            <p class="sen-profile-desc" id="senProfileDesc">Activa capacidades en la grilla para evaluar el perfil de libertad efectiva de la persona.</p>
+
+            <!-- DOUBLE INDICATOR METERS (NEW INTERACTIVE WIDGET) -->
+            <div class="sen-tradeoff-meters">
+              <div class="tradeoff-meter">
+                <div class="tradeoff-meter__header">
+                  <span class="tradeoff-meter__name" id="tradeoffSenLabel">Capacidades Reales (Sen)</span>
+                  <span class="tradeoff-meter__val text-cap" id="tradeoffSenVal">0%</span>
+                </div>
+                <div class="tradeoff-meter__track">
+                  <div class="tradeoff-meter__fill fill-cap" id="tradeoffSenFill" style="width: 0%;"></div>
+                </div>
+              </div>
+              <div class="tradeoff-meter">
+                <div class="tradeoff-meter__header">
+                  <span class="tradeoff-meter__name" id="tradeoffNegLabel">No-Interferencia (Berlin/Hayek)</span>
+                  <span class="tradeoff-meter__val text-neg" id="tradeoffNegVal">100%</span>
+                </div>
+                <div class="tradeoff-meter__track">
+                  <div class="tradeoff-meter__fill fill-neg" id="tradeoffNegFill" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sen-profile-radar" id="senProfileRadar"></div>
+          </div>
+          <p class="sen-caveat" id="senFreedomCaveat"></p>
+        </div>
+
+        <div class="sen-indices">
+          <h3 class="sen-indices__title">Medición en la práctica</h3>
+          <div class="sen-indices-grid">
+            <div class="sen-index-card">
+              <span class="sen-index-name">IDH</span>
+              <span class="sen-index-full">Índice de Desarrollo Humano</span>
+              <p>Combina esperanza de vida, educación e ingreso. Mide más que el PIB, pero sigue siendo una proxy burda de capacidades reales.</p>
+              <span class="sen-index-limit">Límite: no captura desigualdad interna, agencia ni libertades políticas.</span>
+            </div>
+            <div class="sen-index-card">
+              <span class="sen-index-name">IPM</span>
+              <span class="sen-index-full">Índice de Pobreza Multidimensional</span>
+              <p>Mide privaciones en salud, educación y nivel de vida simultáneamente. Más cercano al espíritu de Sen.</p>
+              <span class="sen-index-limit">Límite: los umbrales son convencionales, no derivados de teoría.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lens-interpretation" aria-live="polite">
+          <span class="lens-interpretation__icon" aria-hidden="true">◈</span>
+          <span class="lens-interpretation__label">Bajo este marco:</span>
+          <span class="lens-interpretation__text" id="senLensText"></span>
+        </div>
+      </div>
+    </section>
+    <!-- VIII — COLOMBIA -->
+    <section id="colombia" class="section" data-lens-context="colombia" aria-labelledby="colombia-title">
+      <div class="section__inner">
+        <div class="section__num" aria-hidden="true">VIII</div>
+        <h2 id="colombia-title" class="section__title">Colombia<br/><em id="colombia-subtitle-indices">bajo tres índices</em></h2>
+        <p class="section__subtitle">Los mismos datos. Tres índices. Cuatro lecturas posibles. Cambia el lente — observa cómo el diagnóstico cambia radicalmente.</p>
+
+        <!-- Inline coach banner for first-time column tap -->
+        <div class="colombia-coach-banner" id="colombiaCoachBanner" aria-live="polite" hidden>
+          <span class="colombia-coach-banner__pulse" aria-hidden="true"></span>
+          <p class="colombia-coach-banner__text" id="colombiaCoachBannerText">
+            ¿Primera vez aquí? Toca cualquier columna de la tabla para cambiar instantáneamente el marco teórico.
+          </p>
+          <button class="colombia-coach-banner__close" id="colombiaCoachBannerClose" type="button" aria-label="Cerrar guía">×</button>
+        </div>
+
+        <div class="colombia-table-container">
+          <table class="colombia-table" id="colombiaTable" aria-label="Tabla de comparación de índices de Colombia bajo diferentes lentes teóricos"></table>
+        </div>
+        <div class="colombia-reading" aria-live="polite">
+          <h3 class="colombia-reading__title">Diagnóstico bajo el marco activo</h3>
+          <p class="colombia-reading__text" id="colombiaLensReading"></p>
+          <p class="colombia-reading__warning">◈ Advertencia epistémica: cada índice fue construido desde supuestos teóricos previos. Cambiar el marco no es hacer trampa — es reconocer que los índices no son neutrales.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- IX — COMPARACIÓN -->
+    <section id="comparacion" class="section section--dark" aria-labelledby="comparacion-title">
+      <div class="section__inner">
+        <div class="section__num" aria-hidden="true">IX</div>
+        <h2 id="comparacion-title" class="section__title">Monismo<br/><em>versus pluralismo</em></h2>
+        <p class="section__subtitle">Berlin advirtió: el peligro mayor no es el error intelectual, sino la certeza de haber encontrado el único valor verdadero.</p>
+
+        <div class="system-toggle-bar">
+          <button class="system-btn active" id="systemClosedBtn" aria-pressed="true">Sistema cerrado</button>
+          <button class="system-btn" id="systemPluralBtn" aria-pressed="false">Sistema plural</button>
+        </div>
+
+        <div class="system-curve-container" style="margin-bottom: 1.25rem;">
+          <svg id="systemCurveSvg" class="system-curve-svg" role="img" aria-label="Curva de monismo versus pluralismo"></svg>
+        </div>
+
+        <div class="system-narrative" id="systemNarrative" aria-live="polite"></div>
+
+        <div class="superior-self">
+          <h3 class="superior-self__title" id="superiorSelfTitle">Los Extremos del Monismo: Las Derivas Dogmáticas</h3>
+          <p class="superior-self__intro" id="superiorSelfIntro">Isaiah Berlin advirtió que cuando un valor se eleva a dogma absoluto y único, se justifica la opresión. Ambos conceptos de libertad tienen su propia deriva peligrosa cuando se vuelven monistas:</p>
+          
+          <div class="monism-dangers-grid">
+            <div class="monism-danger-card monism-danger-card--positive">
+              <h4 class="monism-danger-card__title" id="monismDangerPositiveTitle">Deriva de la Libertad Positiva: El «Yo Superior»</h4>
+              <p id="monismDangerPositiveText">Ocurre al asumir que hay un "yo racional" ideal y que el Estado o un líder ilustrado sabe mejor que el individuo lo que este "realmente" quiere. Coaccionarlo para que actúe racionalmente se etiqueta falazmente como <em>"liberarlo"</em>.</p>
+              <span class="monism-danger-card__conclusion" id="monismDangerPositiveConclusion">Históricamente ha justificado paternalismos extremos, teocracias y totalitarismos de Estado.</span>
+            </div>
+            <div class="monism-danger-card monism-danger-card--negative">
+              <h4 class="monism-danger-card__title" id="monismDangerNegativeTitle">Deriva de la Libertad Negativa: La «Dominación Privada»</h4>
+              <p id="monismDangerNegativeText">Ocurre al asumir que la no-interferencia estatal es el único bien supremo, ignorando las asimetrías extremas de poder fáctico. El abandono estatal absoluto se etiqueta falazmente como <em>"libertad"</em>, aunque deje al débil a merced del fuerte.</p>
+              <span class="monism-danger-card__conclusion" id="monismDangerNegativeConclusion">Históricamente ha justificado el darwinismo social, la explotación laboral y la concentración oligárquica sin límites.</span>
+            </div>
+          </div>
+          
+          <p class="superior-self__conclusion" id="superiorSelfConclusion">El peligro no reside en el contenido del valor elegido, sino en la <strong>estructura del argumento monista</strong>: la pretensión de que existe una sola respuesta correcta y armoniosa para la organización humana.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- X — GENEALOGÍA DEL PODER -->
+    <section id="genealogia" class="section section--dark" data-lens-context="genealogia" aria-labelledby="genealogia-title">
+      <div class="section__inner">
+        <div class="section__num" aria-hidden="true">X</div>
+        <h2 id="genealogia-title" class="section__title">Genealogía del poder<br/><em>cómo organizamos la libertad</em></h2>
+        <p class="section__subtitle" id="genealogia-subtitle">Del orden único a la coexistencia de órdenes: una historia de restricciones, autonomías y compromisos.</p>
+
+        <div class="lens-interpretation" aria-live="polite">
+          <span class="lens-interpretation__icon" aria-hidden="true">◈</span>
+          <span class="lens-interpretation__label">Bajo este marco:</span>
+          <span class="lens-interpretation__text" id="genealogiaLensText"></span>
+        </div>
+
+        <div class="genealogia-lead">
+          <p id="genealogiaLeadText">
+            No toda restricción de la libertad responde al mismo principio. Algunas instituciones concentran la autoridad en nombre de una verdad, una fe o un proyecto unívoco (Monismo). Otras distribuyen el poder entre jurisdicciones y derechos autónomos (Pluralismo). <strong>Haz clic o toca cualquier arquitectura en la matriz</strong> para desplegar su anatomía, mecanismo de restricción y referencias académicas.
+          </p>
+        </div>
+
+        <!-- EXPLORADOR DE CUATRO CONCEPCIONES DEL PODER (COMPONENTES INDEPENDIENTES) -->
+        <div class="genealogia-explorer" id="genealogiaExplorer" role="region" aria-label="Explorador de concepciones de monismo y pluralismo">
+          <div class="genealogia-explorer__header">
+            <h3 class="genealogia-explorer__title" id="explorerTitle">Cuatro Concepciones Históricas del Orden y la Coacción</h3>
+            <p class="genealogia-explorer__desc" id="explorerDesc">
+              La libertad no se organiza en un vacío abstracto. A lo largo de la historia, las instituciones han encarnado concepciones monistas o pluralistas según alcancen una posición hegemónica dominante o surjan como emergencias marginales y contestatarias.
+            </p>
+            <div class="genealogia-explorer__caveat" id="explorerCaveat">
+              <span class="caveat-text" id="explorerCaveatText">Advertencia heurística: Las categorías no son clasificaciones morales universales ni estáticas; su posición depende estrictamente del contexto histórico, geográfico y de la correlación de fuerzas institucional.</span>
+            </div>
+          </div>
+
+          <div class="genealogia-categories-grid" id="genealogiaCategoriesGrid">
+            <!-- 1. Monistas Hegemónicos -->
+            <article class="power-category-card power-category-card--monismo_hegemonico" id="catCardMonismoHegemonico" data-category="monismo_hegemonico">
+              <div class="category-card__header">
+                <div class="category-card__badge-row">
+                  <span class="category-card__tag">1</span>
+                  <span class="category-card__badge badge--amber" id="badgeMonismoHegemonico">Monismo Hegemónico</span>
+                </div>
+                <h4 class="category-card__title" id="titleMonismoHegemonico">Monistas hegemónicos</h4>
+                <p class="category-card__subtitle" id="subMonismoHegemonico">Dominio institucional consolidado y soberanía unificada</p>
+              </div>
+              <div class="category-card__body">
+                <p class="category-card__summary" id="sumMonismoHegemonico">
+                  Concepciones que subordinan toda discrepancia a una sola instancia rectora o fin supremo (corona, fe revelada, razón de Estado). Concentran la autoridad para garantizar certidumbre y orden indivisible.
+                </p>
+                <div class="category-card__features">
+                  <div class="category-card__feature">
+                    <span class="feature-label">Mecanismo:</span>
+                    <span class="feature-val" id="featMecMonismoHegemonico">Monopolio coercitivo, aparato burocrático y ley dogmática</span>
+                  </div>
+                  <div class="category-card__feature">
+                    <span class="feature-label">Compromiso:</span>
+                    <span class="feature-val" id="featCompMonismoHegemonico">Prioriza orden territorial a costa de anular la autonomía individual</span>
+                  </div>
+                </div>
+                <div class="category-card__chips-guide" role="note" aria-label="Guía para explorar tradiciones">
+                  <span class="chips-guide-text">Toca una tradición para ver su ficha aislada:</span>
+                </div>
+                <div class="category-card__samples" id="samplesMonismoHegemonico" role="group" aria-label="Tradiciones representativas"></div>
+              </div>
+            </article>
+
+            <!-- 2. Pluralistas Hegemónicos -->
+            <article class="power-category-card power-category-card--pluralismo_hegemonico" id="catCardPluralismoHegemonico" data-category="pluralismo_hegemonico">
+              <div class="category-card__header">
+                <div class="category-card__badge-row">
+                  <span class="category-card__tag">2</span>
+                  <span class="category-card__badge badge--blue" id="badgePluralismoHegemonico">Pluralismo Hegemónico</span>
+                </div>
+                <h4 class="category-card__title" id="titlePluralismoHegemonico">Pluralistas hegemónicos</h4>
+                <p class="category-card__subtitle" id="subPluralismoHegemonico">Institucionalización de contrapesos, derechos y división de poderes</p>
+              </div>
+              <div class="category-card__body">
+                <p class="category-card__summary" id="sumPluralismoHegemonico">
+                  Tradiciones consolidadas que asumen la irreductibilidad de valores incompatibles y distribuyen la autoridad entre jurisdicciones autónomas, tribunales independientes y cartas constitucionales.
+                </p>
+                <div class="category-card__features">
+                  <div class="category-card__feature">
+                    <span class="feature-label">Mecanismo:</span>
+                    <span class="feature-val" id="featMecPluralismoHegemonico">Imperio de la ley, frenos y contrapesos y deliberación reglada</span>
+                  </div>
+                  <div class="category-card__feature">
+                    <span class="feature-label">Compromiso:</span>
+                    <span class="feature-val" id="featCompPluralismoHegemonico">Protege contra la tiranía a costa de lentitud decisional y fricción</span>
+                  </div>
+                </div>
+                <div class="category-card__chips-guide" role="note" aria-label="Guía para explorar tradiciones">
+                  <span class="chips-guide-text">Toca una tradición para ver su ficha aislada:</span>
+                </div>
+                <div class="category-card__samples" id="samplesPluralismoHegemonico" role="group" aria-label="Tradiciones representativas"></div>
+              </div>
+            </article>
+
+            <!-- 3. Monistas Emergentes -->
+            <article class="power-category-card power-category-card--monismo_emergente" id="catCardMonismoEmergente" data-category="monismo_emergente">
+              <div class="category-card__header">
+                <div class="category-card__badge-row">
+                  <span class="category-card__tag">3</span>
+                  <span class="category-card__badge badge--crimson" id="badgeMonismoEmergente">Monismo Emergente</span>
+                </div>
+                <h4 class="category-card__title" id="titleMonismoEmergente">Monistas emergentes</h4>
+                <p class="category-card__subtitle" id="subMonismoEmergente">Corrientes contestatarias, vanguardias radicales o en ruptura</p>
+              </div>
+              <div class="category-card__body">
+                <p class="category-card__summary" id="sumMonismoEmergente">
+                  Vanguardias revolucionarias, nacionalismos radicales o teocracias insurgentes que impugnan el orden vigente en nombre de una verdad definitiva, rechazando el compromiso pluralista como debilidad.
+                </p>
+                <div class="category-card__features">
+                  <div class="category-card__feature">
+                    <span class="feature-label">Mecanismo:</span>
+                    <span class="feature-val" id="featMecMonismoEmergente">Disciplina de partido, movilización redentora y pureza doctrinal</span>
+                  </div>
+                  <div class="category-card__feature">
+                    <span class="feature-label">Compromiso:</span>
+                    <span class="feature-val" id="featCompMonismoEmergente">Cohesión combativa total a costa de suprimir el disenso interno</span>
+                  </div>
+                </div>
+                <div class="category-card__chips-guide" role="note" aria-label="Guía para explorar tradiciones">
+                  <span class="chips-guide-text">Toca una tradición para ver su ficha aislada:</span>
+                </div>
+                <div class="category-card__samples" id="samplesMonismoEmergente" role="group" aria-label="Tradiciones representativas"></div>
+              </div>
+            </article>
+
+            <!-- 4. Pluralistas Emergentes -->
+            <article class="power-category-card power-category-card--pluralismo_emergente" id="catCardPluralismoEmergente" data-category="pluralismo_emergente">
+              <div class="category-card__header">
+                <div class="category-card__badge-row">
+                  <span class="category-card__tag">4</span>
+                  <span class="category-card__badge badge--emerald" id="badgePluralismoEmergente">Pluralismo Emergente</span>
+                </div>
+                <h4 class="category-card__title" id="titlePluralismoEmergente">Pluralistas emergentes</h4>
+                <p class="category-card__subtitle" id="subPluralismoEmergente">Autonomías comunitarias, bienes comunes y diversidad desde abajo</p>
+              </div>
+              <div class="category-card__body">
+                <p class="category-card__summary" id="sumPluralismoEmergente">
+                  Movimientos que defienden la coexistencia horizontal y descentralizada de proyectos de vida autónomos sin recurrir al monopolio del Estado (comunes, feminismo interseccional, autogobierno indígena).
+                </p>
+                <div class="category-card__features">
+                  <div class="category-card__feature">
+                    <span class="feature-label">Mecanismo:</span>
+                    <span class="feature-val" id="featMecPluralismoEmergente">Asambleas de base, mandatos revocables y federaciones voluntarias</span>
+                  </div>
+                  <div class="category-card__feature">
+                    <span class="feature-label">Compromiso:</span>
+                    <span class="feature-val" id="featCompPluralismoEmergente">Máxima autonomía participativa a costa de vulnerabilidad defensiva</span>
+                  </div>
+                </div>
+                <div class="category-card__chips-guide" role="note" aria-label="Guía para explorar tradiciones">
+                  <span class="chips-guide-text">Toca una tradición para ver su ficha aislada:</span>
+                </div>
+                <div class="category-card__samples" id="samplesPluralismoEmergente" role="group" aria-label="Tradiciones representativas"></div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="genealogia-closing">
+          <h3 class="genealogia-closing__title" id="genealogiaClosingTitle">La metamorfosis histórica del poder</h3>
+          <p class="genealogia-closing__text" id="genealogiaClosingText">
+            Cada arquitectura política construye un relato de legitimación para naturalizar sus restricciones. Al examinar la historia, la libertad nunca es una propiedad abstracta: es una configuración precaria sobre quién tiene el poder de restringir, quién debe obedecer y qué contrapesos impiden la dominación absoluta de los más débiles.
+          </p>
+          <div class="genealogia-closing__question-box">
+            <p class="genealogia-closing__eyebrow" id="genealogiaClosingEyebrow">Pregunta rectora de la genealogía</p>
+            <blockquote class="genealogia-closing__quote" id="genealogiaClosingQuote">
+              «¿Qué libertad se restringe, para proteger cuál, quién decide y cómo puede impugnarse esa decisión?»
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODAL DIALOG ACCESIBLE PARA EXPLORACIÓN DE CATEGORÍAS Y TRADICIONES -->
+    <div class="genealogia-modal-backdrop" id="genealogiaModalBackdrop" aria-hidden="true">
+      <div class="genealogia-modal" id="genealogiaModal" role="dialog" aria-modal="true" aria-labelledby="modalCategoryTitle" aria-describedby="modalCategoryContext" tabindex="-1">
+        <div class="genealogia-modal__header">
+          <div class="genealogia-modal__header-top">
+            <div class="genealogia-modal__meta">
+              <span class="genealogia-modal__badge" id="modalCategoryBadge"></span>
+              <span class="genealogia-modal__count" id="modalTraditionsCount"></span>
+            </div>
+            <div class="genealogia-modal__header-actions">
+              <div class="genealogia-modal__nav" aria-label="Navegación entre categorías">
+                <button type="button" class="modal-nav-btn modal-nav-btn--prev" id="modalPrevBtn" aria-label="Categoría anterior" title="Anterior (Flecha izquierda)">← Anterior</button>
+                <button type="button" class="modal-nav-btn modal-nav-btn--next" id="modalNextBtn" aria-label="Categoría siguiente" title="Siguiente (Flecha derecha)">Siguiente →</button>
+              </div>
+              <button type="button" class="genealogia-modal__close-btn" id="modalCloseBtn" aria-label="Cerrar ventana modal" title="Cerrar (Esc)">&times;</button>
+            </div>
+          </div>
+          <h3 class="genealogia-modal__title" id="modalCategoryTitle"></h3>
+          <p class="genealogia-modal__context" id="modalCategoryContext"></p>
+        </div>
+
+        <div class="genealogia-modal__tabs" role="tablist" aria-label="Vistas de la categoría">
+          <button type="button" class="modal-tab-btn is-active" id="modalTabBtnOverview" role="tab" aria-selected="true" aria-controls="modalViewOverview">Fundamentos y Compromisos</button>
+          <button type="button" class="modal-tab-btn" id="modalTabBtnTraditions" role="tab" aria-selected="false" aria-controls="modalViewTraditions">Tradiciones y Casos Históricos</button>
+        </div>
+
+        <div class="genealogia-modal__body" id="modalArchBody">
+          <!-- Vista 1: Fundamentos y Compromisos -->
+          <div class="modal-view-panel is-active" id="modalViewOverview" role="tabpanel" aria-labelledby="modalTabBtnOverview"></div>
+          <!-- Vista 2: Tradiciones y Casos Históricos -->
+          <div class="modal-view-panel" id="modalViewTraditions" role="tabpanel" aria-labelledby="modalTabBtnTraditions" hidden></div>
+        </div>
+
+        <div class="genealogia-modal__footer">
+          <span class="modal-shortcut-hint" id="modalShortcutHint">Navega con ← / → o cierra con Esc</span>
+          <button type="button" class="modal-close-action-btn" id="modalCloseActionBtn">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- XI — CIERRE -->
+    <section id="cierre" class="section section--cierre" aria-labelledby="cierre-title">
+      <div class="section__inner section__inner--cierre">
+        <div class="section__num" aria-hidden="true">XI</div>
+        <div class="cierre-content">
+          <p class="cierre-epigraph">«De la madera torcida de la humanidad no se ha tallado nunca nada completamente recto.»</p>
+          <p class="cierre-attribution">— Immanuel Kant, <em>Idea para una historia universal</em> (1784)</p>
+
+          <div class="cierre-theses">
+            <div class="cierre-thesis">
+              <span class="cierre-thesis__num">1</span>
+              <p>Los valores genuinamente importantes son incompatibles entre sí. No hay sistema que los maximice todos simultáneamente.</p>
+            </div>
+            <div class="cierre-thesis">
+              <span class="cierre-thesis__num">2</span>
+              <p>Todo índice, toda medición, presupone un marco teórico. Ese marco es una elección, no un hecho neutro.</p>
+            </div>
+            <div class="cierre-thesis">
+              <span class="cierre-thesis__num">3</span>
+              <p>El pluralismo no es relativismo. Puedes reconocer valores incompatibles sin concluir que todos valen igual.</p>
+            </div>
+            <div class="cierre-thesis">
+              <span class="cierre-thesis__num">4</span>
+              <p>La humildad epistémica no es parálisis política. Es la condición para no cometer errores irreversibles.</p>
+            </div>
+          </div>
+
+          <p class="cierre-coda">Esta tensión no se resuelve.<br/><strong>Se habita.</strong></p>
+
+          <!-- ECOSISTEMA CALLOUT CARD (Link Building Paso 4) -->
+          <div class="ecosystem-callout-card">
+            <div class="callout-badge" aria-hidden="true">❖</div>
+            <div class="callout-body">
+              <span class="callout-tag" id="cierreEcosystemTag">Ruta del Pensamiento Crítico · Paso 4</span>
+              <h4 class="callout-title" id="cierreEcosystemTitle">Límites materiales de la libertad: ¿A qué altura vives?</h4>
+              <p class="callout-text" id="cierreEcosystemText">
+                ¿Puede una persona ser verdaderamente libre si carece de las condiciones materiales básicas para actuar? La libertad formal se estrella de frente con las brechas materiales reales de nuestro mundo.
+              </p>
+              <a href="https://willkwolf.github.io/global-inequality-21Century/Escala-visual-de-riqueza-mundial.html" target="_blank" rel="noopener" class="ecosystem-callout-btn" id="cierreEcosystemBtn">
+                Descubrir la Escala de Riqueza Global ➔
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer" aria-labelledby="footerTitle">
+    <!-- Stepper del Ecosistema -->
+    <div class="ecosystem-stepper-section">
+      <h3 id="stepPathTitle">Ruta del Pensamiento Crítico</h3>
+      <p class="stepper-subtitle" id="stepPathSub">Una red de visualizaciones interactivas para explorar la economía y la sociedad</p>
+      <div class="ecosystem-stepper">
+        <a href="https://willkwolf.github.io/EcoSchoolMap/" class="step-item" target="_blank" rel="noopener">
+          <div class="step-badge">1</div>
+          <div class="step-meta">
+            <span class="step-title" id="stepTitle1">Comprender</span>
+            <span class="step-project" id="stepProject1">Mapa de Escuelas</span>
+            <span class="step-status" id="stepStatusExplore1">Explorar ➔</span>
+          </div>
+        </a>
+        <a href="https://willkwolf.github.io/economic-bar/" class="step-item" target="_blank" rel="noopener">
+          <div class="step-badge">2</div>
+          <div class="step-meta">
+            <span class="step-title" id="stepTitle2">Mezclar</span>
+            <span class="step-project" id="stepProject2">El Bar de Cocteles</span>
+            <span class="step-status" id="stepStatusExplore2">Explorar ➔</span>
+          </div>
+        </a>
+        <div class="step-item active">
+          <div class="step-badge">3</div>
+          <div class="step-meta">
+            <span class="step-title" id="stepTitle3">Contrastar</span>
+            <span class="step-project" id="stepProject3">Filosofía de la Libertad</span>
+            <span class="step-status" id="stepStatusHere">Estás aquí</span>
+          </div>
+        </div>
+        <a href="https://willkwolf.github.io/global-inequality-21Century/Escala-visual-de-riqueza-mundial.html" class="step-item" target="_blank" rel="noopener">
+          <div class="step-badge">4</div>
+          <div class="step-meta">
+            <span class="step-title" id="stepTitle4">Escalar</span>
+            <span class="step-project" id="stepProject4">Brecha de Riqueza Global</span>
+            <span class="step-status" id="stepStatusExplore4">Explorar ➔</span>
+          </div>
+        </a>
+        <a href="https://willkwolf.github.io/colombia-palma-desigualdad/" class="step-item" target="_blank" rel="noopener">
+          <div class="step-badge">5</div>
+          <div class="step-meta">
+            <span class="step-title" id="stepTitle5">Aterrizar</span>
+            <span class="step-project" id="stepProject5">Desigualdad en Colombia</span>
+            <span class="step-status" id="stepStatusExplore5">Explorar ➔</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <hr class="footer-divider">
+
+    <div class="site-footer__inner">
+      <div class="site-footer__lead">
+        <p class="site-footer__eyebrow" id="footerEyebrow">Créditos y continuidad</p>
+        <h2 class="site-footer__title" id="footerTitle">William Camilo Artunduaga Viana</h2>
+        <p class="site-footer__summary" id="footerSummary">
+          Este artefacto editorial busca devolver complejidad al concepto de libertad y ofrecer una herramienta navegable para discutirlo fuera del eslogan político.
+        </p>
+      </div>
+
+      <div class="site-footer__grid">
+        <section class="site-footer__card" aria-labelledby="footerWorkTitle">
+          <p class="site-footer__card-label" id="footerWorkLabel">Divulgación</p>
+          <h3 class="site-footer__card-title" id="footerWorkTitle">Más trabajo sobre Isaiah Berlin en clave colombiana</h3>
+          <p class="site-footer__card-copy" id="footerWorkCopy">
+            Continúa la exploración en mi podcast en Spotify, donde aterrizo estas ideas en debates, lenguaje y conflictos del contexto colombiano.
+          </p>
+          <a class="site-footer__link" href="https://open.spotify.com/show/4hRC6rIFVIozooGV6OdWOI?si=e500cb9f38684cc2" target="_blank" rel="noreferrer">
+            <span class="site-footer__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="8.5"></circle>
+                <path d="M8.1 10.1c2.8-1 5.6-.8 8 .6"></path>
+                <path d="M8.8 13c2.2-.6 4.3-.4 6.1.7"></path>
+                <path d="M9.4 15.7c1.5-.3 2.9-.1 4 .5"></path>
+              </svg>
+            </span>
+            <span id="footerSpotifyLink">Escuchar en Spotify</span>
+          </a>
+        </section>
+
+        <section class="site-footer__card" aria-labelledby="footerSourcesTitle">
+          <p class="site-footer__card-label" id="footerSourcesLabel">Fuentes y contexto</p>
+          <h3 class="site-footer__card-title" id="footerSourcesTitle">Lee más y explora los cuadernos de fuentes</h3>
+          <p class="site-footer__card-copy" id="footerSourcesCopy">
+            El README explica la motivación de la infografía, su arquitectura visual y las preguntas que articula. Los cuadernos de fuentes permiten profundizar en el material de trabajo.
+          </p>
+          <div class="site-footer__links">
+            <a class="site-footer__link" href="https://github.com/willkwolf/isaiah-berlin-liberty-infographic#readme" target="_blank" rel="noreferrer">
+              <span class="site-footer__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 4.5h9a3 3 0 0 1 3 3V20a.5.5 0 0 1-.8.4L14 18H6a2 2 0 0 1-2-2V6.5a2 2 0 0 1 2-2Z"></path>
+                  <path d="M8 9h8"></path>
+                  <path d="M8 12.5h8"></path>
+                </svg>
+              </span>
+              <span id="footerReadmeLink">Leer README</span>
+            </a>
+            <a class="site-footer__link" href="https://notebooklm.google.com/notebook/5ce143e6-2b6f-41e3-a96d-eb58c6fbb2a1" target="_blank" rel="noreferrer">
+              <span class="site-footer__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 4.5h7.5L18 9v10.5a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5Z"></path>
+                  <path d="M13.5 4.5V9H18"></path>
+                  <path d="M8.5 12h7"></path>
+                  <path d="M8.5 15h7"></path>
+                </svg>
+              </span>
+              <span id="footerNotebookLink">Abrir cuadernos de fuentes</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="site-footer__card" aria-labelledby="footerRightsTitle">
+          <p class="site-footer__card-label" id="footerRightsLabel">Uso y licencia</p>
+          <h3 class="site-footer__card-title" id="footerRightsTitle">Creative Commons para circulación educativa</h3>
+          <p class="site-footer__card-copy" id="footerRightsCopy">
+            Contenido elaborado en marzo de 2026. Se propone una licencia Creative Commons BY-NC-SA 4.0 para compartir, citar y adaptar el material con atribución, sin uso comercial y manteniendo la misma licencia.
+          </p>
+          <div class="site-footer__meta">
+            <span class="site-footer__badge" id="footerBadgeLicense">CC BY-NC-SA 4.0</span>
+            <span class="site-footer__meta-text" id="footerMetaDate">Elaborado: marzo 2026</span>
+          </div>
+        </section>
+      </div>
+    </div>
+  </footer>
+
+  <div class="sr-only" id="lensAnnounce" aria-live="assertive" aria-atomic="true"></div>
+  <script src="i18n.js?v=20260513"></script>
+  <script src="app.js?v=20260513"></script>
+</body>
+</html>
