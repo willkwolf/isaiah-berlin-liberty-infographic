@@ -21,6 +21,11 @@ graph TD
         D1_3["03. Perspectiva Libertaria (Hayek / Friedman)"]
         D1_4["04. El Dilema Empírico Colombiano"]
         D1_5["05. Metodología, Fuentes y Citas"]
+        D1_6["06. Genealogía del Poder y Arquitecturas"]
+        D1_7["07. Monismo vs. Pluralismo"]
+        D1_8["08. Poder, Obediencia y Coerción"]
+        D1_9["09. El Conflicto Trágico de Valores"]
+        D1_10["10. Síntesis y Ruta del Pensamiento Crítico"]
     end
     
     subgraph D2["DOMINIO II: TECNOLOGÍA Y ARQUITECTURA WEB"]
@@ -58,6 +63,11 @@ graph TD
 | **Perspectiva Libertaria** | Friedrich Hayek y Milton Friedman: orden espontáneo (*catalaxia*), conocimiento disperso, derechos de propiedad y el rol del mercado libre en la preservación de la libertad política. | [Ver Documento](./01-marco-teorico/03-perspectiva-libertaria-mercado.md) |
 | **El Dilema Empírico Colombiano** | El caso de estudio de Colombia: cómo métricas idénticas (IPM del DANE, IDH del PNUD, libertad económica) arrojan diagnósticos éticos incompatibles según la lente activa. | [Ver Documento](./01-marco-teorico/04-dilema-empirico-colombia.md) |
 | **Metodología, Fuentes y Citas** | Metodología de divulgación computacional, bibliografía primaria y secundaria completa, cuaderno de fuentes en NotebookLM, podcast en Spotify y formatos de citación (APA 7, BibTeX). | [Ver Documento](./01-marco-teorico/05-metodologia-fuentes-y-citas.md) |
+| **Genealogía del Poder y Arquitecturas** | Sección X: Matriz bidimensional (Monismo vs. Pluralismo / Hegemónico vs. Emergente), 4 cuadrantes, 23 tradiciones históricas, mecanismos de coerción, justificaciones y trade-offs. | [Ver Documento](./01-marco-teorico/06-genealogia-del-poder.md) |
+| **Monismo vs. Pluralismo** | Sección IX: La ilusión de la síntesis armónica, crítica al historicismo teleológico (Hegel/Marx), las derivas dogmáticas («Yo Superior» vs. «Dominación Privada») y sistemas abiertos. | [Ver Documento](./01-marco-teorico/07-monismo-vs-pluralismo.md) |
+| **Poder, Obediencia y Coerción** | Secciones IV y V: «¿Por qué debo obedecer?», Hobbes, Locke, Rousseau y Berlin; red relacional (4 nodos), coerción intencional vs. incapacidad, y laboratorio de 4 casos reales. | [Ver Documento](./01-marco-teorico/08-poder-obediencia-y-coercion.md) |
+| **El Conflicto Trágico de Valores** | Sección III: Incompatibilidad entre igualdad sustantiva y libertad negativa, inconmensurabilidad radical, crítica al utilitarismo, curva de trade-off y problemas técnicos vs. políticos. | [Ver Documento](./01-marco-teorico/09-el-conflicto-tragico-de-valores.md) |
+| **Síntesis y Ruta del Pensamiento Crítico** | Sección XI: La madera torcida de Kant, las 4 tesis del pluralismo, «habitar la tensión», y la Ruta de 5 Pasos de visualizaciones críticas de economía y sociedad. | [Ver Documento](./01-marco-teorico/10-sintesis-y-recorrido-critico.md) |
 
 ---
 
@@ -67,10 +77,10 @@ graph TD
 | Documento | Alcance y Contenido Clave | Enlace Directo |
 | :--- | :--- | :--- |
 | **Arquitectura Zero-Build** | Filosofía técnica de preservación: estándares web nativos (HTML5/CSS3/ES6+), cero dependencias de compilación en runtime, despliegue estático desacoplado en GitHub Pages. | [Ver Documento](./02-tecnologia-y-arquitectura/01-arquitectura-zero-build.md) |
-| **Componentes y Scrollytelling** | Arquitectura DOM, navegación colapsable, acumulador de intersección con `Set` en `IntersectionObserver`, Ruleta Horizontal de Lentes y tarjetas de Genealogía. | [Ver Documento](./02-tecnologia-y-arquitectura/02-componentes-y-scrollytelling.md) |
+| **Componentes y Scrollytelling** | Arquitectura DOM de las 11 secciones, navegación colapsable, acumulador de intersección con `Set`, Ruleta Horizontal de Lentes, Laboratorio de Límites y tarjetas/modal de Genealogía. | [Ver Documento](./02-tecnologia-y-arquitectura/02-componentes-y-scrollytelling.md) |
 | **Sistema de Diseño y Responsividad** | Tokens CSS, cambio de tema claro/oscuro con script sincrónico anti-flicker, WCAG 2.1 AA, objetivos táctiles $\ge 44 \times 44\text{ px}$ y cero overflow horizontal. | [Ver Documento](./02-tecnologia-y-arquitectura/03-sistema-diseno-y-responsividad.md) |
 | **Motor de Internacionalización** | Arquitectura de `files/i18n.js`: motor de parcheo reactivo en memoria, paridad lingüística estricta 1:1 (ES/EN) y alternancia instantánea sin recarga. | [Ver Documento](./02-tecnologia-y-arquitectura/04-motor-internacionalizacion.md) |
-| **Visualización Gráfica y SVG** | Renderizado vectorial nativo con Canvas 2D y SVG inline, algoritmos anti-colisión de etiquetas, `devicePixelRatio` y soporte para `prefers-reduced-motion`. | [Ver Documento](./02-tecnologia-y-arquitectura/05-visualizacion-grafica-y-svg.md) |
+| **Visualización Gráfica y SVG** | Renderizado vectorial nativo con Canvas 2D y SVG inline, curvas de conflicto y sistemas, diagrama relacional de poder, `devicePixelRatio` y soporte para `prefers-reduced-motion`. | [Ver Documento](./02-tecnologia-y-arquitectura/05-visualizacion-grafica-y-svg.md) |
 
 ---
 

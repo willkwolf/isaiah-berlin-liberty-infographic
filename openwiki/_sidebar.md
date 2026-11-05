@@ -1,11 +1,16 @@
 * [🏠 Inicio / Portada](README.md)
 
-* **Dominio I: Marco Teórico**
-  * [01. Fundamentos Filosóficos](01-marco-teorico/01-fundamentos-filosoficos.md)
-  * [02. Enfoque de Capacidades](01-marco-teorico/02-enfoque-de-capacidades.md)
-  * [03. Perspectiva Libertaria](01-marco-teorico/03-perspectiva-libertaria-mercado.md)
+* **Dominio I: Marco Teórico y Filosofía Política**
+  * [01. Fundamentos Filosóficos (Berlin)](01-marco-teorico/01-fundamentos-filosoficos.md)
+  * [02. Enfoque de Capacidades (Sen)](01-marco-teorico/02-enfoque-de-capacidades.md)
+  * [03. Perspectiva Libertaria (Hayek/Friedman)](01-marco-teorico/03-perspectiva-libertaria-mercado.md)
   * [04. El Dilema Empírico Colombiano](01-marco-teorico/04-dilema-empirico-colombia.md)
   * [05. Metodología, Fuentes y Citas](01-marco-teorico/05-metodologia-fuentes-y-citas.md)
+  * [06. Genealogía del Poder y Arquitecturas](01-marco-teorico/06-genealogia-del-poder.md)
+  * [07. Monismo vs. Pluralismo](01-marco-teorico/07-monismo-vs-pluralismo.md)
+  * [08. Poder, Obediencia y Coerción](01-marco-teorico/08-poder-obediencia-y-coercion.md)
+  * [09. El Conflicto Trágico de Valores](01-marco-teorico/09-el-conflicto-tragico-de-valores.md)
+  * [10. Síntesis y Ruta del Pensamiento Crítico](01-marco-teorico/10-sintesis-y-recorrido-critico.md)
 
 * **Dominio II: Tecnología y Arquitectura**
   * [01. Arquitectura Zero-Build](02-tecnologia-y-arquitectura/01-arquitectura-zero-build.md)

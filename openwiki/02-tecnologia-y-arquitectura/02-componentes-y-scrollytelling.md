@@ -2,17 +2,17 @@
 
 ## 1. Visión General de la Interfaz
 
-La interfaz de usuario de **Anatomía de la Libertad** está concebida como un **ensayo hipertextual y scrollytelling** donde la narración filosófica guía al lector a través de diez secciones numeradas (I a X). A medida que el usuario se desplaza verticalmente, el sistema detecta la posición de lectura y reconfigura los componentes interactivos.
+La interfaz de usuario de **Anatomía de la Libertad** está concebida como un **ensayo hipertextual y scrollytelling** donde la narración filosófica guía al lector a través de once secciones numeradas (I a XI). A medida que el usuario se desplaza verticalmente, el sistema detecta la posición de lectura y reconfigura los componentes interactivos.
 
 ```mermaid
 flowchart TD
     subgraph UIComponents["Ecosistema de Componentes DOM"]
-        TN["1. Top Navigation (.top-nav)<br/>Barra superior colapsable con anclas romanas"]
+        TN["1. Top Navigation (.top-nav)<br/>Barra superior colapsable con anclas romanas I a XI"]
         SC["2. Skip Link (.skip-link)<br/>Acceso directo al contenido para lectores de pantalla"]
         ST["3. Motor de Scrollytelling (IntersectionObserver)<br/>Acumulador de intersecciones activas"]
         LP["4. Selector de Lentes Teóricas<br/>Desktop: Panel lateral / Móvil: Ruleta horizontal"]
-        SE["5. Secciones I a X (.section)<br/>Bloques narrativos y laboratorios interactivos"]
-        GE["6. Explorador de Genealogía (Sección X)<br/>Tarjetas elásticas y modales de profundización"]
+        SE["5. Secciones I a XI (.section)<br/>Bloques narrativos y laboratorios interactivos"]
+        GE["6. Explorador de Genealogía (Sección X)<br/>Matriz de 4 categorías, 23 tradiciones y modal accesible"]
     end
 ```
 
@@ -22,9 +22,9 @@ flowchart TD
 
 * **Markup Canónico:** `<nav class="top-nav" aria-label="Secciones" id="topNav">`
 * **Controles y Enlaces:**
-  * Enlaces numerados en numeración romana (`I` a `X`), cada uno con atributo `title` descriptivo del tema de la sección.
-  * Selector bilingüe de idioma (`#langToggleBtn`: `ES` / `EN`).
-  * Conmutador de tema de color (`#themeToggleBtn`: icono sol/luna).
+  * Enlaces numerados en numeración romana (`I` a `XI`), cada uno con atributo `title` descriptivo del tema de la sección.
+  * Selector bilingüe de idioma en el Hero (`.hero-language-switch`: `ES` / `EN`).
+  * Conmutador de tema de color (`#colorModeBtn`: icono sol/luna).
 * **Comportamiento Inteligente al Desplazamiento (`Scroll Collapse`):**
   * Para maximizar el área de lectura en pantallas pequeñas, la barra superior detecta la dirección del desplazamiento:
     * **Desplazamiento descendente:** Añade la clase `.top-nav--collapsed` (`transform: translateY(-100%)`), ocultando la barra suavemente.
@@ -95,11 +95,17 @@ El componente de cambio de marco teórico cuenta con dos implementaciones acopla
 
 ## 5. Sección X: Genealogía del Poder (`.genealogia-explorer`)
 
-La Sección X (`#genealogia`, «Genealogía del poder: cómo organizamos la libertad») fue completamente rediseñada para reemplazar la antigua tabla de coordenadas rígidas por **cuatro tarjetas modulares de exploración**:
+La Sección X (`#genealogia`, «Genealogía del poder: cómo organizamos la libertad») estructura la investigación institucional mediante una **matriz tipológica de cuatro categorías** articuladas en `.genealogia-categories-grid`:
 
-1. **Card 1: El Poder Coercitivo y la Ley (Hobbes / Locke):** El monopolio legítimo de la fuerza, límites constitucionales y la frontera entre orden y tiranía.
-2. **Card 2: El Poder Disperso y el Mercado (Smith / Hayek):** Coordinación descentralizada, formación de precios y prevención de la planificación monolítica.
-3. **Card 3: El Poder como Habilitación Social (Sen / Nussbaum):** Infraestructura pública, salud, educación y desarrollo de capacidades individuales.
-4. **Card 4: El Poder Simbólico y la Ideología (Berlin / Foucault):** Hegemonía cultural, la fabricación del consentimiento y la perversión del «yo superior».
+1. **Categoría 1: Monistas Hegemónicos (`monismo_hegemonico`):** Dominio institucional consolidado y soberanía unificada (imperio tributario, teocracia, monarquía absolutista, califato, confucianismo, nacionalismo autoritario).
+2. **Categoría 2: Pluralistas Hegemónicos (`pluralismo_hegemonico`):** Institucionalización de contrapesos y división de poderes (republicanismo cívico, liberalismo clásico, democracia constitucional, federalismo, ciudad-estado, tradiciones feudales).
+3. **Categoría 3: Monistas Emergentes (`monismo_emergente`):** Corrientes contestatarias y vanguardias radicales (fascismo, marxismo-leninismo, teocracia insurgente, conservadurismo autoritario, nacionalismo étnico).
+4. **Categoría 4: Pluralistas Emergentes (`pluralismo_emergente`):** Autonomías comunitarias y bienes comunes (anarquismo, feminismo interseccional, ecologismo radical/commons, multiculturalismo, movimientos indígenas/derecho propio, comunalismo).
 
-Cada tarjeta incluye controles de expansión progresiva y diálogos modales accesibles con trampa de foco (`focus trap`) y cierre mediante tecla `Escape`.
+### 5.1. Diálogo Modal Accesible (`#genealogiaModal`)
+Al hacer clic en cualquier tradición o categoría, el sistema abre un diálogo modal con:
+* **Control de Foco y Teclado:** Trampa de foco (`focus trap`), navegación secuencial entre categorías con flechas (`←`, `→`), cierre con tecla `Escape` o botón dedicado, y restauración del foco al elemento activador.
+* **Vistas por Pestañas:**
+  * **Pestaña 1 (`#modalViewOverview`):** Fundamentos, mecanismos coercitivos, relatos de legitimación, beneficiarios, perjudicados y trade-offs.
+  * **Pestaña 2 (`#modalViewTraditions`):** Catálogo de tradiciones históricas asociadas con fichas individuales y referencias bibliográficas canónicas.
+* **Blindaje Responsive:** Scroll vertical independiente con `overscroll-behavior: contain` y cero desbordamiento horizontal en resoluciones móviles.
