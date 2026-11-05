@@ -1,0 +1,37 @@
+{
+  "name": "libertad-conceptos--isaih-berlin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:playwright": "playwright test",
+    "test:svg-proportions": "playwright test tests/playwright/svg-proportions-visual.spec.js",
+    "test:vibium": "node tests/vibium/layout-defense.js",
+    "test:vibium:svg": "node tests/vibium/svg-visual-defense.js",
+    "test:all": "npm test && npm run test:playwright && npm run test:vibium && npm run test:vibium:svg"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "axe-core": "^4.11.4",
+    "fast-check": "^4.7.0",
+    "jest": "^30.4.2",
+    "jest-axe": "^10.0.0",
+    "jest-environment-jsdom": "^30.4.1",
+    "vibium": "^26.8.21"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "testTimeout": 30000,
+    "setupFilesAfterEnv": [
+      "./tests/setup.js"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/tests/playwright/"
+    ]
+  }
+}
