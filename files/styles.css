@@ -3459,7 +3459,7 @@ body.modal-open {
 }
 
 .power-category-card--pluralismo_emergente {
-  border-top: 3px solid #059669;
+  border-top: 3px solid #065f46;
   background: linear-gradient(180deg, rgba(5, 150, 105, 0.05) 0%, var(--clr-bg-1) 36%);
 }
 .power-category-card--pluralismo_emergente:hover {
@@ -3727,7 +3727,7 @@ body.light-theme .sample-tradition-cta,
 [data-theme="light"] .sample-tradition-cta {
   background: #f1f5f9;
   border-color: #e2e8f0;
-  color: #0369a1;
+  color: #075985;
 }
 
 body.light-theme .sample-tradition-pill:hover .sample-tradition-cta,
@@ -4171,7 +4171,7 @@ body.light-theme .category-card__chips-guide,
 
 .badge--pluralismo_emergente {
   background: #d1fae5;
-  color: #047857;
+  color: #065f46;
   border: 1px solid #6ee7b7;
 }
 
@@ -5262,119 +5262,187 @@ html.light-mode .lab-reversibility-box {
 
 /* ==========================================================================
    EPISTEMOLOGICAL MODEL DISCLAIMERS & THEORETICAL ENHANCEMENTS
+   Integrated with Editorial Philosophy & CSS Design Tokens
    ========================================================================== */
 
-.viz-model-disclaimer {
-  font-size: 0.78rem;
-  line-height: 1.45;
-  color: #94a3b8;
-  background: rgba(30, 41, 59, 0.4);
-  border-left: 2px solid #f59e0b;
-  padding: 0.5rem 0.85rem;
-  margin-top: 0.75rem;
-  border-radius: 0 4px 4px 0;
-  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
-}
-
-.viz-model-disclaimer em {
-  font-style: normal;
-  font-weight: 600;
-  color: #f59e0b;
-}
-
-.viz-model-disclaimer strong {
-  color: #f1f5f9;
-}
-
+/* --- 1. Republican Callout (Section II) --- */
 .berlin-republican-callout {
-  margin: 2rem 0;
-  padding: 1.25rem 1.5rem;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  border-left: 3px solid #38bdf8;
-  border-radius: 6px;
+  margin: 1.75rem 0 1.5rem 0;
+  padding: 1rem 1.25rem;
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-left: 3px solid var(--clr-accent);
+  border-radius: var(--radius);
+  transition: background var(--transition), border-color var(--transition);
 }
 
 .republican-badge {
   display: inline-block;
-  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
-  font-size: 0.7rem;
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #38bdf8;
-  margin-bottom: 0.5rem;
+  color: var(--clr-accent);
+  margin-bottom: 0.35rem;
+  transition: color var(--transition);
 }
 
 .republican-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #f8fafc;
-  margin: 0 0 0.5rem 0;
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+  font-weight: 400;
+  color: var(--clr-text-bright);
+  margin: 0 0 0.4rem 0;
+  line-height: 1.35;
 }
 
 .republican-desc {
-  font-size: 0.92rem;
-  line-height: 1.6;
-  color: #cbd5e1;
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  line-height: 1.65;
+  color: var(--clr-text);
   margin: 0;
 }
 
+.republican-desc strong {
+  color: var(--clr-text-bright);
+  font-weight: 500;
+}
+
+/* --- 2. Epistemological Model Disclaimers (Sections III & IX) --- */
+.viz-model-disclaimer {
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  line-height: 1.55;
+  color: var(--clr-text-dim);
+  background: transparent;
+  border-top: 1px dashed var(--clr-border);
+  padding: 0.55rem 0.25rem 0 0.25rem;
+  margin-top: 0.65rem;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.viz-model-disclaimer em {
+  font-family: var(--font-mono);
+  font-size: 0.70rem;
+  font-style: normal;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--clr-text-dim);
+  display: inline-block;
+  margin-right: 0.35rem;
+}
+
+.viz-model-disclaimer strong {
+  color: var(--clr-text);
+  font-weight: 500;
+}
+
+/* --- 3. Sen Conversion Factors (Section VII) --- */
 .sen-conversion-box {
-  margin: 2rem 0;
-  padding: 1.5rem;
-  background: rgba(30, 41, 59, 0.5);
-  border: 1px solid rgba(148, 163, 184, 0.15);
-  border-radius: 8px;
+  margin: 1.75rem 0 2rem 0;
+  padding: 1.25rem;
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-lg);
+  transition: background var(--transition), border-color var(--transition);
 }
 
 .sen-conversion-title {
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: #10b981;
-  margin: 0 0 0.5rem 0;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--clr-text-bright);
+  margin: 0 0 0.35rem 0;
+  line-height: 1.35;
 }
 
 .sen-conversion-desc {
-  font-size: 0.92rem;
-  line-height: 1.55;
-  color: #cbd5e1;
-  margin-bottom: 1.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: var(--clr-text);
+  margin-bottom: 1rem;
 }
 
 .sen-conversion-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
 }
 
 .sen-conv-card {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  border-radius: 6px;
-  padding: 1rem;
+  background: var(--clr-bg-2);
+  border: 1px solid var(--clr-border);
+  border-top: 2px solid var(--clr-cap);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
   display: flex;
   flex-direction: column;
+  gap: 0.35rem;
+  transition: border-color var(--transition), transform var(--transition);
+}
+
+.sen-conv-card:hover {
+  border-color: var(--clr-cap-mid);
+  transform: translateY(-2px);
 }
 
 .sen-conv-tag {
-  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #10b981;
-  margin-bottom: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.70rem;
+  font-weight: 600;
+  color: var(--clr-cap);
+  letter-spacing: 0.05em;
+  transition: color var(--transition);
 }
 
 .sen-conv-name {
-  font-size: 0.98rem;
-  font-weight: 600;
-  color: #f8fafc;
-  margin: 0 0 0.5rem 0;
+  font-family: var(--font-serif);
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: var(--clr-text-bright);
+  margin: 0;
+  line-height: 1.3;
 }
 
 .sen-conv-card p {
-  font-size: 0.85rem;
-  line-height: 1.5;
-  color: #94a3b8;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--clr-text-dim);
   margin: 0;
+}
+
+/* --- 4. Responsive & Viewport Adjustments (<= 768px) --- */
+@media (max-width: 768px) {
+  .berlin-republican-callout {
+    padding: 0.85rem 1rem;
+    margin: 1.25rem 0;
+  }
+
+  .sen-conversion-box {
+    padding: 1rem;
+    margin: 1.25rem 0 1.5rem 0;
+  }
+
+  .sen-conversion-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+/* --- 5. High-Contrast Light Mode Enhancements --- */
+body.light-mode .republican-badge {
+  color: #075985; /* High-contrast ocean blue on light mode: 6.0:1 contrast */
+}
+
+body.light-mode .sen-conv-tag {
+  color: #065f46; /* High-contrast deep emerald on light mode: 5.9:1 contrast */
+}
+
+body.light-mode .sen-conv-card:hover {
+  border-color: #065f46;
 }

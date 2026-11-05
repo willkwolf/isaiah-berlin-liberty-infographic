@@ -83,3 +83,41 @@ En dispositivos móviles, cualquier desbordamiento horizontal (`scrollWidth > cl
 ### 3.3. Cumplimiento de WCAG 2.1 AA y Zonas Táctiles (Touch Targets)
 * **Objetivos Táctiles Mínimos (WCAG 2.5.5):** Todos los elementos interactivos móviles (botones de lentes, selector de idioma, botón de cerrar de coach banners, conmutadores de tema y enlaces de navegación) poseen un área táctil mínima de **$44 \times 44 \text{ px}$**.
 * **Zonas Seguras del Dispositivo (Safe Areas):** Se utilizan las funciones CSS `env(safe-area-inset-top)` y `env(safe-area-inset-bottom)` para evitar que los controles queden cubiertos por el *notch* de la cámara o la barra inferior de gestos.
+
+---
+
+## 4. Políticas de Diseño para Nuevos Componentes (Taxonomía, Tamaños y Contraste)
+
+Toda nueva incorporación o extensión conceptual al DOM debe integrarse bajo las directrices del sistema de diseño para preservar la coherencia narrativa, el ritmo visual y la accesibilidad universal.
+
+### 4.1. Taxonomía de Componentes y Reciclaje de Estilos
+1. **Llamadas y Notas Doctrinales (`.philosophical-callout` / `.berlin-republican-callout`):**
+   * **Propósito:** Perspectivas teóricas complementarias o de frontera (ej. Libertad Republicana de Skinner/Pettit).
+   * **Estructura:** Superficie `var(--clr-surface)`, borde sutil `var(--clr-border)` con acento lateral `border-left: 3px solid var(--clr-accent)` y radio `var(--radius)`.
+   * **Tipografía:** Título en `var(--font-serif)` ($\le 1.0 \text{ rem}$), etiqueta en `var(--font-mono)` ($\le 0.75 \text{ rem}$) y cuerpo en `var(--font-sans)` ($0.84 \text{ rem}$).
+2. **Pies Epistemológicos de Diagramas (`.viz-model-disclaimer`):**
+   * **Propósito:** Advertencias metodológicas bajo visualizaciones y curvas heurísticas (Secciones III y IX).
+   * **Estructura:** Fondo transparente, línea superior divisoria discontinua `border-top: 1px dashed var(--clr-border)` y espaciado compacto.
+   * **Tipografía:** Texto descriptivo en `var(--font-sans)` ($0.74 \text{ rem}$) en color `var(--clr-text-dim)` con etiqueta `em` en `var(--font-mono)` ($0.70 \text{ rem}$).
+3. **Matrices y Tarjetas de Taxonomía Conceptual (`.sen-conversion-box` / `.sen-conv-card`):**
+   * **Propósito:** Desgloses categoriales estructurados (ej. Factores de conversión personales, ambientales y sociales de Amartya Sen).
+   * **Estructura:** Contenedor contenedor en `var(--clr-surface)` con grilla de 3 columnas en escritorio y colapso elástico a 1 columna en pantallas $\le 768 \text{ px}$. Tarjetas hijas en `var(--clr-bg-2)` con borde superior de color acento representativo (`border-top: 2px solid var(--clr-cap)`).
+
+### 4.2. Escala Proporcional y Reglas Anti-Patrones
+* **Base Tipográfica:** Dado que `html { font-size: 21px; }`, el valor $1 \text{ rem} = 21 \text{ px}$. Por tanto, títulos internos de tarjetas no deben exceder $1.1 \text{ rem}$ ($23.1 \text{ px}$) para evitar jerarquías infladas o discordantes.
+* **Prohibición de Colores Hexadecimales Fijos:** Está estrictamente prohibido utilizar colores oscuros o claros hardcodeados (como `rgba(30, 41, 59, ...)` o `#f8fafc`). Todos los fondos y tipografías deben derivar de los tokens del sistema (`--clr-surface`, `--clr-bg-2`, `--clr-text*`).
+* **Blindaje de Contraste Bimodal (WCAG 2.1 AA):**
+  * En **Modo Oscuro**, todos los textos deben superar $\ge 4.5:1$ de ratio contra `--clr-surface` y `--clr-bg-2`.
+  * En **Modo Claro**, los acentos y etiquetas deben recalibrarse a tonos oscuros (ej. `#075985` para azul republicano y `#065f46` para verde de capacidades), garantizando ratios de contraste $\ge 5.4:1$.
+
+---
+
+## 5. Matriz de Verificación Automatizada Multi-Dispositivo
+
+El conjunto de pruebas automatizadas garantiza que cada componente añadido pase por el mismo rigor de evaluación:
+
+| Suite de Pruebas | Archivo de Especificación | Criterios Validados |
+| :--- | :--- | :--- |
+| **Diseño y Contraste Matemático** | `tests/new-components-design-and-contrast.test.js` | Ausencia de anti-patrones, jerarquía tipográfica $\le 1.1\text{ rem}$, fórmulas WCAG de luminancia relativa y contraste $\ge 4.5:1$ en modo claro y oscuro, sincronización i18n completa. |
+| **Responsividad Multi-Dispositivo** | `tests/playwright/new-components-multidevice.spec.js` | Viewports de 320px a 1920px (Mobile XS, Standard, Modern, Tablet, HD, Full HD); verificación de cero scroll horizontal, transiciones de grilla de 1 a 3 columnas, y conmutación de tema sin saltos visuales. |
+| **Accesibilidad Integral** | `tests/accessibility.test.js` | 0 violaciones críticas o serias con `axe-core` sobre el DOM renderizado bajo WCAG 2.1 AA. |
