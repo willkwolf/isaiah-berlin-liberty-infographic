@@ -1,7 +1,7 @@
 {
   "name": "libertad-conceptos--isaih-berlin",
   "version": "1.0.0",
-  "description": "",
+  "description": "Anatomía de la Libertad — Infografía interactiva y ensayo sobre los marcos teóricos de la libertad política",
   "main": "index.js",
   "scripts": {
     "test": "jest",
@@ -9,11 +9,24 @@
     "test:svg-proportions": "playwright test tests/playwright/svg-proportions-visual.spec.js",
     "test:vibium": "node tests/vibium/layout-defense.js",
     "test:vibium:svg": "node tests/vibium/svg-visual-defense.js",
-    "test:all": "npm test && npm run test:playwright && npm run test:vibium && npm run test:vibium:svg"
+    "test:all": "npm test && npm run test:playwright && npm run test:vibium && npm run test:vibium:svg",
+    "wiki": "openwiki",
+    "wiki:visualize": "openwiki visualize openwiki",
+    "wiki:update": "openwiki --update"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "isaiah-berlin",
+    "philosophy",
+    "liberty",
+    "positive-liberty",
+    "negative-liberty",
+    "amartya-sen",
+    "milton-friedman",
+    "scrollytelling",
+    "openwiki"
+  ],
+  "author": "William Camilo Artunduaga Viana",
+  "license": "CC-BY-NC-SA-4.0",
   "devDependencies": {
     "@playwright/test": "^1.64.0",
     "axe-core": "^4.11.4",
@@ -21,6 +34,7 @@
     "jest": "^30.4.2",
     "jest-axe": "^10.0.0",
     "jest-environment-jsdom": "^30.4.1",
+    "openwiki": "^0.8.0",
     "vibium": "^26.8.21"
   },
   "jest": {
