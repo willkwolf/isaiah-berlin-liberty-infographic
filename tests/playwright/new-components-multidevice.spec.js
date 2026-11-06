@@ -49,6 +49,10 @@ test.describe('Multi-Device Responsive, Contrast & Theme Audit Suite', () => {
             return { width: r.width, height: r.height, left: r.left, right: r.right };
           });
 
+          // 4. Cierre dual epigraph (Montaigne & Popper)
+          const dual = document.querySelector('.cierre-dual-epigraph');
+          const dualRect = dual ? dual.getBoundingClientRect() : null;
+
           return {
             docWidth,
             bodyScrollWidth,
@@ -59,7 +63,8 @@ test.describe('Multi-Device Responsive, Contrast & Theme Audit Suite', () => {
             conflictDiscSize,
             senBoxRect: senBoxRect ? { left: senBoxRect.left, right: senBoxRect.right, width: senBoxRect.width } : null,
             senCardsCount: senCards.length,
-            senCards
+            senCards,
+            dualRect: dualRect ? { left: dualRect.left, right: dualRect.right, width: dualRect.width } : null
           };
         });
 
@@ -88,6 +93,11 @@ test.describe('Multi-Device Responsive, Contrast & Theme Audit Suite', () => {
           expect(card.left).toBeGreaterThanOrEqual(0);
           expect(card.right).toBeLessThanOrEqual(vp.width + 2);
         }
+
+        // Cierre Dual Epigraph
+        expect(metrics.dualRect).not.toBeNull();
+        expect(metrics.dualRect.left).toBeGreaterThanOrEqual(0);
+        expect(metrics.dualRect.right).toBeLessThanOrEqual(vp.width + 2);
       });
 
       test('Responsive grid adapts columns appropriately (1 col on mobile, 3 cols on desktop)', async ({ page }) => {
@@ -103,6 +113,19 @@ test.describe('Multi-Device Responsive, Contrast & Theme Audit Suite', () => {
           expect(gridColumns, `Expected 1 column on mobile (${vp.name})`).toBe(1);
         } else {
           expect(gridColumns, `Expected 3 columns on desktop (${vp.name})`).toBe(3);
+        }
+
+        const dualColumns = await page.evaluate(() => {
+          const grid = document.querySelector('.cierre-dual-epigraph');
+          if (!grid) return null;
+          const style = window.getComputedStyle(grid);
+          return style.gridTemplateColumns.split(' ').length;
+        });
+        expect(dualColumns).not.toBeNull();
+        if (vp.width <= 768) {
+          expect(dualColumns, `Expected 1 column on mobile (${vp.name})`).toBe(1);
+        } else {
+          expect(dualColumns, `Expected 2 columns on desktop (${vp.name})`).toBe(2);
         }
       });
 

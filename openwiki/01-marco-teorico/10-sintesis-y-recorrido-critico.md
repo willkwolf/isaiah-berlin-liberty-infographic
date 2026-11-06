@@ -1,17 +1,41 @@
-# Dominio I: Marco Teórico — Síntesis Epistémica: La Madera Torcida y la Ruta del Pensamiento Crítico
+# Dominio I: Marco Teórico — Síntesis Epistémica: El Cierre Dual Montaigne–Popper y la Ruta del Pensamiento Crítico
 
-## 1. El Epígrafe de Kant y la Lección de Berlin
+## 1. El Cierre Dual Epistémico: Montaigne y Popper como Vacuna frente al Dogma
 
-En la Sección XI de la infografía (*Cierre: Epílogo epistémico*), el proyecto culmina con una célebre sentencia de **Immanuel Kant** (*Idea para una historia universal en clave cosmopolita*, 1784) que **Sir Isaiah Berlin** adoptó como lema vital y título de una de sus obras cumbres (*The Crooked Timber of Humanity*, 1990):
+En la Sección XI de la infografía (*Cierre: Epílogo epistémico*), el artefacto pedagógico corona su recorrido con un **dispositivo de cierre dual** protagonizado por **Michel de Montaigne** y **Karl Popper**, superando la clásica clausura monológica de Kant para asentar la vacuna epistemológica más coherente con el pluralismo berliniano:
 
-> ### *«Aus so krummem Holze, als woraus der Mensch gemacht ist, kann nichts ganz Gerades gezimmert werden.»*
-> *(«De una madera tan torcida como aquella de la que está hecho el hombre, no puede tallarse nunca nada completamente recto»).*
+```mermaid
+flowchart LR
+    subgraph CierreDual["Cierre Dual Epistémico: Vacuna frente al Dogma"]
+        M["<b>Michel de Montaigne (1588)</b><br/><i>Ensayos</i><br/>«Es poner a muy alto precio nuestras conjeturas el hacer quemar vivo a un hombre por ellas.»<br/><b>Dimensión:</b> Escepticismo y Cautela Ética"]
+        P["<b>Karl Popper (1945)</b><br/><i>La sociedad abierta y sus enemigos</i><br/>«El intento de realizar el cielo en la tierra produce invariablemente el infierno.»<br/><b>Dimensión:</b> Falibilismo y Sociedad Abierta"]
+    end
+    M --> B["<b>Pluralismo Trágico de Isaiah Berlin:</b><br/>Los valores chocan; las certezas absolutas engendran tiranía.<br/><i>«Esta tensión no se resuelve. Se habita.»</i>"]
+    P --> B
+```
 
-Esta metáfora encierra una profunda advertencia ética, psicológica y política contra el fanatismo utópico:
-1. **La Complejidad Irreducible de la Naturaleza Humana:**
-   Los seres humanos no son piezas geométricas homogéneas ni arcilla maleable que los ingenieros sociales o gobernantes iluminados puedan moldear a capricho para encajar en una utopía preconcebida. Poseen deseos contradictorios, lealtades diversas y facultades morales que resisten la uniformidad forzada.
-2. **El Peligro del Cepillo Nivelador:**
-   Quien se propone «enderezar» a la fuerza la madera torcida de la humanidad termina inevitablemente por fracturarla, mutilando vidas concretas en nombre de una pureza geométrica o ideológica inalcanzable.
+### 1.1 ¿Por qué superar la exclusividad de Kant?
+Aunque Isaiah Berlin tituló célebremente una de sus obras maestras *El fuste torcido de la humanidad* (1990) a partir del aforismo de Kant (*Idea para una historia universal en clave cosmopolita*, 1784), el propio Berlin alertó incansablemente sobre las trampas del racionalismo ilustrado monista. Kant sostenía que existe una única ley moral universal deducible por la razón pura (el imperativo categórico), una visión que roza el monismo ético si se extrapola al diseño del orden político. 
+
+Para vacunar la reflexión pedagógica contra cualquier dogma racionalista, el cierre se refundamenta en dos pensadores cardinales del escepticismo crítico y la sociedad abierta:
+
+### 1.2 Michel de Montaigne: Escepticismo Humanista y Cautela Ética
+> ### *«C'est mettre ses conjectures à bien haut prix que d'en faire cuire un homme tout vif.»*
+> *(«Es poner a muy alto precio nuestras conjeturas el hacer quemar vivo a un hombre por ellas.»)*
+> — **Michel de Montaigne**, *Ensayos* (Libro III, Cap. 11, 1588).
+
+1. **La Condición Conjetural del Conocimiento Moral:** Montaigne nos recuerda que lo que llamamos dogmas o verdades incuestionables no son más que conjeturas humanas falibles. Elevar una conjetura al rango de certeza absoluta es el primer paso hacia el fanatismo.
+2. **El Freno a la Crueldad:** Ninguna construcción teórica o certeza ideológica justifica infligir tormento, despojo o muerte a otro ser humano. Es la máxima advertencia frente a las inquisiciones de cualquier signo.
+
+### 1.3 Karl Popper: Falibilismo Crítico y Rechazo a la Utopía Totalizadora
+> ### *«The attempt to make heaven on earth invariably produces hell.»*
+> *(«El intento de realizar el cielo en la tierra produce invariablemente el infierno.»)*
+> — **Karl Popper**, *La sociedad abierta y sus enemigos* (1945).
+
+1. **Contra la Ingeniería Social Utópica:** La pretensión de conocer el fin supremo de la historia y diseñar un sistema perfecto («el cielo en la tierra») exige suprimir toda disidencia y sacrificar generaciones presentes en aras de un paraíso futuro ilusorio.
+2. **Falibilismo Institucional y Reforma Gradual:** En lugar de utopías holistas, Popper defiende la ingeniería social gradual (*piecemeal social engineering*), instituciones transparentes sometidas a crítica pública y la protección irrestricta de la libertad de disentir.
+
+Ambas citas articulan un doble blindaje: **Montaigne** custodia la humildad de la conciencia moral interior; **Popper** custodia las instituciones políticas frente al mesianismo colectivista. Juntos pavimentan el camino hacia las 4 tesis del pluralismo berliniano.
 
 ---
 

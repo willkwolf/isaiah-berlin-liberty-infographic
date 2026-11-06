@@ -213,6 +213,26 @@ describe('Design Policies & Contrast for New Components', () => {
       expect(sub.textContent).toContain('2024–2026');
       expect(sub.textContent).toContain('DANE');
     });
+
+    test('.cierre-dual-epigraph renders dual quotes for Montaigne and Popper with accessible semantic structure', () => {
+      const dualContainer = document.querySelector('.cierre-dual-epigraph');
+      expect(dualContainer).not.toBeNull();
+      expect(dualContainer.getAttribute('role')).toBe('region');
+      expect(dualContainer.getAttribute('aria-label')).toBeTruthy();
+
+      const montaigneItem = dualContainer.querySelector('.cierre-dual-item--montaigne');
+      const popperItem = dualContainer.querySelector('.cierre-dual-item--popper');
+      expect(montaigneItem).not.toBeNull();
+      expect(popperItem).not.toBeNull();
+
+      expect(document.querySelector('#cierreBadgeMontaigne')).not.toBeNull();
+      expect(document.querySelector('#cierreEpigraphMontaigne').textContent).toContain('conjeturas');
+      expect(document.querySelector('#cierreAttrMontaigne').textContent).toContain('Montaigne');
+
+      expect(document.querySelector('#cierreBadgePopper')).not.toBeNull();
+      expect(document.querySelector('#cierreEpigraphPopper').textContent).toContain('cielo en la tierra');
+      expect(document.querySelector('#cierreAttrPopper').textContent).toContain('Popper');
+    });
   });
 
   describe('5. Bilingual i18n Synchronization Integrity', () => {
@@ -229,10 +249,16 @@ describe('Design Policies & Contrast for New Components', () => {
       '#senConvTitle3',
       '#senConvDesc3',
       '#colombiaSubtitle',
-      '#systemModelDisclaimer'
+      '#systemModelDisclaimer',
+      '#cierreBadgeMontaigne',
+      '#cierreEpigraphMontaigne',
+      '#cierreAttrMontaigne',
+      '#cierreBadgePopper',
+      '#cierreEpigraphPopper',
+      '#cierreAttrPopper'
     ];
 
-    test('all 13 new string selectors are registered in files/i18n.js English staticContent', () => {
+    test('all 19 new string selectors are registered in files/i18n.js English staticContent', () => {
       for (const key of requiredKeys) {
         expect(i18nContent).toContain(key);
       }
