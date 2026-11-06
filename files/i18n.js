@@ -154,6 +154,8 @@ window.I18N_CONTENT.locales.en.staticContent.push(
   { selector: '#conflicto .slider-mobile-hint', type: 'text', value: 'Slide to explore reciprocal loss ⇄' },
   { selector: '#conflicto .loss-row:nth-child(1) .loss-row__label', type: 'text', value: 'Negative liberty restricted' },
   { selector: '#conflicto .loss-row:nth-child(2) .loss-row__label', type: 'text', value: 'Equality sacrificed' },
+  { selector: '#conflictUnderFrameLabel', type: 'text', value: 'Under this framework:' },
+  { selector: '#conflictTradeoffLabel', type: 'text', value: 'Trade-off diagnosis:' },
   { selector: '#poder-title', type: 'html', value: 'Power<br/><em>and obedience</em>' },
   { selector: '#poder .section__subtitle', type: 'html', value: 'Berlin distinguishes: coercion implies an intentional human agent. <em>“Why should I obey?”</em> is the fundamental political question.' },
   { selector: '#powerInfo .power-info__hint', type: 'text', value: 'Click or tap a node to see the kind of restriction it exerts on the individual.' },

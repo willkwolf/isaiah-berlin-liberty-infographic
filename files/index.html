@@ -230,55 +230,80 @@
         <p class="section__subtitle">Berlin fue explícito: igualdad y libertad son valores genuinamente incompatibles. No es un problema de implementación. Es un <strong>conflicto trágico</strong>.</p>
 
         <div class="conflict-container">
-          <div class="conflict-poles">
-            <div class="conflict-pole conflict-pole--left">
-              <span class="conflict-pole__icon" aria-hidden="true">◈</span>
-              <span class="conflict-pole__label">Igualdad</span>
-              <span class="conflict-pole__sub">redistribución activa<br/>bienes garantizados</span>
-            </div>
-            <div class="conflict-pole conflict-pole--right">
-              <span class="conflict-pole__icon" aria-hidden="true">⌁</span>
-              <span class="conflict-pole__label">Libertad</span>
-              <span class="conflict-pole__sub">no-interferencia<br/>autonomía individual</span>
-            </div>
-          </div>
+          <!-- UNIFIED INTERACTION INSTRUMENT CARD (TUFTE COMPACT & SPATIALLY INTEGRATED) -->
+          <div class="conflict-card" id="conflictInteractiveCard">
+            <!-- 1. SLIDER & POLES (DIRECTLY AT THE TOP OF THE INSTRUMENT) -->
+            <div class="conflict-controls-top">
+              <div class="conflict-poles">
+                <div class="conflict-pole conflict-pole--left">
+                  <span class="conflict-pole__icon" aria-hidden="true">◈</span>
+                  <div class="conflict-pole__meta">
+                    <span class="conflict-pole__label">Igualdad</span>
+                    <span class="conflict-pole__sub">redistribución activa<span class="conflict-pole__sub-extra"><br/>bienes garantizados</span></span>
+                  </div>
+                </div>
+                <div class="conflict-pole conflict-pole--right">
+                  <span class="conflict-pole__icon" aria-hidden="true">⌁</span>
+                  <div class="conflict-pole__meta">
+                    <span class="conflict-pole__label">Libertad</span>
+                    <span class="conflict-pole__sub">no-interferencia<span class="conflict-pole__sub-extra"><br/>autonomía individual</span></span>
+                  </div>
+                </div>
+              </div>
 
-          <div class="slider-wrap">
-            <input type="range" id="conflictSlider" class="conflict-slider" min="0" max="100" value="50"
-                   aria-label="Deslizar entre igualdad y libertad" />
-            <div class="slider-track-labels">
-              <span>Máx. igualdad</span>
-              <span>Equilibrio inestable</span>
-              <span>Máx. libertad</span>
+              <div class="slider-wrap">
+                <div class="slider-mobile-hint" aria-hidden="true">Desliza para explorar la pérdida recíproca ⇄</div>
+                <div class="slider-track-labels">
+                  <span>Máx. igualdad</span>
+                  <span>Equilibrio inestable</span>
+                  <span>Máx. libertad</span>
+                </div>
+                <input type="range" id="conflictSlider" class="conflict-slider" min="0" max="100" value="50"
+                       aria-label="Deslizar entre igualdad y libertad" />
+              </div>
             </div>
-            <div class="slider-mobile-hint" aria-hidden="true">Desliza para explorar la pérdida recíproca ⇄</div>
-          </div>
 
-          <div class="conflict-loss-panel" aria-live="polite">
-            <div class="conflict-curve-container" style="margin-bottom: 1.25rem;">
+            <!-- 2. FIGURE & TRAJECTORY (DIRECT VISUAL FEEDBACK) -->
+            <div class="conflict-figure-wrap">
               <svg id="conflictCurveSvg" class="conflict-curve-svg" role="img" aria-label="Curva de conflicto entre libertad e igualdad"></svg>
-              <p class="viz-model-disclaimer" id="conflictModelDisclaimer">
-                <em>Nota epistemológica:</em> Este diagrama ilustra un <strong>modelo heurístico y cualitativo</strong> de costo de oportunidad valorativo. No representa una función econométrica empírica ni frecuencias estadísticas.
-              </p>
             </div>
-            <div class="loss-row">
-              <span class="loss-row__label">Libertad negativa restringida</span>
-              <div class="loss-bar-track"><div class="loss-bar loss-bar--neg" id="lossBarNeg"></div></div>
-              <span class="loss-row__val" id="lossValNeg">50%</span>
-            </div>
-            <div class="loss-row">
-              <span class="loss-row__label">Igualdad sacrificada</span>
-              <div class="loss-bar-track"><div class="loss-bar loss-bar--eq" id="lossBarEq"></div></div>
-              <span class="loss-row__val" id="lossValEq">50%</span>
-            </div>
-            <p class="conflict-note" id="conflictNote"></p>
-          </div>
-        </div>
 
-        <div class="lens-interpretation" aria-live="polite">
-          <span class="lens-interpretation__icon" aria-hidden="true">◈</span>
-          <span class="lens-interpretation__label">Bajo este marco:</span>
-          <span class="lens-interpretation__text" id="conflictLensText"></span>
+            <!-- 3. DYNAMIC INTERPRETATION: "BAJO ESTE MARCO" + CHIP TEXT + TRADE-OFF NOTE (REPLACES THE OLD DISCLAIMER SPOT) -->
+            <div class="conflict-live-reading lens-interpretation" aria-live="polite">
+              <div class="conflict-live-header">
+                <div class="conflict-lens-chip" id="conflictActiveChip">
+                  <span class="conflict-lens-dot" id="conflictLensDot" aria-hidden="true"></span>
+                  <span class="conflict-lens-name" id="conflictLensName">Libertad Negativa</span>
+                  <span class="conflict-lens-author" id="conflictLensAuthor">Berlin</span>
+                </div>
+                <span class="conflict-lens-lead" id="conflictUnderFrameLabel">Bajo este marco:</span>
+              </div>
+              <p class="conflict-lens-text" id="conflictLensText"></p>
+              <div class="conflict-tradeoff-status">
+                <span class="conflict-tradeoff-label" id="conflictTradeoffLabel">Diagnóstico de compromiso:</span>
+                <p class="conflict-note" id="conflictNote"></p>
+              </div>
+            </div>
+
+            <!-- 4. HIGH-CONTRAST, SPACE-SAVING LOSS BARS -->
+            <div class="conflict-bars-grid">
+              <div class="loss-row">
+                <span class="loss-row__label">Libertad negativa restringida</span>
+                <div class="loss-bar-track"><div class="loss-bar loss-bar--neg" id="lossBarNeg"></div></div>
+                <span class="loss-row__val" id="lossValNeg">50%</span>
+              </div>
+              <div class="loss-row">
+                <span class="loss-row__label">Igualdad sacrificada</span>
+                <div class="loss-bar-track"><div class="loss-bar loss-bar--eq" id="lossBarEq"></div></div>
+                <span class="loss-row__val" id="lossValEq">50%</span>
+              </div>
+            </div>
+
+            <!-- 5. COMPACT EPISTEMOLOGICAL DISCLAIMER (DISCREET MICRO-FOOTNOTE SAVING CRITICAL VIEWPORT SPACE) -->
+            <p class="viz-model-disclaimer conflict-disclaimer--compact" id="conflictModelDisclaimer">
+              <em>Nota epistemológica:</em> Este diagrama ilustra un <strong>modelo heurístico y cualitativo</strong> de costo de oportunidad valorativo. No representa una función econométrica empírica ni frecuencias estadísticas.
+            </p>
+          </div>
         </div>
       </div>
     </section>

@@ -1210,6 +1210,32 @@ function setLens(lens) {
   // Colombia
   updateColombiaDashboard();
 
+  // Update conflict lens chip in Section III (Spatial proximity & immediate feedback)
+  const def = getLensDefinition(lens);
+  const lensColor = LENS_DATA[lens].color;
+  const conflictLensName = qs('#conflictLensName');
+  if (conflictLensName) {
+    conflictLensName.textContent = def.name;
+    conflictLensName.style.color = lensColor;
+  }
+  const conflictLensAuthor = qs('#conflictLensAuthor');
+  if (conflictLensAuthor) {
+    conflictLensAuthor.textContent = def.author;
+  }
+  const conflictLensDot = qs('#conflictLensDot');
+  if (conflictLensDot) {
+    conflictLensDot.style.backgroundColor = lensColor;
+    conflictLensDot.style.boxShadow = `0 0 8px ${lensColor}`;
+  }
+  const conflictLiveReading = qs('.conflict-live-reading');
+  if (conflictLiveReading) {
+    conflictLiveReading.style.borderLeftColor = lensColor;
+  }
+  const conflictActiveChip = qs('#conflictActiveChip');
+  if (conflictActiveChip) {
+    conflictActiveChip.style.borderColor = `${lensColor}55`;
+  }
+
   // Dynamic curves & arrows (Tufte visual integrity and dynamic flow)
   drawConflictCurveSvg(state.conflictValue);
   updatePowerDiagramEdges(lens);
@@ -1670,11 +1696,11 @@ function drawConflictCurveSvg(val) {
 
   const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
   const W = isMobile ? 360 : 560;
-  const H = isMobile ? 180 : 180;
+  const H = isMobile ? 155 : 180;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
   const pad = isMobile
-    ? { l: 56, r: 18, t: 34, b: 34 }
+    ? { l: 52, r: 16, t: 26, b: 28 }
     : { l: 65, r: 25, t: 32, b: 32 };
   const pw = W - pad.l - pad.r;
   const ph = H - pad.t - pad.b;
@@ -1718,8 +1744,8 @@ function drawConflictCurveSvg(val) {
 
   // On mobile, render the Y-axis label vertically along the vertical axis line to prevent truncation
   const yAxisLabelSvg = isMobile
-    ? `<text x="${pad.l - 14}" y="${pad.t + ph / 2}" fill="${axisColor}" font-size="${fAxis}" font-family="IBM Plex Mono" font-weight="600" text-anchor="middle" transform="rotate(-90 ${pad.l - 14} ${pad.t + ph / 2})">${labelY}</text>`
-    : `<text x="${pad.l}" y="${pad.t - 10}" fill="${axisColor}" font-size="${fAxis}" font-family="IBM Plex Mono" font-weight="600" text-anchor="start">${labelY}</text>`;
+    ? `<text x="${pad.l - 12}" y="${pad.t + ph / 2}" fill="${axisColor}" font-size="${fAxis}" font-family="IBM Plex Mono" font-weight="600" text-anchor="middle" transform="rotate(-90 ${pad.l - 14} ${pad.t + ph / 2})">${labelY}</text>`
+    : `<text x="${pad.l}" y="${pad.t - (isMobile ? 8 : 10)}" fill="${axisColor}" font-size="${fAxis}" font-family="IBM Plex Mono" font-weight="600" text-anchor="start">${labelY}</text>`;
 
   let svgContent = `
     <!-- Axes -->
@@ -1728,7 +1754,7 @@ function drawConflictCurveSvg(val) {
 
     <!-- Axis Labels -->
     ${yAxisLabelSvg}
-    <text x="${pad.l + pw}" y="${pad.t + ph + 24}" fill="${axisColor}" font-size="${fAxis}" font-family="IBM Plex Mono" font-weight="600" text-anchor="end">${labelX}</text>
+    <text x="${pad.l + pw}" y="${pad.t + ph + (isMobile ? 20 : 24)}" fill="${axisColor}" font-size="${fAxis}" font-family="IBM Plex Mono" font-weight="600" text-anchor="end">${labelX}</text>
 
     <!-- Trajectory Curve -->
     <polyline points="${points.join(' ')}" fill="none" stroke="${activeColor}" stroke-width="2.5" stroke-linecap="round"/>
