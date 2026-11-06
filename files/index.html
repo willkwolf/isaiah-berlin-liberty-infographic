@@ -353,15 +353,28 @@
             </g>
           </svg>
 
-          <div class="power-info" id="powerInfo" aria-live="polite">
-            <p class="power-info__hint">Haz clic o toca un nodo para ver el tipo de restricción que ejerce sobre el individuo.</p>
-          </div>
-        </div>
+          <div class="power-card power-info" id="powerInfo" aria-live="polite">
+            <!-- 1. DYNAMIC NODE DETAILS (UPDATED WHEN TAPPING ANY NODE) -->
+            <div class="power-node-details" id="powerNodeDetails">
+              <div class="power-info__hint-wrap">
+                <span class="power-info__hint-icon" aria-hidden="true">◈</span>
+                <p class="power-info__hint">Haz clic o toca un nodo para ver el tipo de restricción que ejerce sobre el individuo.</p>
+              </div>
+            </div>
 
-        <div class="lens-interpretation" aria-live="polite">
-          <span class="lens-interpretation__icon" aria-hidden="true">◈</span>
-          <span class="lens-interpretation__label">Bajo este marco:</span>
-          <span class="lens-interpretation__text" id="poderLensText"></span>
+            <!-- 2. DYNAMIC LENS READING: "BAJO ESTE MARCO" + CHIP TEXT (INTEGRATED IN-PLACE) -->
+            <div class="power-live-reading lens-interpretation" aria-live="polite">
+              <div class="power-live-header">
+                <div class="power-lens-chip" id="powerActiveChip">
+                  <span class="power-lens-dot" id="powerLensDot" aria-hidden="true"></span>
+                  <span class="power-lens-name" id="powerLensName">Libertad Negativa</span>
+                  <span class="power-lens-author" id="powerLensAuthor">Berlin</span>
+                </div>
+                <span class="power-lens-lead" id="powerUnderFrameLabel">Bajo este marco:</span>
+              </div>
+              <p class="power-lens-text" id="poderLensText"></p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

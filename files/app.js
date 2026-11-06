@@ -1234,6 +1234,29 @@ function setLens(lens) {
   const conflictActiveChip = qs('#conflictActiveChip');
   if (conflictActiveChip) {
     conflictActiveChip.style.borderColor = `${lensColor}55`;
+  // Update power lens chip in Section IV (Spatial proximity & immediate feedback)
+  const powerLensName = qs('#powerLensName');
+  if (powerLensName) {
+    powerLensName.textContent = def.name;
+    powerLensName.style.color = lensColor;
+  }
+  const powerLensAuthor = qs('#powerLensAuthor');
+  if (powerLensAuthor) {
+    powerLensAuthor.textContent = def.author;
+  }
+  const powerLensDot = qs('#powerLensDot');
+  if (powerLensDot) {
+    powerLensDot.style.backgroundColor = lensColor;
+    powerLensDot.style.boxShadow = `0 0 8px ${lensColor}`;
+  }
+  const powerLiveReading = qs('.power-live-reading');
+  if (powerLiveReading) {
+    powerLiveReading.style.borderLeftColor = lensColor;
+  }
+  const powerActiveChip = qs('#powerActiveChip');
+  if (powerActiveChip) {
+    powerActiveChip.style.borderColor = `${lensColor}55`;
+  }
   }
 
   // Dynamic curves & arrows (Tufte visual integrity and dynamic flow)
@@ -1810,18 +1833,18 @@ function initPowerDiagram() {
 }
 
 function renderPowerInfo() {
-  const infoPanel = qs('#powerInfo');
+  const nodeContainer = qs('#powerNodeDetails') || qs('#powerInfo');
   const nodes = qsa('.power-node');
-  if (!infoPanel) return;
+  if (!nodeContainer) return;
 
   if (!state.activePowerNode) {
     nodes.forEach(n => {
       n.classList.remove('active');
       n.setAttribute('aria-pressed', 'false');
     });
-    infoPanel.innerHTML = isEnglish()
-      ? '<p class="power-info__hint">Click or tap a node to see the kind of restriction it exerts on the individual.</p>'
-      : '<p class="power-info__hint">Haz clic o toca un nodo para ver el tipo de restricción que ejerce sobre el individuo.</p>';
+    nodeContainer.innerHTML = isEnglish()
+      ? '<div class="power-info__hint-wrap"><span class="power-info__hint-icon" aria-hidden="true">◈</span><p class="power-info__hint">Click or tap a node to see the kind of restriction it exerts on the individual.</p></div>'
+      : '<div class="power-info__hint-wrap"><span class="power-info__hint-icon" aria-hidden="true">◈</span><p class="power-info__hint">Haz clic o toca un nodo para ver el tipo de restricción que ejerce sobre el individuo.</p></div>';
     updatePowerDiagramEdges(state.currentLens);
     return;
   }
@@ -1833,9 +1856,11 @@ function renderPowerInfo() {
   });
   const data = getPowerNode(state.activePowerNode);
   if (!data) return;
-  infoPanel.innerHTML = `
-    <div class="power-info__node-name">${data.name}</div>
-    <div class="power-info__type">${data.type}</div>
+  nodeContainer.innerHTML = `
+    <div class="power-info__header">
+      <div class="power-info__node-name">${data.name}</div>
+      <div class="power-info__type">${data.type}</div>
+    </div>
     <p class="power-info__desc">${data.desc}</p>
     <p class="power-info__mechanism">${data.mechanism}</p>
   `;

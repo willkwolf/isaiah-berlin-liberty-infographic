@@ -159,6 +159,7 @@ window.I18N_CONTENT.locales.en.staticContent.push(
   { selector: '#poder-title', type: 'html', value: 'Power<br/><em>and obedience</em>' },
   { selector: '#poder .section__subtitle', type: 'html', value: 'Berlin distinguishes: coercion implies an intentional human agent. <em>“Why should I obey?”</em> is the fundamental political question.' },
   { selector: '#powerInfo .power-info__hint', type: 'text', value: 'Click or tap a node to see the kind of restriction it exerts on the individual.' },
+  { selector: '#powerUnderFrameLabel', type: 'text', value: 'Under this framework:' },
   { selector: '#powerDiagram', type: 'attr', attr: 'aria-label', value: 'Diagram of power relations' },
   { selector: '.power-node[data-node="individuo"]', type: 'attr', attr: 'aria-label', value: 'Individual: political subject' },
   { selector: '.power-node[data-node="estado"]', type: 'attr', attr: 'aria-label', value: 'State: monopoly of force' },
