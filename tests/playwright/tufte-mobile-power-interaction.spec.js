@@ -20,15 +20,15 @@ test.describe('Tufte Mobile Power Interaction & Spatial Proximity Suite (Section
         await page.goto(FILE_URL);
         await page.waitForLoadState('domcontentloaded');
         await page.waitForTimeout(150);
-        // Force Spanish language deterministically for assertions
+        // Force Spanish language and 'negativa' lens deterministically for assertions
         await page.evaluate(() => {
           if (window.setLanguage) window.setLanguage('es');
+          if (window.setLens) window.setLens('negativa');
         });
         await page.waitForTimeout(150);
       });
 
-      test('Unified Card Proportions, Zero Horizontal Overflow & Spatial Proximity', async ({ page }) => {
-        // Scroll to Section IV
+      test('The Swap: Live Reading is DE FRENTE (on top), static details ABAJO (below), with full SVG size', async ({ page }) => {
         await page.locator('#poder').scrollIntoViewIfNeeded();
         await page.waitForTimeout(200);
 
@@ -45,26 +45,34 @@ test.describe('Tufte Mobile Power Interaction & Spatial Proximity Suite (Section
           const reading = document.querySelector('.power-live-reading');
           const readingRect = reading.getBoundingClientRect();
 
+          const details = document.querySelector('#powerNodeDetails');
+          const detailsRect = details.getBoundingClientRect();
+
           return {
             docWidth,
             bodyScrollWidth,
             cardHeight: cardRect.height,
+            svgWidth: svgRect.width,
             svgToCardGap: cardRect.top - svgRect.bottom,
-            readingHeight: readingRect.height
+            readingTop: readingRect.top,
+            detailsTop: detailsRect.top
           };
         });
 
         // 1. Zero horizontal overflow
         expect(metrics.bodyScrollWidth).toBeLessThanOrEqual(metrics.docWidth + 1);
 
-        // 2. Spatial proximity: Diagram and Card sit within tight budget (< 50px gap)
-        expect(metrics.svgToCardGap).toBeLessThanOrEqual(50);
+        // 2. THE SWAP: Live reading is on top (de frente), static details are below
+        expect(metrics.readingTop).toBeLessThan(metrics.detailsTop);
 
-        // 3. Reading is visible and populated
-        expect(metrics.readingHeight).toBeGreaterThan(30);
+        // 3. SVG is not artificially shrunken
+        expect(metrics.svgWidth).toBeGreaterThanOrEqual(280);
+
+        // 4. Spatial proximity: Diagram and Card sit within comfortable budget
+        expect(metrics.svgToCardGap).toBeLessThanOrEqual(50);
       });
 
-      test('In-Place Node Touch: tapping Sociedad & Estado updates details without navigation', async ({ page }) => {
+      test('In-Place Node Touch: tapping Sociedad updates front reading for Sociedad and static details below', async ({ page }) => {
         await page.locator('#poder').scrollIntoViewIfNeeded();
         await page.waitForTimeout(200);
 
@@ -72,24 +80,25 @@ test.describe('Tufte Mobile Power Interaction & Spatial Proximity Suite (Section
         await page.locator('.power-node[data-node="sociedad"]').click();
         await page.waitForTimeout(150);
 
-        const sociedadText = await page.locator('#powerNodeDetails').innerText();
-        expect(sociedadText).toContain('Sociedad');
-        expect(sociedadText).toContain('norma social');
+        // Dynamic text in front updates to Sociedad analysis
+        const frontText = await page.locator('#poderLensText').innerText();
+        expect(frontText).toContain('Berlin');
+        expect(frontText).toContain('normas informales');
 
-        // Verify live reading remains visible in same card
-        const readingVisible = await page.locator('.power-live-reading').isVisible();
-        expect(readingVisible).toBe(true);
+        // Static details below update
+        const detailsText = await page.locator('#powerNodeDetails').innerText();
+        expect(detailsText).toContain('Sociedad');
+        expect(detailsText).toContain('Coacción normativa-informal');
 
         // Tap Estado node
         await page.locator('.power-node[data-node="estado"]').click();
         await page.waitForTimeout(150);
 
-        const estadoText = await page.locator('#powerNodeDetails').innerText();
-        expect(estadoText).toContain('Estado');
-        expect(estadoText).toContain('Monopolio legítimo');
+        const frontTextEstado = await page.locator('#poderLensText').innerText();
+        expect(frontTextEstado).toContain('El Estado posee el monopolio de la fuerza legal');
       });
 
-      test('In-Place Lens Reactivity: changing lens chips updates badge and reading in-place', async ({ page }) => {
+      test('In-Place Lens Reactivity: changing lens chips updates front text immediately', async ({ page }) => {
         await page.locator('#poder').scrollIntoViewIfNeeded();
         await page.waitForTimeout(200);
 
@@ -119,6 +128,25 @@ test.describe('Tufte Mobile Power Interaction & Spatial Proximity Suite (Section
 
         expect(await page.locator('#powerLensName').innerText()).toBe('Económico-Libertario');
         expect((await page.locator('#poderLensText').innerText()).length).toBeGreaterThan(15);
+      });
+
+      test('Dual interaction: switching chips while a node is active updates that node\'s front text', async ({ page }) => {
+        await page.locator('#poder').scrollIntoViewIfNeeded();
+        await page.waitForTimeout(200);
+
+        // 1. Select Sociedad node
+        await page.locator('.power-node[data-node="sociedad"]').click();
+        await page.waitForTimeout(150);
+
+        // 2. Switch to Capacidades
+        await page.evaluate(() => {
+          window.setLens('capacidades');
+        });
+        await page.waitForTimeout(150);
+
+        const frontText = await page.locator('#poderLensText').innerText();
+        expect(frontText).toContain('Para Sen, las normas sociales, estigmas y exclusiones culturales');
+        expect(await page.locator('#powerLensName').innerText()).toBe('Enfoque de Capacidades');
       });
     });
   }

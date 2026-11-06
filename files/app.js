@@ -1261,6 +1261,7 @@ function setLens(lens) {
 
   // Dynamic curves & arrows (Tufte visual integrity and dynamic flow)
   drawConflictCurveSvg(state.conflictValue);
+  updatePowerLiveReading();
   updatePowerDiagramEdges(lens);
 
   // Announce
@@ -1808,6 +1809,103 @@ function initConflictSlider() {
 // SECTION IV — POWER DIAGRAM
 // ═══════════════════════════════════════════════
 
+
+// Interpretaciones específicas por nodo y marco teórico (Section IV - In-Place Lens Reading)
+const POWER_NODE_LENS_READINGS = {
+  sociedad: {
+    negativa: 'Para Berlin, la sociedad y sus normas informales coartan de manera difusa, pero no constituyen coacción política estricta: solo la interferencia deliberada con fuerza legal vulnera la libertad negativa.',
+    positiva: 'Bajo la libertad positiva, la comunidad es la base de la autorrealización colectiva; el riesgo advertido es la imposición de un «yo superior» o moralismo comunitario que asfixie la autonomía individual.',
+    capacidades: 'Para Sen, las normas sociales, estigmas y exclusiones culturales de la sociedad son privaciones reales de capacidades: dañan la libertad sustantiva con tanta fuerza como una ley estatal.',
+    libertario: 'Las normas sociales y costumbres evolucionan de forma descentralizada y voluntaria; distinguirlas tajantemente del monopolio coercitivo estatal es indispensable.'
+  },
+  estado: {
+    negativa: 'El Estado posee el monopolio de la fuerza legal; para Berlin, cada ley y sanción es una restricción frontal a la libertad negativa que exige justificación estricta.',
+    positiva: 'Para la libertad positiva, el Estado no es un mero agresor, sino el instrumento colectivo indispensable para habilitar educación pública, salud y autogobierno democrático.',
+    capacidades: 'Para Sen, el Estado tiene el deber ineludible de garantizar las capacidades básicas (salud, educación, garantías protectoras) sin las cuales no existe agencia real.',
+    libertario: 'Para Hayek y Friedman, el Estado es la única entidad que ejerce coacción física directa; debe limitarse a proteger la propiedad y hacer cumplir contratos voluntarios.'
+  },
+  mercado: {
+    negativa: 'Para Berlin, la incapacidad de pagar un precio en el mercado es carencia material o pobreza, no una coacción política deliberada ejercida por un ser humano.',
+    positiva: 'El mercado desregulado genera asimetrías extremas que privan a las mayorías de la capacidad real de autodeterminación; el poder económico privado también coarta.',
+    capacidades: 'Para Sen, la falta de ingresos en el mercado destruye capacidades elementales: el hambre no es falta de comida sino falta de habilitación institucional para funcionar.',
+    libertario: 'Para el enfoque libertario, el mercado es la máxima expresión de cooperación voluntaria sin coerción: los precios coordinan conocimiento disperso sin mandar a nadie.'
+  },
+  individuo: {
+    negativa: 'El individuo requiere una frontera inviolable de no-interferencia privada donde nadie —ni el soberano, ni la mayoría democrática— pueda invadir su autonomía.',
+    positiva: 'El individuo solo es libre si es dueño efectivo de su destino y participa activamente en las decisiones colectivas que configuran su comunidad política.',
+    capacidades: 'El individuo debe ser visto como agente con agencia propia, con libertades sustantivas y capacidades para elegir la vida que tiene razones para valorar.',
+    libertario: 'El individuo es el soberano absoluto sobre su persona y propiedad; cualquier interferencia redistributiva forzosa vulnera sus derechos fundamentales.'
+  }
+};
+
+const POWER_NODE_LENS_READINGS_EN = {
+  sociedad: {
+    negativa: 'For Berlin, society and informal norms constrain diffusely, but do not constitute strict political coercion unless deliberate force or legal sanction intervenes.',
+    positiva: 'Under positive liberty, community is the ground of collective self-realization; the danger warned by Berlin is imposing a "higher self" that stifles personal autonomy.',
+    capacidades: 'For Sen, social norms, stigma, and cultural exclusion are real capability deprivations: they damage substantive freedom as deeply as any punitive law.',
+    libertario: 'Social norms and conventions evolve spontaneously and voluntarily; confusing them with state coercion is a core category mistake.'
+  },
+  estado: {
+    negativa: 'The State holds the monopoly of legitimate violence; for Berlin, every law and penalty is a direct restriction on negative liberty requiring strict justification.',
+    positiva: 'For positive liberty, the State is not merely an oppressor, but an indispensable instrument for collective self-government, public education, and health.',
+    capacidades: 'For Sen, the State has a positive duty to build and secure basic capabilities (health, schooling, social safety nets) required for real human agency.',
+    libertario: 'For Hayek and Friedman, the State is the only entity wielding physical force; it must be strictly restrained to defending property and voluntary contracts.'
+  },
+  mercado: {
+    negativa: 'For Berlin, inability to pay a market price is material incapacity or poverty, not deliberate political coercion by an intentional agent.',
+    positiva: 'An unregulated market creates power imbalances that strip citizens of genuine self-determination; private economic power can coerce as well.',
+    capacidades: 'For Sen, market insolvency destroys foundational capabilities: famine and exclusion are failures of entitlements, not inevitable natural limits.',
+    libertario: 'For the libertarian framework, the market is the ultimate arena of voluntary cooperation without coercion: prices coordinate knowledge without rulers.'
+  },
+  individuo: {
+    negativa: 'The individual requires an inviolable frontier of private non-interference where no sovereign or collective may dictate choices.',
+    positiva: 'The individual is truly free only as an active author of their life, participating in the democratic governance of their society.',
+    capacidades: 'The individual is an agent entitled to substantive freedoms and capabilities to achieve what they have reason to value.',
+    libertario: 'The individual possesses full self-ownership; any compulsory redistribution without consent infringes on fundamental liberty.'
+  }
+};
+
+function updatePowerLiveReading() {
+  const currentLens = state.currentLens || 'negativa';
+  const def = getLensDefinition(currentLens);
+  const lensColor = LENS_DATA[currentLens].color;
+
+  const powerLensName = qs('#powerLensName');
+  if (powerLensName) {
+    powerLensName.textContent = def.name;
+    powerLensName.style.color = lensColor;
+  }
+  const powerLensAuthor = qs('#powerLensAuthor');
+  if (powerLensAuthor) {
+    powerLensAuthor.textContent = def.author;
+  }
+  const powerLensDot = qs('#powerLensDot');
+  if (powerLensDot) {
+    powerLensDot.style.backgroundColor = lensColor;
+    powerLensDot.style.boxShadow = `0 0 8px ${lensColor}`;
+  }
+  const powerLiveReading = qs('.power-live-reading');
+  if (powerLiveReading) {
+    powerLiveReading.style.borderLeftColor = lensColor;
+  }
+  const powerActiveChip = qs('#powerActiveChip');
+  if (powerActiveChip) {
+    powerActiveChip.style.borderColor = `${lensColor}55`;
+  }
+
+  const textEl = qs('#poderLensText');
+  if (!textEl) return;
+
+  if (state.activePowerNode && POWER_NODE_LENS_READINGS[state.activePowerNode]) {
+    const readings = isEnglish()
+      ? (POWER_NODE_LENS_READINGS_EN[state.activePowerNode] || POWER_NODE_LENS_READINGS[state.activePowerNode])
+      : POWER_NODE_LENS_READINGS[state.activePowerNode];
+    textEl.textContent = readings[currentLens] || def.interpretations.poder;
+  } else {
+    textEl.textContent = def.interpretations.poder || '';
+  }
+}
+
 function initPowerDiagram() {
   const nodes = qsa('.power-node');
   if (!nodes.length) return;
@@ -1833,8 +1931,12 @@ function initPowerDiagram() {
 }
 
 function renderPowerInfo() {
-  const nodeContainer = qs('#powerNodeDetails') || qs('#powerInfo');
+  const nodeContainer = qs('#powerNodeDetails');
   const nodes = qsa('.power-node');
+
+  // Update in-place live lens reading in front
+  updatePowerLiveReading();
+
   if (!nodeContainer) return;
 
   if (!state.activePowerNode) {
@@ -1857,12 +1959,14 @@ function renderPowerInfo() {
   const data = getPowerNode(state.activePowerNode);
   if (!data) return;
   nodeContainer.innerHTML = `
-    <div class="power-info__header">
-      <div class="power-info__node-name">${data.name}</div>
-      <div class="power-info__type">${data.type}</div>
+    <div class="power-node-static-details">
+      <div class="power-info__header">
+        <div class="power-info__node-name">${data.name}</div>
+        <div class="power-info__type">${data.type}</div>
+      </div>
+      <p class="power-info__desc">${data.desc}</p>
+      <p class="power-info__mechanism">${data.mechanism}</p>
     </div>
-    <p class="power-info__desc">${data.desc}</p>
-    <p class="power-info__mechanism">${data.mechanism}</p>
   `;
   
   updatePowerDiagramEdges(state.currentLens);

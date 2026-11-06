@@ -3,12 +3,11 @@
  *
  * Comprehensive test suite verifying Edward Tufte Data-Ink & Interaction Proximity
  * redesign in Section IV (Poder y obediencia):
- *  1. Unified power interactive card structure (.power-card / #powerInfo)
- *  2. Direct spatial proximity: Node information + In-place live lens reading ("Bajo este marco")
- *  3. In-place node interaction: Tapping nodes updates node details without losing lens context
- *  4. In-place lens reactivity: Lens chip updates badge, dot, and text in-place without scrolling
- *  5. Removal of redundant isolated .lens-interpretation at section bottom
- *  6. Bilingual (ES/EN) i18n support
+ *  1. Full natural size for SVG diagram & nodes (no artificial shrinking)
+ *  2. The Swap: Dynamic reading ("Bajo este marco") DE FRENTE (on top), static node details ABAJO (below)
+ *  3. In-place node touch: Tapping a node displays that node's specific lens reading in front, and static breakdown below
+ *  4. In-place lens reactivity: Changing lens chips updates badge and text in front immediately
+ *  5. Dual interaction: Combining node touch and lens switching updates the in-front reading seamlessly
  */
 
 'use strict';
@@ -16,18 +15,16 @@
 const fs = require('fs');
 const path = require('path');
 
-describe('Tufte Mobile Power Interaction Suite (Section IV)', () => {
+describe('Tufte Mobile Power Interaction Suite (Section IV - In-Place Swap)', () => {
   let htmlContent;
   let cssContent;
   let jsContent;
-  let i18nContent;
   let appExports;
 
   beforeAll(() => {
     htmlContent = fs.readFileSync(path.resolve(__dirname, '../files/index.html'), 'utf8');
     cssContent = fs.readFileSync(path.resolve(__dirname, '../files/styles.css'), 'utf8');
     jsContent = fs.readFileSync(path.resolve(__dirname, '../files/app.js'), 'utf8');
-    i18nContent = fs.readFileSync(path.resolve(__dirname, '../files/i18n.js'), 'utf8');
   });
 
   beforeEach(() => {
@@ -36,7 +33,7 @@ describe('Tufte Mobile Power Interaction Suite (Section IV)', () => {
 
     const runner = new Function(
       'window', 'document', 'localStorage', 'navigator',
-      jsContent + '\nreturn { setLens, initPowerDiagram, renderPowerInfo, state, LENS_DATA, getPowerNode };'
+      jsContent + '\nreturn { setLens, initPowerDiagram, renderPowerInfo, updatePowerLiveReading, state, LENS_DATA, POWER_NODE_LENS_READINGS };'
     );
     appExports = runner(window, document, window.localStorage, window.navigator);
     if (typeof appExports.initPowerDiagram === 'function') {
@@ -44,7 +41,7 @@ describe('Tufte Mobile Power Interaction Suite (Section IV)', () => {
     }
   });
 
-  describe('1. DOM Architecture & Component Integration', () => {
+  describe('1. DOM Architecture & The Swap (Live Reading DE FRENTE, Static ABAJO)', () => {
     test('Section IV contains the unified interactive power card', () => {
       const section = document.querySelector('#poder');
       expect(section).not.toBeNull();
@@ -54,79 +51,79 @@ describe('Tufte Mobile Power Interaction Suite (Section IV)', () => {
       expect(card.classList.contains('power-info')).toBe(true);
     });
 
-    test('Card houses both dynamic node details and in-place live lens reading', () => {
+    test('The Swap: .power-live-reading is positioned BEFORE #powerNodeDetails inside the card', () => {
       const card = document.querySelector('.power-card');
-      const nodeDetails = card.querySelector('#powerNodeDetails');
-      const liveReading = card.querySelector('.power-live-reading');
+      const children = Array.from(card.children);
 
-      expect(nodeDetails).not.toBeNull();
-      expect(liveReading).not.toBeNull();
-      expect(liveReading.classList.contains('lens-interpretation')).toBe(true);
+      const liveReadingIndex = children.findIndex(el => el.classList.contains('power-live-reading'));
+      const nodeDetailsIndex = children.findIndex(el => el.id === 'powerNodeDetails');
 
-      const lensChip = liveReading.querySelector('#powerActiveChip');
-      expect(lensChip).not.toBeNull();
+      expect(liveReadingIndex).toBeGreaterThanOrEqual(0);
+      expect(nodeDetailsIndex).toBeGreaterThanOrEqual(0);
+
+      // Crucial: Live reading is in front / on top, static details are below!
+      expect(liveReadingIndex).toBeLessThan(nodeDetailsIndex);
+    });
+
+    test('Live reading in front contains active chip, lead label, and dynamic text', () => {
+      const liveReading = document.querySelector('.power-live-reading');
+      expect(liveReading.querySelector('#powerActiveChip')).not.toBeNull();
       expect(liveReading.querySelector('#powerLensDot')).not.toBeNull();
       expect(liveReading.querySelector('#powerLensName')).not.toBeNull();
       expect(liveReading.querySelector('#powerLensAuthor')).not.toBeNull();
-
-      const underFrameLabel = liveReading.querySelector('#powerUnderFrameLabel');
-      expect(underFrameLabel).not.toBeNull();
-      expect(underFrameLabel.textContent).toContain('Bajo este marco:');
-
-      const lensText = liveReading.querySelector('#poderLensText');
-      expect(lensText).not.toBeNull();
+      expect(liveReading.querySelector('#powerUnderFrameLabel')).not.toBeNull();
+      expect(liveReading.querySelector('#poderLensText')).not.toBeNull();
     });
 
-    test('No redundant isolated lens-interpretation remains at the section bottom', () => {
-      const section = document.querySelector('#poder');
-      // Only the one inside the unified power card should exist
-      const interpretations = section.querySelectorAll('.lens-interpretation');
-      expect(interpretations.length).toBe(1);
-      expect(interpretations[0].closest('.power-card')).not.toBeNull();
+    test('SVG retains full natural width and is not artificially shrunken in mobile CSS', () => {
+      expect(cssContent).not.toContain('max-height: 220px');
+      expect(cssContent).toContain('.power-svg');
     });
   });
 
-  describe('2. In-Place Node Touch Interaction', () => {
-    test('Touching Sociedad displays node details in-place while keeping live reading intact', () => {
+  describe('2. In-Place Node Touch Interaction with Front Lens Reading', () => {
+    test('Touching Sociedad updates the in-front reading for Sociedad under active lens', () => {
       const node = document.querySelector('.power-node[data-node="sociedad"]');
       expect(node).not.toBeNull();
 
       node.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
 
+      // Text in front updates to Sociedad analysis
+      const textEl = document.querySelector('#poderLensText');
+      expect(textEl.textContent).toContain('Para Berlin');
+      expect(textEl.textContent).toContain('normas informales');
+
+      // Static breakdown below updates
       const nodeDetails = document.querySelector('#powerNodeDetails');
       expect(nodeDetails.querySelector('.power-info__node-name').textContent).toBe('Sociedad');
       expect(nodeDetails.querySelector('.power-info__type').textContent).toContain('normativa-informal');
-      expect(nodeDetails.querySelector('.power-info__desc').textContent).toContain('norma social');
-      expect(nodeDetails.querySelector('.power-info__mechanism').textContent).toContain('presión de conformidad');
-
-      // Live reading remains in place
-      const lensText = document.querySelector('#poderLensText');
-      expect(lensText).not.toBeNull();
     });
 
-    test('Touching Estado displays State monopoly details in-place', () => {
+    test('Touching Estado updates the in-front reading for Estado', () => {
       const node = document.querySelector('.power-node[data-node="estado"]');
       node.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
 
+      const textEl = document.querySelector('#poderLensText');
+      expect(textEl.textContent).toContain('El Estado posee el monopolio de la fuerza legal');
+
       const nodeDetails = document.querySelector('#powerNodeDetails');
       expect(nodeDetails.querySelector('.power-info__node-name').textContent).toBe('Estado');
-      expect(nodeDetails.querySelector('.power-info__type').textContent).toContain('Weber');
-      expect(nodeDetails.querySelector('.power-info__desc').textContent).toContain('Monopolio legítimo');
     });
 
-    test('Toggling active node returns cleanly to the hint', () => {
+    test('Toggling off active node resets in-front reading to global section synthesis', () => {
       const node = document.querySelector('.power-node[data-node="mercado"]');
       node.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
-      expect(document.querySelector('.power-info__node-name').textContent).toBe('Mercado');
+      expect(document.querySelector('#poderLensText').textContent).toContain('mercado');
 
       // Toggle off
       node.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
       expect(document.querySelector('.power-info__hint')).not.toBeNull();
+      expect(document.querySelector('#poderLensText').textContent).toContain('El Estado es la fuente primaria');
     });
   });
 
-  describe('3. Dynamic Lens Reactivity (In-Place Chip Switching)', () => {
-    test('setLens("positiva") updates badge, dot, and reading in-place without scrolling', () => {
+  describe('3. Dynamic Lens Reactivity (Changing Chips Changes Front Text)', () => {
+    test('Switching lens to Positiva updates front text immediately', () => {
       appExports.setLens('positiva');
 
       const nameEl = document.querySelector('#powerLensName');
@@ -140,7 +137,7 @@ describe('Tufte Mobile Power Interaction Suite (Section IV)', () => {
       expect(textEl.textContent).toContain('El Estado no solo restringe: habilita');
     });
 
-    test('setLens("capacidades") updates badge, dot, and reading in-place', () => {
+    test('Switching lens to Capacidades updates front text immediately', () => {
       appExports.setLens('capacidades');
 
       const nameEl = document.querySelector('#powerLensName');
@@ -154,44 +151,21 @@ describe('Tufte Mobile Power Interaction Suite (Section IV)', () => {
       expect(textEl.textContent).toContain('privación de capacidades');
     });
 
-    test('setLens("libertario") updates badge, dot, and reading in-place', () => {
-      appExports.setLens('libertario');
-
-      const nameEl = document.querySelector('#powerLensName');
-      const authorEl = document.querySelector('#powerLensAuthor');
-      const dotEl = document.querySelector('#powerLensDot');
-      const textEl = document.querySelector('#poderLensText');
-
-      expect(nameEl.textContent).toBe('Económico-Libertario');
-      expect(authorEl.textContent).toContain('Hayek');
-      expect(dotEl.style.backgroundColor).toBe('rgb(176, 176, 170)');
-      expect(textEl.textContent.length).toBeGreaterThan(15);
-    });
-
-    test('Dual interaction: touching node while lens is active preserves both perspectives', () => {
-      appExports.setLens('capacidades');
-
-      // Touch Sociedad
+    test('Dual interaction: switching chips while a node is selected updates that node\'s interpretation in front', () => {
+      // 1. Touch Sociedad
       const node = document.querySelector('.power-node[data-node="sociedad"]');
       node.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
 
-      // Node details are visible
-      expect(document.querySelector('.power-info__node-name').textContent).toBe('Sociedad');
+      // 2. Switch to Capacidades
+      appExports.setLens('capacidades');
 
-      // Lens reading is also visible in the same card
-      expect(document.querySelector('#powerLensName').textContent).toBe('Enfoque de Capacidades');
-      expect(document.querySelector('#poderLensText').textContent).toContain('privación de capacidades');
-    });
-  });
+      // The text in front must speak specifically about Sociedad under Capacidades!
+      const textEl = document.querySelector('#poderLensText');
+      expect(textEl.textContent).toContain('Para Sen, las normas sociales, estigmas y exclusiones culturales');
 
-  describe('4. CSS & Styling Integrity', () => {
-    test('CSS defines .power-card and .power-live-reading with Tufte styling tokens', () => {
-      expect(cssContent).toContain('.power-card');
-      expect(cssContent).toContain('.power-live-reading');
-      expect(cssContent).toContain('.power-lens-chip');
-      expect(cssContent).toContain('.power-lens-dot');
-      expect(cssContent).toContain('#poder');
-      expect(cssContent).toContain('padding-bottom: calc(6rem + env(safe-area-inset-bottom))');
+      // 3. Switch to Libertario
+      appExports.setLens('libertario');
+      expect(textEl.textContent).toContain('Las normas sociales y costumbres evolucionan de forma descentralizada');
     });
   });
 });

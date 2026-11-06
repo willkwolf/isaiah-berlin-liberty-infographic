@@ -354,16 +354,8 @@
           </svg>
 
           <div class="power-card power-info" id="powerInfo" aria-live="polite">
-            <!-- 1. DYNAMIC NODE DETAILS (UPDATED WHEN TAPPING ANY NODE) -->
-            <div class="power-node-details" id="powerNodeDetails">
-              <div class="power-info__hint-wrap">
-                <span class="power-info__hint-icon" aria-hidden="true">◈</span>
-                <p class="power-info__hint">Haz clic o toca un nodo para ver el tipo de restricción que ejerce sobre el individuo.</p>
-              </div>
-            </div>
-
-            <!-- 2. DYNAMIC LENS READING: "BAJO ESTE MARCO" + CHIP TEXT (INTEGRATED IN-PLACE) -->
-            <div class="power-live-reading lens-interpretation" aria-live="polite">
+            <!-- 1. TEXTO DINÁMICO QUE ESTABA ABAJO, AHORA DE FRENTE (SWAP): LECTURA EN VIVO DEL MARCO ("BAJO ESTE MARCO") -->
+            <div class="power-live-reading lens-interpretation" id="powerLiveReading" aria-live="polite">
               <div class="power-live-header">
                 <div class="power-lens-chip" id="powerActiveChip">
                   <span class="power-lens-dot" id="powerLensDot" aria-hidden="true"></span>
@@ -373,6 +365,14 @@
                 <span class="power-lens-lead" id="powerUnderFrameLabel">Bajo este marco:</span>
               </div>
               <p class="power-lens-text" id="poderLensText"></p>
+            </div>
+
+            <!-- 2. TEXTO ESTÁTICO, QUE QUEDE ABAJO (SWAP): DETALLES INSTITUCIONALES DEL NODO -->
+            <div class="power-node-details" id="powerNodeDetails">
+              <div class="power-info__hint-wrap">
+                <span class="power-info__hint-icon" aria-hidden="true">◈</span>
+                <p class="power-info__hint">Haz clic o toca un nodo para ver el tipo de restricción que ejerce sobre el individuo.</p>
+              </div>
             </div>
           </div>
         </div>
